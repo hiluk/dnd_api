@@ -1,6 +1,0 @@
-﻿services:
-  dndsolution.core.api:
-    image: dndsolution.core.api
-    build:
-      context: .
-      dockerfile: DndSolution.Core.Api/Dockerfile

@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureRepositories();
 builder.Services.ConfigureServices();
 
-builder.Services.AddDbContext<CharactersDbContext>(options => 
-    options.UseNpgsql(builder.Configuration.GetConnectionString("CharactersDbContext"))
+builder.Services.AddDbContext<CharactersContext>(options => 
+    options.UseNpgsql(builder.Configuration.GetConnectionString("CharactersContext"))
 );
 
 builder.Services.AddControllers();
