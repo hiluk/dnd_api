@@ -8,11 +8,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Dtos\" />
+      <ProjectReference Include="..\DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj" />
+      <PackageReference Include="Mapster" Version="7.4.1-pre01" />
     </ItemGroup>
 
 </Project>

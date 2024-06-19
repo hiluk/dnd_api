@@ -7,4 +7,5 @@ public class Character : ICharacter
     public string Name { get; init; } = "";
     public int Level { get; init; } = 0;
     public string Class { get; init; } = "Undefined";
+    public IAttributes Attributes { get; set; }
 }
