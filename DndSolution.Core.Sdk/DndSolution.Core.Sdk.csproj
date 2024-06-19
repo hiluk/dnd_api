@@ -7,4 +7,12 @@
         <RootNamespace>Core.Sdk</RootNamespace>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Folder Include="Dtos\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj" />
+    </ItemGroup>
+
 </Project>
