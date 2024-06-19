@@ -1,6 +1,6 @@
 ﻿using DndSolution.Application.Abstractions;
 
-namespace Core.Sdk;
+namespace Core.Sdk.Dtos;
 
 public class CharacterDto : ICharacter
 {
