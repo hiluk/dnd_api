@@ -24,10 +24,4 @@
       <ProjectReference Include="..\DndSolution.Core.Sdk\DndSolution.Core.Sdk.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
-    </ItemGroup>
-
 </Project>
