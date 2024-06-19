@@ -3,9 +3,9 @@
 using Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-public class CharactersDbContext : DbContext
+public class CharactersContext : DbContext
 {
-    public CharactersDbContext(DbContextOptions<CharactersDbContext> options) : base(options)
+    public CharactersContext(DbContextOptions<CharactersContext> options) : base(options)
     {
     }
     
@@ -13,7 +13,7 @@ public class CharactersDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost:5432;Database=dnddb1;Username=postgres;Password=dndapipass");
+        optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=db;Username=root;Password=root");
     } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
