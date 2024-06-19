@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Core.Api.Controllers;
 
 [ApiController]
-[Route("/api/v1/[controller]")]
+[Route("/api/v1/character")]
 public class CharacterController : ControllerBase
 {
     private readonly ICharactersService _service;

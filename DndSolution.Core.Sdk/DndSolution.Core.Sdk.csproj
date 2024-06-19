@@ -9,6 +9,8 @@
 
     <ItemGroup>
       <ProjectReference Include="..\DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\DndSolution.Data.Abstractions\DndSolution.Data.Abstractions.csproj" />
+      <ProjectReference Include="..\DndSolution.Data.Repositories\DndSolution.Data.Repositories.csproj" />
     </ItemGroup>
 
     <ItemGroup>

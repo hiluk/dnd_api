@@ -3,7 +3,7 @@ using DndSolution.Application.Models;
 
 namespace Data.Abstractions;
 
-public interface ICharacterRepository
+public interface ICharactersRepository
 
 {
     public Task SaveCharacterToDb(CharacterEntity character);

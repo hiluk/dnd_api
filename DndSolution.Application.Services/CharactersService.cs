@@ -1,9 +1,6 @@
-﻿using System.Web.Mvc;
-using Core.Sdk.Dtos;
-using Data.Abstractions;
+﻿using Data.Abstractions;
 using Data.Entities;
 using DndSolution.Application.Abstractions;
-using DndSolution.Application.Models;
 using Mapster;
 
 namespace DndSolution.Application.Services;
@@ -11,9 +8,9 @@ namespace DndSolution.Application.Services;
 public class CharactersService : ICharactersService
 {
 
-    private readonly ICharacterRepository _repository;
+    private readonly ICharactersRepository _repository;
 
-    public CharactersService(ICharacterRepository repository)
+    public CharactersService(ICharactersRepository repository)
     {
         _repository = repository;
     }

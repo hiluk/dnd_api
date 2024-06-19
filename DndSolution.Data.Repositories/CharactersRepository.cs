@@ -5,7 +5,7 @@ using Mapster;
 
 namespace Data.Repositories;
 
-public class CharacterRepository : ICharacterRepository
+public class CharactersRepository : ICharactersRepository
 {
     public async Task SaveCharacterToDb(CharacterEntity entity)
     {

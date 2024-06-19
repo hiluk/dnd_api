@@ -13,7 +13,7 @@ public class CharactersDbContext : DbContext
     
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Host=localhost:5432;Database=dnddb;Username=postgres;Password=dndapipass");
+        optionsBuilder.UseNpgsql("Host=localhost:5432;Database=dnddb1;Username=postgres;Password=dndapipass");
     } 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
