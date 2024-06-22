@@ -6,8 +6,4 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
-    </ItemGroup>
-
 </Project>

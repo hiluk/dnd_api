@@ -1,11 +1,26 @@
-﻿using DndSolution.Application.Abstractions;
+﻿using Core.Sdk.Enums;
 
 namespace Core.Sdk.Dtos;
 
-public class CharacterDto : ICharacter
+public class CharacterDto 
 {
+    /// <summary>
+    /// Имя персонажа
+    /// </summary>
     public string Name { get; init; }
-    public int Level { get; init; }
-    public string Class { get; init; }
-    public IAttributes Attributes { get; set; }
+    
+    /// <summary>
+    /// Уровень персонажа
+    /// </summary>
+    public byte Level { get; set; }
+    
+    /// <summary>
+    /// Класс персонажа
+    /// </summary>
+    public DtoCharacterClass CharacterClass { get; init; }
+
+    /// <summary>
+    /// Расса персонажа
+    /// </summary>
+    public DtoCharacterRace CharacterRace { get; init; }
 }
