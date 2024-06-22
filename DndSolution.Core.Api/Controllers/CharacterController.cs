@@ -1,9 +1,6 @@
-﻿using Core.Sdk;
+﻿using Core.Api.Mappings;
 using Core.Sdk.Dtos;
 using DndSolution.Application.Abstractions;
-using DndSolution.Application.Models;
-using Mapster;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Api.Controllers;
@@ -12,17 +9,27 @@ namespace Core.Api.Controllers;
 [Route("/api/v1/character")]
 public class CharacterController : ControllerBase
 {
-    private readonly ICharactersService _service;
+    private readonly ICharacterService _service;
+    private readonly ILogger<CharacterController> _logger;
 
-    public CharacterController(ICharactersService service)
+    public CharacterController(ICharacterService service, ILogger<CharacterController> logger)
     {
         _service = service;
+        _logger = logger;
     }
 
-    [HttpPost("create")]
-    public async Task CreateCharacter(CharacterDto dto)
+    [HttpPost("createPerson")]
+    public async Task CreateCharacter(CharacterSaveRequest request, CancellationToken token)
     {
-        var character = dto.Adapt<Character>();
-        await _service.CreateCharacter(character);
+        try
+        {
+            var character = CharacterMapper.MapToModel(request);
+            await _service.CreateCharacterAsync(character, token);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,"Не удалось сохранить персонажа");
+            throw;
+        }        
     }
 }
