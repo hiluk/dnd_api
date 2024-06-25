@@ -23,9 +23,4 @@ public class Character
     /// Расса персонажа
     /// </summary>
     public CharacterRace CharacterRace { get; set; }
-
-    /// <summary>
-    /// Информация об очках характеристик персонажа
-    /// </summary>
-    public CharacterStats Stats { get; set; }
 }

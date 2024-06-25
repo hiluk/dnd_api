@@ -57,16 +57,11 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<long>("StatsId")
-                        .HasColumnType("bigint");
-
                     b.Property<long>("Xp")
                         .HasColumnType("bigint")
                         .HasColumnName("xp");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("StatsId");
 
                     b.ToTable("character");
                 });
@@ -112,17 +107,6 @@ namespace Data.Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("stats");
-                });
-
-            modelBuilder.Entity("Data.Entities.Entities.CharacterEntity", b =>
-                {
-                    b.HasOne("Data.Entities.Entities.CharacterStatsEntity", "Stats")
-                        .WithMany()
-                        .HasForeignKey("StatsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Stats");
                 });
 #pragma warning restore 612, 618
         }

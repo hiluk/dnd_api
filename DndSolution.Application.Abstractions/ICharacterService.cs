@@ -5,5 +5,5 @@ namespace DndSolution.Application.Abstractions;
 
 public interface ICharacterService
 {
-    public Task CreateCharacterAsync(Character character, CancellationToken token);
+    public Task CreateCharacterAsync(CharacterFull character, CancellationToken token);
 }

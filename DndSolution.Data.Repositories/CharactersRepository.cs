@@ -1,5 +1,4 @@
 ﻿using Data.Abstractions;
-using Data.Entities;
 using Data.Entities.Entities;
 using Microsoft.Extensions.Logging;
 
@@ -16,9 +15,12 @@ public class CharactersRepository : ICharactersRepository
         _logger = logger;
     }
 
-    public async Task SaveCharacterAsync(CharacterEntity character, CancellationToken token)
+    public async Task SaveCharacterAsync(CharacterFullEntity character, CancellationToken token)
     {
-        await _context.Set<CharacterEntity>().AddAsync(character, token);
+        await _context.Set<CharacterEntity>().AddAsync(character.Character, token);
+        await _context.SaveChangesAsync(token);
+        
+        await _context.Set<CharacterStatsEntity>().AddAsync(character.Stats, token);
         await _context.SaveChangesAsync(token);
     }
 }
