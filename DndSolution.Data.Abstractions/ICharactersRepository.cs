@@ -6,5 +6,5 @@ namespace Data.Abstractions;
 
 public interface ICharactersRepository
 {
-    public Task SaveCharacterAsync(CharacterEntity character, CancellationToken token);
+    public Task SaveCharacterAsync(CharacterFullEntity character, CancellationToken token);
 }

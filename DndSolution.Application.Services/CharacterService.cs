@@ -19,10 +19,8 @@ public class CharacterService : ICharacterService
         _repository = repository;
     }
 
-    public async Task CreateCharacterAsync(Character character, CancellationToken token)
+    public async Task CreateCharacterAsync(CharacterFull character, CancellationToken token)
     {
-        // var entity = character.Adapt<CharacterEntity>(); TODO
-        
         var entity = CharacterMapper.MapToEntity(character);
         await _repository.SaveCharacterAsync(entity, token);
     }

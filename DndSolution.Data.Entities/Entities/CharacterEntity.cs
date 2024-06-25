@@ -31,6 +31,4 @@ public class CharacterEntity
 
     [Column("creation_date")]
     public DateTime DateCreate { get; set; }
-
-    public CharacterStatsEntity Stats { get; set; }
 }
