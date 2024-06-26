@@ -5,7 +5,7 @@ public class CharacterStats
     /// <summary>
     /// 
     /// </summary>
-    public int Strenght { get; set; }
+    public int Strength { get; set; }
 
     /// <summary>
     /// 

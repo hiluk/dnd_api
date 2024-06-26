@@ -1,14 +1,14 @@
-﻿namespace Core.Sdk.Dtos;
+﻿namespace Core.Sdk.Dtos.Characters;
 
 public class CharacterSaveRequest
 {
     /// <summary>
     /// Информация о персонаже
     /// </summary>
-    public CharacterDto CharacterInformation { get; set; }
+    public required CharacterDto CharacterInformation { get; init; }
     
     /// <summary>
     /// Информация о очках характеристик персонажа
     /// </summary>
-    public CharacterStatsDto CharacterStats { get; set; }
+    public required CharacterStatsDto CharacterStats { get; init; }
 }

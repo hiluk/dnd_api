@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    [Migration("20240625175517_Initial")]
+    [Migration("20240626174146_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -50,6 +50,11 @@ namespace Data.Repositories.Migrations
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("creation_date");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
 
                     b.Property<byte>("Level")
                         .HasColumnType("smallint")
@@ -99,7 +104,7 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("intelligence");
 
-                    b.Property<int>("Strenght")
+                    b.Property<int>("Strength")
                         .HasColumnType("integer")
                         .HasColumnName("strength");
 
@@ -110,6 +115,30 @@ namespace Data.Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("stats");
+                });
+
+            modelBuilder.Entity("Data.Entities.UserEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("email");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("password");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("users");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,5 +1,5 @@
 ﻿using Core.Api.Mappings;
-using Core.Sdk.Dtos;
+using Core.Sdk.Dtos.Characters;
 using DndSolution.Application.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 

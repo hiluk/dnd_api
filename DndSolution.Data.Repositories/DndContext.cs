@@ -16,5 +16,7 @@ public class DndContext : DbContext
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<CharacterEntity>().HasKey(x => x.Id);
         modelBuilder.Entity<CharacterStatsEntity>().HasKey(x => x.Id);
+        
+        modelBuilder.Entity<UserEntity>().HasKey(x => x.Id);
     }
 }

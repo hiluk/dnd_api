@@ -1,6 +1,7 @@
 ﻿using Core.Sdk.Enums;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
-namespace Core.Sdk.Dtos;
+namespace Core.Sdk.Dtos.Characters;
 
 public class CharacterDto 
 {
@@ -12,7 +13,12 @@ public class CharacterDto
     /// <summary>
     /// Уровень персонажа
     /// </summary>
-    public byte Level { get; set; }
+    public byte Level { get; init; }
+
+    /// <summary>
+    /// Эмейл пользователя
+    /// </summary>
+    public string Email { get; init; }
     
     /// <summary>
     /// Класс персонажа

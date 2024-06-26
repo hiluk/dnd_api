@@ -20,7 +20,7 @@ public class CharacterStatsEntity
     /// Сила
     /// </summary>
     [Column("strength")]
-    public int Strenght { get; set; }
+    public int Strength { get; set; }
     
     /// <summary>
     /// Интеллект
