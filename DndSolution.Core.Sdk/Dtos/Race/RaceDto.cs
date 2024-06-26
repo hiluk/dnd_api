@@ -1,6 +1,6 @@
-﻿namespace DndSolution.Application.Models.Models.Race;
+﻿namespace Core.Sdk.Dtos.Race;
 
-public class Race
+public class RaceDto
 {
     public string Id { get; init; }
     
@@ -18,7 +18,7 @@ public class Race
     
     public string Traits { get; init; }
     
-    public Asi[] Asi { get; init; }
+    public AsiDto[] Asi { get; init; }
     
-    public Speed[] Speed { get; init; }
+    public SpeedDto[] Speed { get; init; }
 }
