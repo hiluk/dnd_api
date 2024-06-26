@@ -7,19 +7,6 @@ namespace DndSolution.Application.Services.Mappers;
 
 public static class CharacterMapper
 {
-    // public static CharacterEntity MapToEntity(CharacterFull model)
-    // {
-    //     return new CharacterEntity
-    //     {
-    //         Name = model.Name,
-    //         CharacterClass = (EntityCharacterClass)model.CharacterClass,
-    //         CharacterRace = (EntityCharacterRace)model.CharacterRace,
-    //         Level = model.Level,
-    //         Xp = 0,
-    //         CharacterId = GetNewId(),
-    //     };
-    // }
-
     public static CharacterFullEntity MapToEntity(CharacterFull model)
     {
         var characterId = GetNewId();
@@ -27,7 +14,7 @@ public static class CharacterMapper
         var stats = new CharacterStatsEntity
         {
             CharacterId = characterId,
-            Strenght = model.Stats.Strenght,
+            Strength = model.Stats.Strength,
             Dexterity = model.Stats.Dexterity,
             Intelligence = model.Stats.Intelligence,
             Wisdom = model.Stats.Wisdom,
@@ -43,6 +30,7 @@ public static class CharacterMapper
             CharacterRace = (EntityCharacterRace)model.Character.CharacterRace,
             CharacterId = characterId,
             Xp = 0,
+            Email = model.Character.Email,
             DateCreate = DateTime.UtcNow
         };
 
@@ -52,6 +40,7 @@ public static class CharacterMapper
             Stats = stats
         };
     }
+    
     private static string GetNewId()
     {
         var chars = DndConstants.Alphanumeric;

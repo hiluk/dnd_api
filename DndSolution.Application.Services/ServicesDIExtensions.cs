@@ -8,6 +8,7 @@ public static class ServicesDIExtensions
     public static IServiceCollection ConfigureServices(this IServiceCollection services)
     {
         services.AddTransient<ICharacterService, CharacterService>();
+        services.AddTransient<IUserService, UserService>();
         
         return services;
     }

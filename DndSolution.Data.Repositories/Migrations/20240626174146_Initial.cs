@@ -20,6 +20,7 @@ namespace Data.Repositories.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     character_id = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
                     level = table.Column<byte>(type: "smallint", nullable: false),
                     xp = table.Column<long>(type: "bigint", nullable: false),
                     race = table.Column<int>(type: "integer", nullable: false),
@@ -49,6 +50,20 @@ namespace Data.Repositories.Migrations
                 {
                     table.PrimaryKey("PK_stats", x => x.id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "users",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    password = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_users", x => x.id);
+                });
         }
 
         /// <inheritdoc />
@@ -59,6 +74,9 @@ namespace Data.Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "stats");
+
+            migrationBuilder.DropTable(
+                name: "users");
         }
     }
 }

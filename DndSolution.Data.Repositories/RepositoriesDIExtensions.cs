@@ -17,6 +17,8 @@ public static class RepositoriesDIExtensions
             , ServiceLifetime.Scoped);
         
         services.AddTransient<ICharactersRepository, CharactersRepository>();
+        services.AddTransient<IUserRepository, UserRepository>();
+        
         return services;
     }
 }

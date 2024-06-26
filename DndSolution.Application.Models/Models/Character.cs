@@ -15,6 +15,11 @@ public class Character
     public byte Level { get; set; }
     
     /// <summary>
+    /// Эмейл пользователя
+    /// </summary>
+    public string Email { get; init; }
+    
+    /// <summary>
     /// Класс персонажа
     /// </summary>
     public CharacterClass CharacterClass { get; init; }

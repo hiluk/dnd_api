@@ -5,7 +5,7 @@ public class CharacterStatsDto
     /// <summary>
     /// Сила
     /// </summary>
-    public int Strenght { get; set; }
+    public int Strength { get; set; }
     
     /// <summary>
     /// Интеллект
