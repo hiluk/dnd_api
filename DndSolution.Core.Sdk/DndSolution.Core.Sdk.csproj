@@ -14,7 +14,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Mapster" Version="7.4.1-pre01" />
+      <PackageReference Include="Mapster" Version="7.4.0" />
+      <PackageReference Include="Mapster.Async" Version="2.0.1" />
+      <PackageReference Include="Mapster.Core" Version="1.2.1" />
+      <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
+      <PackageReference Include="Mapster.EFCore" Version="5.1.1" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.6">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
