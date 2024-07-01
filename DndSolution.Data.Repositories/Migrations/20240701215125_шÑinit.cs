@@ -7,11 +7,25 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class шÑinit : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "asi",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    stat = table.Column<string>(type: "text", nullable: false),
+                    value = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_asi", x => x.id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "character",
                 columns: table => new
@@ -30,6 +44,39 @@ namespace Data.Repositories.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_character", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "race",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    desc = table.Column<string>(type: "text", nullable: false),
+                    age = table.Column<string>(type: "text", nullable: false),
+                    size = table.Column<string>(type: "text", nullable: false),
+                    language = table.Column<string>(type: "text", nullable: false),
+                    vision = table.Column<string>(type: "text", nullable: false),
+                    traits = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_race", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "speed",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    type = table.Column<string>(type: "text", nullable: false),
+                    value = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_speed", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -70,7 +117,16 @@ namespace Data.Repositories.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "asi");
+
+            migrationBuilder.DropTable(
                 name: "character");
+
+            migrationBuilder.DropTable(
+                name: "race");
+
+            migrationBuilder.DropTable(
+                name: "speed");
 
             migrationBuilder.DropTable(
                 name: "stats");
