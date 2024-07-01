@@ -1,9 +1,10 @@
-﻿namespace DndSolution.Application.Models.Models.Race;
+﻿using Mapster;
 
+namespace DndSolution.Application.Models.Models.Race;
+
+[AdaptTo("[name]Dto"), GenerateMapper]
 public class Race
 {
-    public string Id { get; init; }
-    
     public string Name { get; init; }
     
     public string Description { get; init; }
@@ -18,7 +19,7 @@ public class Race
     
     public string Traits { get; init; }
     
-    public Asi[] Asi { get; init; }
+    public List<Asi> Asi { get; init; }
     
-    public Speed[] Speed { get; init; }
+    public List<Speed> Speed { get; init; }
 }
