@@ -1,6 +1,6 @@
 ﻿namespace Core.Sdk.Dtos.Characters;
 
-public class CharacterSaveRequest
+public class CharacterFullDto
 {
     /// <summary>
     /// Информация о персонаже

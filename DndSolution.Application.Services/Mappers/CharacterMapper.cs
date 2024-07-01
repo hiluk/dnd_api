@@ -1,5 +1,6 @@
 ﻿using Data.Entities.Entities;
 using Data.Entities.Enums;
+using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models;
 using DndSolution.Neccessary;
 
@@ -35,6 +36,34 @@ public static class CharacterMapper
         };
 
         return new CharacterFullEntity
+        {
+            Character = character,
+            Stats = stats
+        };
+    }
+    
+    public static CharacterFull MapToModel(CharacterFullEntity entity)
+    {
+        var stats = new CharacterStats
+        {
+            Strength = entity.Stats.Strength,
+            Dexterity = entity.Stats.Dexterity,
+            Intelligence = entity.Stats.Intelligence,
+            Wisdom = entity.Stats.Wisdom,
+            Charisma = entity.Stats.Charisma,
+            Constitution = entity.Stats.Constitution
+        };
+
+        var character = new Character
+        {
+            Name = entity.Character.Name,
+            Level = entity.Character.Level,
+            CharacterClass = (CharacterClass)entity.Character.CharacterClass,
+            CharacterRace = (CharacterRace)entity.Character.CharacterRace,
+            Email = entity.Character.Email,
+        };
+
+        return new CharacterFull
         {
             Character = character,
             Stats = stats
