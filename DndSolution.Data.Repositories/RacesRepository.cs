@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories.Migrations;
 
-public class RacesRepository
+public class RacesRepository : IRacesRepository
 {
     private readonly DndContext _context;
     private readonly ILogger<IRacesRepository> _logger;
@@ -15,7 +15,7 @@ public class RacesRepository
         _logger = logger;
     }
 
-    public async Task SaveCharacterAsync(RaceFullEntity race, CancellationToken token)
+    public async Task SaveRaceAsync(RaceFullEntity race, CancellationToken token)
     {
         await _context.Set<RaceEntity>().AddAsync(race.Race, token);
 
