@@ -8,7 +8,7 @@ public class SpeedEntity
 {
     [Key]
     [Column("id")]
-    public string Id { get; set; }
+    public long Id { get; set; }
     
     [Column("type")]
     public string Type { get; set; }

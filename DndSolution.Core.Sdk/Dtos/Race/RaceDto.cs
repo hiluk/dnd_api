@@ -18,7 +18,7 @@ public class RaceDto
     
     public string Traits { get; init; }
     
-    public AsiDto[] Asi { get; init; }
+    public List<AsiDto> Asi { get; init; }
     
-    public SpeedDto[] Speed { get; init; }
+    public List<SpeedDto> Speed { get; init; }
 }

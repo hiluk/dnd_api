@@ -8,7 +8,7 @@ public class RaceEntity
 {
     [Key]
     [Column("id")]
-    public string Id { get; init; }
+    public long Id { get; init; }
     
     [Column("name")]
     public string Name { get; init; }

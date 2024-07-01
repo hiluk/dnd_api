@@ -8,7 +8,7 @@ public class AsiEntity
 {
     [Key]
     [Column("id")]
-    public int Id { get; init; }
+    public long Id { get; init; }
     
     [Column("stat")]
     public string Stat { get; init; }
