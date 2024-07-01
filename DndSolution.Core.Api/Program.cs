@@ -1,6 +1,7 @@
 using Core.Api;
 using Data.Repositories;
 using DndSolution.Application.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,8 +22,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-await using var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<DndContext>();
-context.Database.EnsureCreated();
+using var scope = app.Services.CreateScope();
+await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>())
+{
+    context.Database.Migrate();
+    context.Database.EnsureCreated();
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
