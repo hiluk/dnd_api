@@ -2,7 +2,6 @@
 
 public class AsiDto
 {
-    public int Id { get; init; }
     
     public string Stat { get; init; }
     
