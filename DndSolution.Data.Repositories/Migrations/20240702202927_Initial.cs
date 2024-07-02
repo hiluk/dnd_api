@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -92,7 +92,7 @@ namespace Data.Repositories.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     raceId = table.Column<long>(type: "bigint", nullable: false),
                     stat = table.Column<string>(type: "text", nullable: false),
-                    value = table.Column<string>(type: "text", nullable: false)
+                    value = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {

@@ -40,9 +40,8 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("stat");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Value")
+                        .HasColumnType("integer")
                         .HasColumnName("value");
 
                     b.HasKey("Id");

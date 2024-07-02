@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    [Migration("20240702154607_init")]
-    partial class init
+    [Migration("20240702202927_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,9 +43,8 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("stat");
 
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("text")
+                    b.Property<int>("Value")
+                        .HasColumnType("integer")
                         .HasColumnName("value");
 
                     b.HasKey("Id");
