@@ -2,7 +2,6 @@
 
 public class SpeedDto
 {
-    public string Id { get; set; }
     
     public string Type { get; set; }
     
