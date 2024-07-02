@@ -20,4 +20,20 @@ public static class RaceModelMapper
             Speed = SpeedMapper.MapToModel(dto.Speed),
         };
     }
+    
+    public static RaceDto MapToDto(Race model)
+    {
+        return new RaceDto
+        {
+            Name = model.Name,
+            Age = model.Age,
+            Asi = AsiMapper.MapToDto(model.Asi),
+            Description = model.Description,
+            Language = model.Language,
+            Size = model.Size,
+            Traits = model.Traits,
+            Vision = model.Vision,
+            Speed = SpeedMapper.MapToDto(model.Speed),
+        };
+    }
 }

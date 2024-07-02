@@ -4,5 +4,5 @@ public class Asi
 {
     public string Stat { get; init; }
     
-    public string Value { get; init; }
+    public int Value { get; init; }
 }

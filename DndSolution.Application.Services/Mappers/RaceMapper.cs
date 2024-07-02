@@ -22,4 +22,20 @@ public class RaceMapper
          Speed = SpeedMapper.MapToEntity(race.Speed),
       };
    }
+
+   public static Race MapToModel(RaceEntity entity)
+   {
+      return new Race
+      {
+         Age = entity.Age,
+         Description = entity.Description,
+         Language = entity.Language,
+         Name = entity.Name,
+         Size = entity.Size,
+         Traits = entity.Traits,
+         Vision = entity.Vision,
+         Asi = AsiMapper.MapToModels(entity.Asi),
+         Speed = SpeedMapper.MapToModels(entity.Speed),
+      };
+   }
 }

@@ -20,5 +20,5 @@ public class AsiEntity
     public string Stat { get; init; }
     
     [Column("value")]
-    public string Value { get; init; }
+    public int Value { get; init; }
 }

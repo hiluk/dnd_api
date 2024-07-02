@@ -17,7 +17,7 @@ public class RaceController : ControllerBase
         _service = service;
     }
 
-    [HttpPost("saveRace")]
+    [HttpPost("SaveRace")]
     public async Task SaveRace(RaceDto dto, CancellationToken token)
     {
         try
@@ -30,5 +30,19 @@ public class RaceController : ControllerBase
             Console.WriteLine(e);
             throw;
         }
+    }
+    
+    [HttpGet("GetAllRaces")]
+    public async Task<List<RaceDto>> GetAllRacesAsync(CancellationToken token)
+    {
+        var races = await _service.GetAllRacesAsync(token);
+        List<RaceDto> racesDto = [];
+
+        foreach (var race in races)
+        {
+            racesDto.Add(RaceModelMapper.MapToDto(race));
+        }
+
+        return racesDto;
     }
 }

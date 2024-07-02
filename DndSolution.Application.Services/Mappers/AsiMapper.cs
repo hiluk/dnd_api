@@ -21,4 +21,21 @@ public class AsiMapper
 
         return asiEntities;
     }
+    
+    public static List<Asi> MapToModels(List<AsiEntity> entities)
+    {
+        List<Asi> asis = [];
+
+        foreach (var asi in entities)
+        {
+            asis.Add(new Asi
+                {
+                    Value = asi.Value,
+                    Stat = asi.Stat,
+                }
+            );
+        }
+
+        return asis;
+    }
 }
