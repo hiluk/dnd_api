@@ -6,9 +6,15 @@ namespace Data.Entities.Entities;
 [Table("asi")]
 public class AsiEntity
 {
-    [Key]
     [Column("id")]
     public long Id { get; init; }
+    
+    [ForeignKey("raceId")]
+    [Column("raceId")]
+    public long RaceId { get; init; }
+    
+    [Column("race")]
+    public RaceEntity Race { get; init; }
     
     [Column("stat")]
     public string Stat { get; init; }

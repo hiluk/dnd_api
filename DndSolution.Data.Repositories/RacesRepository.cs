@@ -15,9 +15,9 @@ public class RacesRepository : IRacesRepository
         _logger = logger;
     }
 
-    public async Task SaveRaceAsync(RaceFullEntity race, CancellationToken token)
+    public async Task SaveRaceAsync(RaceEntity race, CancellationToken token)
     {
-        await _context.Set<RaceEntity>().AddAsync(race.Race, token);
+        await _context.Set<RaceEntity>().AddAsync(race, token);
 
         foreach (var asi in race.Asi)
         {

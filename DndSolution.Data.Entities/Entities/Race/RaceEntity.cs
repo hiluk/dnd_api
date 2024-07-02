@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using DndSolution.Application.Models.Models.Race;
 
 namespace Data.Entities.Entities;
 
@@ -8,7 +9,7 @@ public class RaceEntity
 {
     [Key]
     [Column("id")]
-    public long Id { get; init; }
+    public long raceId { get; init; }
     
     [Column("name")]
     public string Name { get; init; }
@@ -30,4 +31,8 @@ public class RaceEntity
     
     [Column("traits")]
     public string Traits { get; init; }
+    
+    public List<AsiEntity> Asi { get; init; }
+    
+    public List<SpeedEntity> Speed { get; init; }
 }

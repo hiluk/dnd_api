@@ -5,7 +5,7 @@ namespace DndSolution.Application.Services.Mappers;
 
 public class AsiMapper
 {
-    public static List<AsiEntity> MapToEntities(List<Asi> asis, long id)
+    public static List<AsiEntity> MapToEntities(List<Asi> asis)
     {
         List<AsiEntity> asiEntities = [];
 
@@ -15,7 +15,6 @@ public class AsiMapper
             {
                 Value = asi.Value,
                 Stat = asi.Stat,
-                Id = id
             }
             );
         }

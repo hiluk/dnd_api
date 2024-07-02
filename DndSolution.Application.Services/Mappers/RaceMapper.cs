@@ -7,9 +7,9 @@ namespace DndSolution.Application.Services.Mappers;
 
 public class RaceMapper 
 {
-   public static RaceFullEntity MapToEntity(Race race)
+   public static RaceEntity MapToEntity(Race race)
    {
-      var raceEntity = new RaceEntity
+      return new RaceEntity
       {
          Age = race.Age,
          Description = race.Description,
@@ -17,14 +17,9 @@ public class RaceMapper
          Name = race.Name,
          Size = race.Size,
          Traits = race.Traits,
-         Vision = race.Vision
-      };
-      
-      return new RaceFullEntity
-      {
-         Race = raceEntity,
-         Asi = AsiMapper.MapToEntities(race.Asi, raceEntity.Id),
-         Speed = SpeedMapper.MapToEntity(race.Speed, raceEntity.Id),
+         Vision = race.Vision,
+         Asi = AsiMapper.MapToEntities(race.Asi),
+         Speed = SpeedMapper.MapToEntity(race.Speed),
       };
    }
 }

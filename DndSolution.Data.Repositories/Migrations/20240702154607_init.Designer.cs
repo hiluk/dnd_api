@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    [Migration("20240701215646_init")]
+    [Migration("20240702154607_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -34,6 +34,10 @@ namespace Data.Repositories.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("RaceId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("raceId");
+
                     b.Property<string>("Stat")
                         .IsRequired()
                         .HasColumnType("text")
@@ -45,6 +49,8 @@ namespace Data.Repositories.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RaceId");
 
                     b.ToTable("asi");
                 });
@@ -143,12 +149,12 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("Data.Entities.Entities.RaceEntity", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("raceId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("raceId"));
 
                     b.Property<string>("Age")
                         .IsRequired()
@@ -185,7 +191,7 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("vision");
 
-                    b.HasKey("Id");
+                    b.HasKey("raceId");
 
                     b.ToTable("race");
                 });
@@ -199,6 +205,10 @@ namespace Data.Repositories.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("RaceId")
+                        .HasColumnType("bigint")
+                        .HasColumnName("raceId");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text")
@@ -209,6 +219,8 @@ namespace Data.Repositories.Migrations
                         .HasColumnName("value");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("RaceId");
 
                     b.ToTable("speed");
                 });
@@ -235,6 +247,35 @@ namespace Data.Repositories.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("Data.Entities.Entities.AsiEntity", b =>
+                {
+                    b.HasOne("Data.Entities.Entities.RaceEntity", "Race")
+                        .WithMany("Asi")
+                        .HasForeignKey("RaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Race");
+                });
+
+            modelBuilder.Entity("Data.Entities.Entities.SpeedEntity", b =>
+                {
+                    b.HasOne("Data.Entities.Entities.RaceEntity", "Race")
+                        .WithMany("Speed")
+                        .HasForeignKey("RaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Race");
+                });
+
+            modelBuilder.Entity("Data.Entities.Entities.RaceEntity", b =>
+                {
+                    b.Navigation("Asi");
+
+                    b.Navigation("Speed");
                 });
 #pragma warning restore 612, 618
         }

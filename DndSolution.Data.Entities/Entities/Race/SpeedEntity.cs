@@ -6,9 +6,15 @@ namespace Data.Entities.Entities;
 [Table("speed")]
 public class SpeedEntity
 {
-    [Key]
     [Column("id")]
-    public long Id { get; set; }
+    public long Id { get; init; }
+    
+    [ForeignKey("raceId")]
+    [Column("raceId")]
+    public long RaceId { get; init; }
+    
+    [Column("race")]
+    public RaceEntity Race { get; init; }
     
     [Column("type")]
     public string Type { get; set; }

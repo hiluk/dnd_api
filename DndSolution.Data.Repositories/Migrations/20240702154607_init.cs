@@ -13,20 +13,6 @@ namespace Data.Repositories.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "asi",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    stat = table.Column<string>(type: "text", nullable: false),
-                    value = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_asi", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "character",
                 columns: table => new
                 {
@@ -66,20 +52,6 @@ namespace Data.Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "speed",
-                columns: table => new
-                {
-                    id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    type = table.Column<string>(type: "text", nullable: false),
-                    value = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_speed", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "stats",
                 columns: table => new
                 {
@@ -111,6 +83,58 @@ namespace Data.Repositories.Migrations
                 {
                     table.PrimaryKey("PK_users", x => x.id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "asi",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    raceId = table.Column<long>(type: "bigint", nullable: false),
+                    stat = table.Column<string>(type: "text", nullable: false),
+                    value = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_asi", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_asi_race_raceId",
+                        column: x => x.raceId,
+                        principalTable: "race",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "speed",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    raceId = table.Column<long>(type: "bigint", nullable: false),
+                    type = table.Column<string>(type: "text", nullable: false),
+                    value = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_speed", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_speed_race_raceId",
+                        column: x => x.raceId,
+                        principalTable: "race",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_asi_raceId",
+                table: "asi",
+                column: "raceId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_speed_raceId",
+                table: "speed",
+                column: "raceId");
         }
 
         /// <inheritdoc />
@@ -123,9 +147,6 @@ namespace Data.Repositories.Migrations
                 name: "character");
 
             migrationBuilder.DropTable(
-                name: "race");
-
-            migrationBuilder.DropTable(
                 name: "speed");
 
             migrationBuilder.DropTable(
@@ -133,6 +154,9 @@ namespace Data.Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "users");
+
+            migrationBuilder.DropTable(
+                name: "race");
         }
     }
 }
