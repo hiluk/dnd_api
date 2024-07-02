@@ -4,5 +4,5 @@ namespace Data.Abstractions;
 
 public interface IRacesRepository
 {
-    public Task SaveRaceAsync(RaceFullEntity race, CancellationToken token);
+    public Task SaveRaceAsync(RaceEntity race, CancellationToken token);
 }

@@ -5,13 +5,12 @@ namespace DndSolution.Application.Services.Mappers;
 
 public class SpeedMapper
 {
-    public static List<SpeedEntity> MapToEntity(List<Speed> speeds, long id)
+    public static List<SpeedEntity> MapToEntity(List<Speed> speeds)
     {
         List<SpeedEntity> speedEntities = [];
         
         speedEntities.AddRange(speeds.Select(speed => new SpeedEntity
         {
-            Id = id,
             Type = speed.Type, 
             Value = speed.Value,
         }
