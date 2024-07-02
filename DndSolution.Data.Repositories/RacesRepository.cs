@@ -1,5 +1,6 @@
 ﻿using Data.Abstractions;
 using Data.Entities.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories.Migrations;
@@ -30,5 +31,15 @@ public class RacesRepository : IRacesRepository
         }
         
         await _context.SaveChangesAsync(token); 
+    }
+
+    public async Task<List<RaceEntity>> GetAllRaces(CancellationToken token)
+    {
+        var races = await _context.Set<RaceEntity>()
+                .Include(x => x.Asi)
+                .Include(x => x.Speed)
+                .ToListAsync(token);
+
+        return races;
     }
 }

@@ -21,4 +21,21 @@ public class SpeedMapper
 
         return models;
     }
+    
+    public static List<SpeedDto> MapToDto(List<Speed> models)
+    {
+        List<SpeedDto> dtos = [];
+
+        foreach (var speed in models)
+        {
+            dtos.Add(new SpeedDto
+                {
+                    Type = speed.Type,
+                    Value = speed.Value,
+                }
+            );
+        }
+
+        return dtos;
+    }
 }

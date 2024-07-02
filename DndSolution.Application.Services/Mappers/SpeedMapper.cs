@@ -19,7 +19,7 @@ public class SpeedMapper
         return speedEntities;
     }
 
-    public static List<Speed> MapToModel(List<SpeedEntity> entities)
+    public static List<Speed> MapToModels(List<SpeedEntity> entities)
     {
         List<Speed> speeds = [];
 

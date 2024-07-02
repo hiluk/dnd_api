@@ -20,4 +20,20 @@ public class AsiMapper
 
         return models;
     }
+    
+    public static List<AsiDto> MapToDto(List<Asi> models)
+    {
+        List<AsiDto> dtos = [];
+
+        foreach (var asi in models)
+        {
+            dtos.Add(new AsiDto
+            {
+                Stat = asi.Stat,
+                Value = asi.Value,
+            });
+        }
+
+        return dtos;
+    }
 }
