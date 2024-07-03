@@ -1,4 +1,6 @@
-﻿using Core.Sdk.Enums;
+﻿using Core.Sdk.Dtos.Classes;
+using Core.Sdk.Dtos.Race;
+using Core.Sdk.Enums;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Core.Sdk.Dtos.Characters;
@@ -23,10 +25,10 @@ public class CharacterDto
     /// <summary>
     /// Класс персонажа
     /// </summary>
-    public DtoCharacterClass CharacterClass { get; init; }
+    public CharacterClassDto CharacterClass { get; init; }
 
     /// <summary>
     /// Расса персонажа
     /// </summary>
-    public DtoCharacterRace CharacterRace { get; init; }
+    public RaceDto CharacterRace { get; init; }
 }

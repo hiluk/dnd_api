@@ -7,29 +7,33 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "character",
+                name: "class",
                 columns: table => new
                 {
                     id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    character_id = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false),
-                    level = table.Column<byte>(type: "smallint", nullable: false),
-                    xp = table.Column<long>(type: "bigint", nullable: false),
-                    race = table.Column<int>(type: "integer", nullable: false),
-                    @class = table.Column<int>(name: "class", type: "integer", nullable: false),
-                    creation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    desc = table.Column<string>(type: "text", nullable: false),
+                    hit_dice = table.Column<string>(type: "text", nullable: false),
+                    hp_at_1st_level = table.Column<string>(type: "text", nullable: false),
+                    hp_at_high_levels = table.Column<string>(type: "text", nullable: false),
+                    prof_armor = table.Column<string>(type: "text", nullable: false),
+                    prof_weapon = table.Column<string>(type: "text", nullable: false),
+                    prof_tool = table.Column<string>(type: "text", nullable: false),
+                    prof_saving_throws = table.Column<string>(type: "text", nullable: false),
+                    prof_skills = table.Column<string>(type: "text", nullable: false),
+                    equipment = table.Column<string>(type: "text", nullable: false),
+                    spell_casting_ability = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_character", x => x.id);
+                    table.PrimaryKey("PK_class", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,6 +110,38 @@ namespace Data.Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "character",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    character_id = table.Column<string>(type: "text", nullable: false),
+                    name = table.Column<string>(type: "text", nullable: false),
+                    email = table.Column<string>(type: "text", nullable: false),
+                    level = table.Column<byte>(type: "smallint", nullable: false),
+                    xp = table.Column<long>(type: "bigint", nullable: false),
+                    CharacterRaceraceId = table.Column<long>(type: "bigint", nullable: false),
+                    CharacterClassId = table.Column<long>(type: "bigint", nullable: false),
+                    creation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_character", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_character_class_CharacterClassId",
+                        column: x => x.CharacterClassId,
+                        principalTable: "class",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_character_race_CharacterRaceraceId",
+                        column: x => x.CharacterRaceraceId,
+                        principalTable: "race",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "speed",
                 columns: table => new
                 {
@@ -132,6 +168,16 @@ namespace Data.Repositories.Migrations
                 column: "raceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_character_CharacterClassId",
+                table: "character",
+                column: "CharacterClassId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_character_CharacterRaceraceId",
+                table: "character",
+                column: "CharacterRaceraceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_speed_raceId",
                 table: "speed",
                 column: "raceId");
@@ -154,6 +200,9 @@ namespace Data.Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "users");
+
+            migrationBuilder.DropTable(
+                name: "class");
 
             migrationBuilder.DropTable(
                 name: "race");

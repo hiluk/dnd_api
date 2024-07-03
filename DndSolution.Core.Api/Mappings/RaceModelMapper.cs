@@ -1,5 +1,5 @@
 ﻿using Core.Sdk.Dtos.Race;
-using DndSolution.Application.Models.Models.Race;
+using DndSolution.Application.Models.Models.Races;
 
 namespace Core.Api.Mappings;
 

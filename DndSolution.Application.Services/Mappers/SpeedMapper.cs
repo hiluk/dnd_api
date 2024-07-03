@@ -1,5 +1,5 @@
 ﻿using Data.Entities.Entities;
-using DndSolution.Application.Models.Models.Race;
+using DndSolution.Application.Models.Models.Races;
 
 namespace DndSolution.Application.Services.Mappers;
 

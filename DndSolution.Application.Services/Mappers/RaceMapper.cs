@@ -1,6 +1,6 @@
 ﻿using Core.Sdk.Dtos.Race;
 using Data.Entities.Entities;
-using DndSolution.Application.Models.Models.Race;
+using DndSolution.Application.Models.Models.Races;
 using Mapster;
 
 namespace DndSolution.Application.Services.Mappers;

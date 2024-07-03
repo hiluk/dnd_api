@@ -3,6 +3,7 @@ using Core.Sdk.Dtos.Characters;
 using Core.Sdk.Enums;
 using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Classes;
 
 namespace Core.Api.Mappings;
 
@@ -24,8 +25,8 @@ public static class CharacterMapper
         {
             Name = dto.CharacterInformation.Name,
             Level = dto.CharacterInformation.Level,
-            CharacterClass = (CharacterClass)dto.CharacterInformation.CharacterClass,
-            CharacterRace = (CharacterRace)dto.CharacterInformation.CharacterRace,
+            CharacterClass = ClassModelMapper.MapToModel(dto.CharacterInformation.CharacterClass),
+            CharacterRace = RaceModelMapper.MapToModel(dto.CharacterInformation.CharacterRace),
             Email = dto.CharacterInformation.Email
         };
 
@@ -52,8 +53,8 @@ public static class CharacterMapper
         {
             Name = model.Character.Name,
             Level = model.Character.Level,
-            CharacterClass = (DtoCharacterClass)model.Character.CharacterClass,
-            CharacterRace = (DtoCharacterRace)model.Character.CharacterRace,
+            CharacterClass = ClassModelMapper.MapToDto(model.Character.CharacterClass),
+            CharacterRace = RaceModelMapper.MapToDto(model.Character.CharacterRace),
             Email = model.Character.Email
         };
 

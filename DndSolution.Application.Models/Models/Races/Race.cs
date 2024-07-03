@@ -1,8 +1,6 @@
-﻿using Mapster;
+﻿
+namespace DndSolution.Application.Models.Models.Races;
 
-namespace DndSolution.Application.Models.Models.Race;
-
-[AdaptTo("[name]Dto"), GenerateMapper]
 public class Race
 {
     public string Name { get; init; }

@@ -1,4 +1,7 @@
-﻿using DndSolution.Application.Models.Enums;
+﻿
+
+using DndSolution.Application.Models.Models.Classes;
+using DndSolution.Application.Models.Models.Races;
 
 namespace DndSolution.Application.Models.Models;
 
@@ -25,7 +28,7 @@ public class Character
     public CharacterClass CharacterClass { get; init; }
 
     /// <summary>
-    /// Расса персонажа
+    /// Раса персонажа
     /// </summary>
-    public CharacterRace CharacterRace { get; set; }
+    public Race CharacterRace { get; set; }
 }

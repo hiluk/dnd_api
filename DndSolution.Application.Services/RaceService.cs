@@ -1,7 +1,7 @@
 ﻿using Core.Sdk.Dtos.Race;
 using Data.Abstractions;
 using DndSolution.Application.Abstractions;
-using DndSolution.Application.Models.Models.Race;
+using DndSolution.Application.Models.Models.Races;
 using DndSolution.Application.Services.Mappers;
 
 namespace DndSolution.Application.Services;

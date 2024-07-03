@@ -1,6 +1,6 @@
 ﻿using DndSolution.Application.Models;
 using DndSolution.Application.Models.Models;
-using DndSolution.Application.Models.Models.Race;
+using DndSolution.Application.Models.Models.Races;
 
 namespace DndSolution.Application.Abstractions;
 

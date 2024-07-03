@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using DndSolution.Application.Models.Models.Race;
 
 namespace Data.Entities.Entities;
 

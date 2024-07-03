@@ -1,4 +1,4 @@
-﻿namespace DndSolution.Application.Models.Models.Race;
+﻿namespace DndSolution.Application.Models.Models.Races;
 
 public class Asi
 {

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Data.Entities.Class;
 using Data.Entities.Enums;
 
 namespace Data.Entities.Entities;
@@ -48,13 +49,13 @@ public class CharacterEntity
     /// Расса персонажа
     /// </summary>
     [Column("race")]
-    public EntityCharacterRace CharacterRace { get; init; }
+    public RaceEntity CharacterRace { get; init; }
     
     /// <summary>
     /// Класс персонажа
     /// </summary>
     [Column("class")]
-    public EntityCharacterClass CharacterClass { get; init; }
+    public CharacterClassEntity CharacterClass { get; init; }
 
     /// <summary>
     /// Дата создания персонажа

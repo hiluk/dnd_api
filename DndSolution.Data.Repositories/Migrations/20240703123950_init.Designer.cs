@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    [Migration("20240702202927_Initial")]
-    partial class Initial
+    [Migration("20240703123950_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,80 @@ namespace Data.Repositories.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("Data.Entities.Class.CharacterClassEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("desc");
+
+                    b.Property<string>("Equipment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("equipment");
+
+                    b.Property<string>("HitDice")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("hit_dice");
+
+                    b.Property<string>("HpAt1stLevel")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("hp_at_1st_level");
+
+                    b.Property<string>("HpAtHigherLevels")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("hp_at_high_levels");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<string>("ProfArmor")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prof_armor");
+
+                    b.Property<string>("ProfSavingThrows")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prof_saving_throws");
+
+                    b.Property<string>("ProfSkills")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prof_skills");
+
+                    b.Property<string>("ProfTool")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prof_tool");
+
+                    b.Property<string>("ProfWeapon")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("prof_weapon");
+
+                    b.Property<string>("SpellCastingAbility")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("spell_casting_ability");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("class");
+                });
 
             modelBuilder.Entity("Data.Entities.Entities.AsiEntity", b =>
                 {
@@ -63,18 +137,16 @@ namespace Data.Repositories.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int>("CharacterClass")
-                        .HasColumnType("integer")
-                        .HasColumnName("class");
+                    b.Property<long>("CharacterClassId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CharacterId")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("character_id");
 
-                    b.Property<int>("CharacterRace")
-                        .HasColumnType("integer")
-                        .HasColumnName("race");
+                    b.Property<long>("CharacterRaceraceId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("DateCreate")
                         .HasColumnType("timestamp with time zone")
@@ -99,6 +171,10 @@ namespace Data.Repositories.Migrations
                         .HasColumnName("xp");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CharacterClassId");
+
+                    b.HasIndex("CharacterRaceraceId");
 
                     b.ToTable("character");
                 });
@@ -257,6 +333,25 @@ namespace Data.Repositories.Migrations
                         .IsRequired();
 
                     b.Navigation("Race");
+                });
+
+            modelBuilder.Entity("Data.Entities.Entities.CharacterEntity", b =>
+                {
+                    b.HasOne("Data.Entities.Class.CharacterClassEntity", "CharacterClass")
+                        .WithMany()
+                        .HasForeignKey("CharacterClassId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.Entities.RaceEntity", "CharacterRace")
+                        .WithMany()
+                        .HasForeignKey("CharacterRaceraceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CharacterClass");
+
+                    b.Navigation("CharacterRace");
                 });
 
             modelBuilder.Entity("Data.Entities.Entities.SpeedEntity", b =>
