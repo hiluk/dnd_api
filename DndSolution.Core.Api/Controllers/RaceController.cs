@@ -12,11 +12,21 @@ public class RaceController : ControllerBase
 {
     private readonly IRaceService _service;
 
+
+    /// <summary>
+    /// Работа с расами
+    /// </summary>
+    /// <param name="service"></param>
     public RaceController(IRaceService service)
     {
         _service = service;
     }
 
+    /// <summary>
+    /// Сохраниние новой расы
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <param name="token"></param>
     [HttpPost("SaveRace")]
     public async Task SaveRace(RaceDto dto, CancellationToken token)
     {
@@ -32,6 +42,11 @@ public class RaceController : ControllerBase
         }
     }
     
+    /// <summary>
+    /// Получение всех рас
+    /// </summary>
+    /// <param name="token"></param>
+    /// <returns></returns>
     [HttpGet("GetAllRaces")]
     public async Task<List<RaceDto>> GetAllRacesAsync(CancellationToken token)
     {
