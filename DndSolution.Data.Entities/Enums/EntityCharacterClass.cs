@@ -1,8 +1,7 @@
 ﻿namespace Data.Entities.Enums;
 
-public enum EntityCharacterClass
+public enum CharacterClassTypeEntity
 {
-    None,
     Warrior,
     Mage,
     Paladin

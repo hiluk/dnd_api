@@ -14,6 +14,7 @@ public class ClassService : IClassService
         _repository = repository;
     }
 
+    /// <inheritdoc />
     public async Task SaveClassAsync(CharacterClass model, CancellationToken token)
     {
         var entity = CharacterClassMapper.MapToEntity(model);
@@ -21,6 +22,7 @@ public class ClassService : IClassService
         await _repository.SaveClassAsync(entity, token);
     }
 
+    /// <inheritdoc />
     public async Task<List<CharacterClass>> GetAllClassesAsync(CancellationToken token)
     {
         var entities = await _repository.GetAllClassesAsync(token);

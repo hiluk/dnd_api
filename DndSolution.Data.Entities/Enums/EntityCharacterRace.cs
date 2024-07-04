@@ -1,10 +1,7 @@
 ﻿namespace Data.Entities.Enums;
 
-public enum EntityCharacterRace
+public enum CharacterRaceTypeEntity
 {
-    None,
-    Human,
-    Elf,
-    Dwarf,
-    Halfing
+    Human = 1,
+    HalfElf = 2,
 }

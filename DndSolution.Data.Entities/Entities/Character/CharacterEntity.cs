@@ -49,13 +49,13 @@ public class CharacterEntity
     /// Расса персонажа
     /// </summary>
     [Column("race")]
-    public RaceEntity CharacterRace { get; init; }
+    public CharacterRaceTypeEntity CharacterRace { get; init; }
     
     /// <summary>
     /// Класс персонажа
     /// </summary>
     [Column("class")]
-    public CharacterClassEntity CharacterClass { get; init; }
+    public CharacterClassTypeEntity CharacterClass { get; init; }
 
     /// <summary>
     /// Дата создания персонажа
