@@ -28,8 +28,8 @@ public static class CharacterMapper
         {
             Name = model.Character.Name,
             Level = model.Character.Level,
-            CharacterClass = CharacterClassMapper.MapToEntity(model.Character.CharacterClass),
-            CharacterRace = RaceMapper.MapToEntity(model.Character.CharacterRace),
+            // CharacterClass = CharacterClassMapper.MapToEntity(model.Character.CharacterClass),
+            // CharacterRace = RaceMapper.MapToEntity(model.Character.CharacterRace),
             CharacterId = characterId,
             Xp = 0,
             Email = model.Character.Email,
@@ -59,8 +59,8 @@ public static class CharacterMapper
         {
             Name = entity.Character.Name,
             Level = entity.Character.Level,
-            CharacterClass = CharacterClassMapper.MapToModel(entity.Character.CharacterClass),
-            CharacterRace = RaceMapper.MapToModel(entity.Character.CharacterRace),
+            // CharacterClass = CharacterClassMapper.MapToModel(entity.Character.CharacterClass),
+            // CharacterRace = RaceMapper.MapToModel(entity.Character.CharacterRace),
             Email = entity.Character.Email,
         };
 
