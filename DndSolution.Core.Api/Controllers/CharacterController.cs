@@ -1,4 +1,5 @@
 ﻿using Core.Api.Mappings;
+using Core.Sdk.Dtos.Character;
 using Core.Sdk.Dtos.Characters;
 using DndSolution.Application.Abstractions;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace Core.Api.Controllers;
 /// Контроллер работы с персонажами
 /// </summary>
 [ApiController]
-[Route("/api/v1/character")]
+[Route("/characters")]
 public class CharacterController : ControllerBase
 {
     private readonly ICharacterService _service;
@@ -31,13 +32,13 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="dto">Дто с информацеий о персонаже</param>
     /// <param name="token">Токен отмены операции</param>
-    [HttpPost("createPerson")]
-    public async Task CreateCharacter([FromBody] CharacterFullDto dto, CancellationToken token)
+    [HttpPost("create")]
+    public async Task CreateCharacter([FromBody]CharacterFullDto dto, CancellationToken token)
     {
         try
         {
-            var character = CharacterMapper.MapToModel(dto);
-            await _service.CreateCharacterAsync(character, token);
+            var character = CharacterMapper.MapToModel(dto.Character);
+            await _service.CreateCharacterAsync(character, dto.email, token);
         }
         catch (Exception e)
         {
@@ -51,8 +52,8 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="token">Токен отмены операции</param>
-    [HttpPost("GetAllUserCharacters")]
-    public async Task<IReadOnlyList<CharacterFullDto>> GetAllUserCharacters(string email, CancellationToken token)
+    [HttpPost("")]
+    public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters(string email, CancellationToken token)
     {
         try
         {
@@ -73,8 +74,8 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="request">Запрос на получение персонажа</param>
     /// <param name="token">Токен отмены операции</param>
-    [HttpPost("GetUsersCharacter")]
-    public async Task<CharacterFullDto> GetCharacterByName(CharacterRequest request, CancellationToken token)
+    [HttpPost("get-by-name")]
+    public async Task<CharacterDto> GetCharacterByName(CharacterRequest request, CancellationToken token)
     {
         try
         {
@@ -93,7 +94,7 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="request"></param>
     /// <param name="token"></param>
-    [HttpDelete("DeleteUsersCharacter")]
+    [HttpDelete("delete")]
     public async Task DeleteCharacter([FromBody] CharacterRequest request, CancellationToken token)
     {
         try

@@ -15,11 +15,11 @@ public class CharacterEntity
     [Column("id")]
     public long Id { get; set; }
 
-    /// <summary>
-    /// Универсальный идентификатор персонажа
-    /// </summary>
-    [Column("character_id")]
-    public string CharacterId { get; init; }
+    // /// <summary>
+    // /// Универсальный идентификатор персонажа
+    // /// </summary>
+    // [Column("character_id")]
+    // public string CharacterId { get; init; }
     
     /// <summary>
     /// Имя персонажа
@@ -46,7 +46,7 @@ public class CharacterEntity
     public long Xp { get; init; }
     
     /// <summary>
-    /// Расса персонажа
+    /// Раса персонажа
     /// </summary>
     [Column("race")]
     public CharacterRaceTypeEntity CharacterRace { get; init; }
@@ -62,4 +62,6 @@ public class CharacterEntity
     /// </summary>
     [Column("creation_date")]
     public DateTime DateCreate { get; set; }
+    
+    public CharacterStatsEntity Stats { get; set; }
 }

@@ -16,19 +16,19 @@ public class CharacterDto
     /// Уровень персонажа
     /// </summary>
     public byte Level { get; init; }
-
-    /// <summary>
-    /// Эмейл пользователя
-    /// </summary>
-    public string Email { get; init; }
     
     /// <summary>
     /// Класс персонажа
     /// </summary>
-    public CharacterClassDto CharacterClass { get; init; }
+    public CharacterClassTypeDto CharacterClass { get; init; }
 
     /// <summary>
     /// Расса персонажа
     /// </summary>
-    public RaceDto CharacterRace { get; init; }
+    public CharacterRaceTypeDto CharacterRace { get; init; }
+    
+    /// <summary>
+    /// Информация о очках характеристик персонажа
+    /// </summary>
+    public CharacterStatsDto CharacterStats { get; init; }
 }

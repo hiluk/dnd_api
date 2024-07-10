@@ -2,7 +2,5 @@
 
 public enum CharacterClassTypeEntity
 {
-    Warrior,
-    Mage,
-    Paladin
+    Warrior = 1,
 }

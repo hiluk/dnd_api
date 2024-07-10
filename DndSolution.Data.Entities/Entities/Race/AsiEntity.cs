@@ -9,8 +9,8 @@ public class AsiEntity
     [Column("id")]
     public long Id { get; init; }
     
-    [ForeignKey("raceId")]
-    [Column("raceId")]
+    [ForeignKey("race_id")]
+    [Column("race_id")]
     public long RaceId { get; init; }
     
     [Column("race")]

@@ -31,6 +31,12 @@ public class DndContext : DbContext
             .HasForeignKey(x => x.RaceId);
         
         modelBuilder.Entity<CharacterEntity>().HasKey(x => x.Id);
+        modelBuilder.Entity<CharacterEntity>()
+            .HasOne(x => x.Stats)
+            .WithOne(x => x.Character)
+            .HasForeignKey<CharacterStatsEntity>(x => x.CharacterId)
+            .IsRequired();
+
         modelBuilder.Entity<CharacterStatsEntity>().HasKey(x => x.Id);
         
         modelBuilder.Entity<UserEntity>().HasKey(x => x.Id);

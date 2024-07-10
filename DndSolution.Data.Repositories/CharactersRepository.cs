@@ -25,54 +25,35 @@ public class CharactersRepository : ICharactersRepository
     }
 
     /// <inheritdoc />
-    public async Task SaveCharacterAsync(CharacterFullEntity character, CancellationToken token)
+    public async Task SaveCharacterAsync(CharacterEntity character, CancellationToken token)
     {
-        await _context.Set<CharacterEntity>().AddAsync(character.Character, token);
-        await _context.SaveChangesAsync(token);
+        await _context.Set<CharacterEntity>().AddAsync(character, token);
         
         await _context.Set<CharacterStatsEntity>().AddAsync(character.Stats, token);
         await _context.SaveChangesAsync(token);
     }
     
     /// <inheritdoc />
-    public async Task<IReadOnlyList<CharacterFullEntity>> GetAllUserCharactersAsync(string email, CancellationToken token)
+    public async Task<IReadOnlyList<CharacterEntity>> GetAllUserCharactersAsync(string email, CancellationToken token)
     {
-        var characters = _context.Set<CharacterEntity>().Where(x => x.Email == email).AsQueryable();
-        var stats = _context.Set<CharacterStatsEntity>().AsQueryable();
-
-        var joined = await characters.Join(stats,
-            l => l.CharacterId,
-            r => r.CharacterId,
-            (l, r) => new
-            {
-                Character = l,
-                Stats = r
-            })
+        var characters = await _context.Set<CharacterEntity>()
+            .Where(x => x.Email == email)
+            .Include(x => x.Stats)
             .ToListAsync(token);
 
-        var resultList = new List<CharacterFullEntity>();
-        foreach (var item in joined)
-        {
-            var character = item.Character;
-            var stat = item.Stats;
-
-            var resultItem = MapToFullEntity(character, stat);
-            resultList.Add(resultItem);
-        }
-        
-        return resultList;
+        return characters;
     }
 
     /// <inheritdoc />
-    public async Task<CharacterFullEntity> GetCharacterAsync(string email, string name, CancellationToken token)
+    public async Task<CharacterEntity> GetCharacterAsync(string email, string name, CancellationToken token)
     {
         var character = await _context.Set<CharacterEntity>()
-            .Where(x => x.Email == email && x.Name == name).FirstAsync(token);
-
-        var stat = await _context.Set<CharacterStatsEntity>()
-            .Where(x => x.CharacterId == character.CharacterId).FirstAsync(token);
+            .Where(x => x.Email == email && x.Name == name)
+            .Include(x => x.Stats)
+            .FirstAsync(token);
         
-        return MapToFullEntity(character, stat);
+        
+        return character;
     }
 
     /// <inheritdoc />
@@ -83,14 +64,5 @@ public class CharactersRepository : ICharactersRepository
             .ExecuteDeleteAsync(token);
         
         await _context.SaveChangesAsync(token);
-    }
-
-    private static CharacterFullEntity MapToFullEntity(CharacterEntity character, CharacterStatsEntity stat)
-    {
-        return new CharacterFullEntity
-        {
-            Character = character,
-            Stats = stat
-        };
     }
 }

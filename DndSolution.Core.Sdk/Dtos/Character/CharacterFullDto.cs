@@ -1,14 +1,10 @@
-﻿namespace Core.Sdk.Dtos.Characters;
+﻿using Core.Sdk.Dtos.Characters;
+
+namespace Core.Sdk.Dtos.Character;
 
 public class CharacterFullDto
 {
-    /// <summary>
-    /// Информация о персонаже
-    /// </summary>
-    public required CharacterDto CharacterInformation { get; init; }
+    public string email { get; set; }
     
-    /// <summary>
-    /// Информация о очках характеристик персонажа
-    /// </summary>
-    public required CharacterStatsDto CharacterStats { get; init; }
+    public CharacterDto Character { get; set; }
 }

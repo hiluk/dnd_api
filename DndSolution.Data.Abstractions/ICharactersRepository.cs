@@ -13,7 +13,7 @@ public interface ICharactersRepository
     /// <param name="character"></param>
     /// <param name="token"></param>
     /// <returns></returns>
-    public Task SaveCharacterAsync(CharacterFullEntity character, CancellationToken token);
+    public Task SaveCharacterAsync(CharacterEntity character, CancellationToken token);
 
     /// <summary>
     /// Получить всех персонажей пользователя
@@ -21,7 +21,7 @@ public interface ICharactersRepository
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="token">Токен отмены операции</param>
     /// <returns></returns>
-    public Task<IReadOnlyList<CharacterFullEntity>> GetAllUserCharactersAsync(string email, CancellationToken token);
+    public Task<IReadOnlyList<CharacterEntity>> GetAllUserCharactersAsync(string email, CancellationToken token);
     
     /// <summary>
     /// Получить персонажа пользователя по имени
@@ -29,7 +29,7 @@ public interface ICharactersRepository
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="name">Имя персонажа</param>
     /// <param name="token">Токен отмены операции</param>
-    public Task<CharacterFullEntity> GetCharacterAsync(string email, string name, CancellationToken token);
+    public Task<CharacterEntity> GetCharacterAsync(string email, string name, CancellationToken token);
     
     /// <summary>
     /// Удалить персонажа

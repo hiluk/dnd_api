@@ -9,59 +9,47 @@ namespace Core.Api.Mappings;
 
 public static class CharacterMapper
 {
-    public static CharacterFull MapToModel(CharacterFullDto dto)
+    public static Character MapToModel(CharacterDto dto)
     {
-        var stats = new CharacterStats
-        {
-            Strength = dto.CharacterStats.Strength,
-            Dexterity = dto.CharacterStats.Dexterity,
-            Intelligence = dto.CharacterStats.Intelligence,
-            Wisdom = dto.CharacterStats.Wisdom,
-            Charisma = dto.CharacterStats.Charisma,
-            Constitution = dto.CharacterStats.Constitution
-        };
-
         var character = new Character
         {
-            Name = dto.CharacterInformation.Name,
-            Level = dto.CharacterInformation.Level,
-            CharacterClass = ClassModelMapper.MapToModel(dto.CharacterInformation.CharacterClass),
-            CharacterRace = RaceModelMapper.MapToModel(dto.CharacterInformation.CharacterRace),
-            Email = dto.CharacterInformation.Email
+            Name = dto.Name,
+            Level = dto.Level,
+            CharacterClass = (CharacterClassType)dto.CharacterClass,
+            CharacterRace = (CharacterRaceType)dto.CharacterRace,
+            Stats = new CharacterStats
+            {
+                Strength = dto.CharacterStats.Strength,
+                Dexterity = dto.CharacterStats.Dexterity,
+                Intelligence = dto.CharacterStats.Intelligence,
+                Wisdom = dto.CharacterStats.Wisdom,
+                Charisma = dto.CharacterStats.Charisma,
+                Constitution = dto.CharacterStats.Constitution
+            }
         };
 
-        return new CharacterFull
-        {
-            Character = character,
-            Stats = stats
-        };
+        return character;
     }
 
-    public static CharacterFullDto MapToDto(CharacterFull model)
+    public static CharacterDto MapToDto(Character model)
     {
-        var stats = new CharacterStatsDto
-        {
-            Strength = model.Stats.Strength,
-            Dexterity = model.Stats.Dexterity,
-            Intelligence = model.Stats.Intelligence,
-            Wisdom = model.Stats.Wisdom,
-            Charisma = model.Stats.Charisma,
-            Constitution = model.Stats.Constitution
-        };
-
         var character = new CharacterDto
         {
-            Name = model.Character.Name,
-            Level = model.Character.Level,
-            CharacterClass = ClassModelMapper.MapToDto(model.Character.CharacterClass),
-            CharacterRace = RaceModelMapper.MapToDto(model.Character.CharacterRace),
-            Email = model.Character.Email
+            Name = model.Name,
+            Level = model.Level,
+            CharacterClass = (CharacterClassTypeDto)model.CharacterClass,
+            CharacterRace = (CharacterRaceTypeDto)model.CharacterRace,
+            CharacterStats = new CharacterStatsDto()
+            {
+                Constitution = model.Stats.Constitution,
+                Dexterity = model.Stats.Constitution,
+                Intelligence = model.Stats.Intelligence,
+                Wisdom = model.Stats.Wisdom,
+                Charisma = model.Stats.Charisma,
+                Strength = model.Stats.Strength,
+            }
         };
 
-        return new CharacterFullDto
-        {
-            CharacterInformation = character,
-            CharacterStats = stats
-        };
+        return character;
     }
 }

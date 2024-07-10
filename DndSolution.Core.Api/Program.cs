@@ -12,7 +12,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureRepositories(builder.Configuration);
 builder.Services.ConfigureServices();
 
-builder.Services.AddAuth();
+// builder.Services.AddAuth();
 
 var app = builder.Build();
 

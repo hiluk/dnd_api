@@ -6,15 +6,18 @@ namespace Data.Entities.Entities;
 [Table("stats")]
 public class CharacterStatsEntity
 {
-    [Key]
     [Column("id")]
     public long Id { get; set; }
     
     /// <summary>
     /// Уникальный идентификатор персонажа
     /// </summary>
+    [ForeignKey("character_id")]
     [Column("character_id")]
-    public string CharacterId { get; set; }
+    public long CharacterId { get; set; }
+    
+    [Column("character")]
+    public CharacterEntity Character { get; init; }
     
     /// <summary>
     /// Сила
@@ -45,6 +48,7 @@ public class CharacterStatsEntity
     /// </summary>
     [Column("dexterity")]
     public int Dexterity { get; set; }
+    
     
     /// <summary>
     /// Харизма

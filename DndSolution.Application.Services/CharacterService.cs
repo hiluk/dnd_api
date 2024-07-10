@@ -22,14 +22,14 @@ public class CharacterService : ICharacterService
     }
 
     /// <inheritdoc />>
-    public async Task CreateCharacterAsync(CharacterFull character, CancellationToken token)
+    public async Task CreateCharacterAsync(Character character, string email, CancellationToken token)
     {
-        var entity = CharacterMapper.MapToEntity(character);
+        var entity = CharacterMapper.MapToEntity(character, email);
         await _repository.SaveCharacterAsync(entity, token);
     }
 
     /// <inheritdoc />>
-    public async Task<IReadOnlyList<CharacterFull>> GetAllUserCharactersAsync(string email, CancellationToken token)
+    public async Task<IReadOnlyList<Character>> GetAllUserCharactersAsync(string email, CancellationToken token)
     {
         var entity= await _repository.GetAllUserCharactersAsync(email, token);
         var model = entity.Select(CharacterMapper.MapToModel).ToList();
@@ -38,7 +38,7 @@ public class CharacterService : ICharacterService
     }
 
     /// <inheritdoc />
-    public async Task<CharacterFull> GetCharacterAsync(string email, string name, CancellationToken token)
+    public async Task<Character> GetCharacterAsync(string email, string name, CancellationToken token)
     {
         var entity = await _repository.GetCharacterAsync(email, name, token);
         return CharacterMapper.MapToModel(entity);

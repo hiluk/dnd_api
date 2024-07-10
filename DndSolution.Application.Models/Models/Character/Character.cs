@@ -1,5 +1,6 @@
 ﻿
 
+using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models.Classes;
 using DndSolution.Application.Models.Models.Races;
 
@@ -17,18 +18,19 @@ public class Character
     /// </summary>
     public byte Level { get; set; }
     
-    /// <summary>
-    /// Эмейл пользователя
-    /// </summary>
-    public string Email { get; init; }
     
     /// <summary>
     /// Класс персонажа
     /// </summary>
-    public CharacterClass CharacterClass { get; init; }
+    public CharacterClassType CharacterClass { get; init; }
 
     /// <summary>
     /// Раса персонажа
     /// </summary>
-    public Race CharacterRace { get; set; }
+    public CharacterRaceType CharacterRace { get; set; }
+    
+    /// <summary>
+    /// Характеристики персонажа
+    /// </summary>
+    public CharacterStats Stats { get; init; }
 }

@@ -9,65 +9,51 @@ namespace DndSolution.Application.Services.Mappers;
 
 public static class CharacterMapper
 {
-    public static CharacterFullEntity MapToEntity(CharacterFull model)
+    public static CharacterEntity MapToEntity(Character model, string email)
     {
         var characterId = GetNewId();
         
-        var stats = new CharacterStatsEntity
-        {
-            CharacterId = characterId,
-            Strength = model.Stats.Strength,
-            Dexterity = model.Stats.Dexterity,
-            Intelligence = model.Stats.Intelligence,
-            Wisdom = model.Stats.Wisdom,
-            Charisma = model.Stats.Charisma,
-            Constitution = model.Stats.Constitution
-        };
 
-        var character = new CharacterEntity
+        return new CharacterEntity
         {
-            Name = model.Character.Name,
-            Level = model.Character.Level,
-            // CharacterClass = CharacterClassMapper.MapToEntity(model.Character.CharacterClass),
-            // CharacterRace = RaceMapper.MapToEntity(model.Character.CharacterRace),
-            CharacterId = characterId,
+            Name = model.Name,
+            Level = model.Level,
+            Email = email,
+            CharacterClass = (CharacterClassTypeEntity)model.CharacterClass,
+            CharacterRace = (CharacterRaceTypeEntity)model.CharacterRace,
             Xp = 0,
-            Email = model.Character.Email,
-            DateCreate = DateTime.UtcNow
-        };
-
-        return new CharacterFullEntity
-        {
-            Character = character,
-            Stats = stats
+            DateCreate = DateTime.UtcNow,
+            Stats = new CharacterStatsEntity
+            {
+                Strength = model.Stats.Strength,
+                Dexterity = model.Stats.Dexterity,
+                Intelligence = model.Stats.Intelligence,
+                Wisdom = model.Stats.Wisdom,
+                Charisma = model.Stats.Charisma,
+                Constitution = model.Stats.Constitution
+            }
         };
     }
     
-    public static CharacterFull MapToModel(CharacterFullEntity entity)
+    public static Character MapToModel(CharacterEntity entity)
     {
-        var stats = new CharacterStats
-        {
-            Strength = entity.Stats.Strength,
-            Dexterity = entity.Stats.Dexterity,
-            Intelligence = entity.Stats.Intelligence,
-            Wisdom = entity.Stats.Wisdom,
-            Charisma = entity.Stats.Charisma,
-            Constitution = entity.Stats.Constitution
-        };
+        
 
-        var character = new Character
+         return new Character
         {
-            Name = entity.Character.Name,
-            Level = entity.Character.Level,
-            // CharacterClass = CharacterClassMapper.MapToModel(entity.Character.CharacterClass),
-            // CharacterRace = RaceMapper.MapToModel(entity.Character.CharacterRace),
-            Email = entity.Character.Email,
-        };
-
-        return new CharacterFull
-        {
-            Character = character,
-            Stats = stats
+            Name = entity.Name,
+            Level = entity.Level,
+            CharacterClass = (CharacterClassType)entity.CharacterClass,
+            CharacterRace = (CharacterRaceType)entity.CharacterRace,
+            Stats = new CharacterStats
+            {
+                Strength = entity.Stats.Strength,
+                Dexterity = entity.Stats.Dexterity,
+                Intelligence = entity.Stats.Intelligence,
+                Wisdom = entity.Stats.Wisdom,
+                Charisma = entity.Stats.Charisma,
+                Constitution = entity.Stats.Constitution
+            }
         };
     }
     
