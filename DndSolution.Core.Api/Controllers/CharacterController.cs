@@ -53,7 +53,7 @@ public class CharacterController : ControllerBase
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpPost("")]
-    public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters(string email, CancellationToken token)
+    public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters([FromBody] string email, CancellationToken token)
     {
         try
         {

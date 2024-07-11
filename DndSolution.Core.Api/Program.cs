@@ -29,8 +29,8 @@ await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>(
     context.Database.EnsureCreated();
 }
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.UseHttpsRedirection();
 app.MapControllers();
