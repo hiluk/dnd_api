@@ -22,7 +22,9 @@ public class ClassesRepository : IClassesRepository
 
     public async Task<List<CharacterClassEntity>> GetAllClassesAsync(CancellationToken token)
     {
-        var classes = await _context.Set<CharacterClassEntity>().ToListAsync(token);
+        var classes = await _context.Set<CharacterClassEntity>()
+            .AsNoTracking()
+            .ToListAsync(token);
 
         return classes;
     }

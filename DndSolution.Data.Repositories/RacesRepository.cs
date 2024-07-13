@@ -36,9 +36,10 @@ public class RacesRepository : IRacesRepository
     public async Task<List<RaceEntity>> GetAllRaces(CancellationToken token)
     {
         var races = await _context.Set<RaceEntity>()
-                .Include(x => x.Asi)
-                .Include(x => x.Speed)
-                .ToListAsync(token);
+            .AsNoTracking()
+            .Include(x => x.Asi)
+            .Include(x => x.Speed)
+            .ToListAsync(token);
 
         return races;
     }
