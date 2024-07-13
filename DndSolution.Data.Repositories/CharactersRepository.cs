@@ -37,6 +37,7 @@ public class CharactersRepository : ICharactersRepository
     public async Task<IReadOnlyList<CharacterEntity>> GetAllUserCharactersAsync(string email, CancellationToken token)
     {
         var characters = await _context.Set<CharacterEntity>()
+            .AsNoTracking()
             .Where(x => x.Email == email)
             .Include(x => x.Stats)
             .ToListAsync(token);
