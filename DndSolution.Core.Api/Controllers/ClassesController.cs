@@ -41,17 +41,13 @@ public class ClassesController : ControllerBase
    {
        try
        {
-           List<CharacterClassDto> classDtos = [];
            var models = await _service.GetAllClassesAsync(token);
 
-           foreach (var characterClass in models)
-           {
-               classDtos.Add(ClassModelMapper.MapToDto(characterClass));
-           }
+           var dtos = models.Select(x => ClassModelMapper.MapToDto(x)).ToList();
 
-           if (classDtos.IsNullOrEmpty()) return NoContent();
+           if (dtos.IsNullOrEmpty()) return NoContent();
 
-           return Ok(classDtos);
+           return Ok(dtos);
        }
        catch (Exception e)
        {

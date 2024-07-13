@@ -25,12 +25,7 @@ public class RaceService : IRaceService
     public async Task<List<Race>> GetAllRacesAsync(CancellationToken token)
     {
         var entities = await _repository.GetAllRaces(token);
-        List<Race> races = [];
-
-        foreach (var entity in entities)
-        {
-            races.Add(RaceMapper.MapToModel(entity));
-        }
+        var races = entities.Select(x => RaceMapper.MapToModel(x)).ToList();
 
         return races;
     }

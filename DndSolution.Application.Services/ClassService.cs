@@ -26,14 +26,9 @@ public class ClassService : IClassService
     public async Task<List<CharacterClass>> GetAllClassesAsync(CancellationToken token)
     {
         var entities = await _repository.GetAllClassesAsync(token);
-        List<CharacterClass> models = [];
+        var classes = entities.Select(x => CharacterClassMapper.MapToModel(x)).ToList();
 
-        foreach (var classEntity in entities)
-        {
-            models.Add(CharacterClassMapper.MapToModel(classEntity));
-        }
-
-        return models;
+        return classes;
     }
 }
     

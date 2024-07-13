@@ -67,16 +67,11 @@ public class RacesController : ControllerBase
         try
         {
             var races = await _service.GetAllRacesAsync(token);
-            List<RaceDto> racesDto = [];
-
-            foreach (var race in races)
-            {
-                racesDto.Add(RaceModelMapper.MapToDto(race));
-            }
+            var dtos = races.Select(x => RaceModelMapper.MapToDto(x)).ToList();
             
-            if (racesDto.IsNullOrEmpty()) return NoContent();
+            if (dtos.IsNullOrEmpty()) return NoContent();
 
-            return Ok(racesDto);
+            return Ok(dtos);
         }
         catch (Exception e)
         {

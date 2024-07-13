@@ -10,7 +10,6 @@ public class CharacterClass
     
     public string HpAt1stLevel { get; set; }
     
-    // TODO: Сделать модель дайса и тут ее прокинуть
     public string HpAtHigherLevels { get; set; }
     
     public string ProfArmor { get; set; }
