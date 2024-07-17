@@ -1,7 +1,6 @@
 ﻿using Data.Abstractions;
 using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models.Models.Classes;
-using DndSolution.Application.Services.Mappers;
 
 namespace DndSolution.Application.Services;
 
@@ -17,18 +16,13 @@ public class ClassService : IClassService
     /// <inheritdoc />
     public async Task SaveClassAsync(CharacterClass model, CancellationToken token)
     {
-        var entity = CharacterClassMapper.MapToEntity(model);
-
-        await _repository.SaveClassAsync(entity, token);
+        await _repository.SaveClassAsync(model, token);
     }
 
     /// <inheritdoc />
     public async Task<List<CharacterClass>> GetAllClassesAsync(CancellationToken token)
     {
-        var entities = await _repository.GetAllClassesAsync(token);
-        var classes = entities.Select(x => CharacterClassMapper.MapToModel(x)).ToList();
-
-        return classes;
+        return  await _repository.GetAllClassesAsync(token);
     }
 }
     

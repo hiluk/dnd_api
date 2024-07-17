@@ -10,7 +10,6 @@
     <ItemGroup>
       <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
       <ProjectReference Include="..\DndSolution.Core.Sdk\DndSolution.Core.Sdk.csproj" />
-      <ProjectReference Include="..\DndSolution.Data.Entities\DndSolution.Data.Entities.csproj" />
     </ItemGroup>
 
     <ItemGroup>

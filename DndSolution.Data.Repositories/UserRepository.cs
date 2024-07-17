@@ -1,5 +1,5 @@
 ﻿using Data.Abstractions;
-using Data.Entities;
+using DndSolution.Application.Models;
 using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories;
@@ -15,16 +15,16 @@ public class UserRepository : IUserRepository
         _logger = logger;
     }
 
-    public async Task SaveUserAsync(UserEntity user, CancellationToken token)
+    public async Task SaveUserAsync(User user, CancellationToken token)
     {
-        var emails = _context.Set<UserEntity>().Select(x => x.Email).ToList();
+        var emails = _context.Set<User>().Select(x => x.Email).ToList();
         if (emails.Contains(user.Email))
         {
             _logger.LogError("Пользователь с таким эмэйлом уже есть");
             throw new ArgumentException();
         }
             
-        await _context.Set<UserEntity>().AddAsync(user, token);
+        await _context.Set<User>().AddAsync(user, token);
         await _context.SaveChangesAsync(token);
     }
 }

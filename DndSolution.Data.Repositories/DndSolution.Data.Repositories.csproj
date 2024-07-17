@@ -27,7 +27,6 @@
     <ItemGroup>
       <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
       <ProjectReference Include="..\DndSolution.Data.Abstractions\DndSolution.Data.Abstractions.csproj" />
-      <ProjectReference Include="..\DndSolution.Data.Entities\DndSolution.Data.Entities.csproj" />
     </ItemGroup>
     
 </Project>

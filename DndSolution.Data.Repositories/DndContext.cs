@@ -1,7 +1,8 @@
-﻿using Data.Entities;
-using Data.Entities.Class;
-using Data.Entities.Entities;
+﻿
+using DndSolution.Application.Models;
 using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Classes;
+using DndSolution.Application.Models.Models.Races;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
@@ -10,6 +11,9 @@ public class DndContext : DbContext
 {
 
     public DbSet<Character> Characters { get; set; }
+    public DbSet<Race> Races { get; set; }
+    public DbSet<CharacterClass> Classes { get; set; }
+    public DbSet<User> Users { get; set; }
     public DndContext(DbContextOptions options) : base(options)
     {
         
@@ -18,18 +22,18 @@ public class DndContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<RaceEntity>().HasKey(x => x.raceId);
-        modelBuilder.Entity<CharacterClassEntity>().HasKey(x => x.Id);
+        modelBuilder.Entity<Race>().HasKey(x => x.Id);
+        modelBuilder.Entity<CharacterClass>().HasKey(x => x.Id);
         
-        modelBuilder.Entity<AsiEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<AsiEntity>()
-                    .HasOne<RaceEntity>(x => x.Race)
+        modelBuilder.Entity<Asi>().HasKey(x => x.Id);
+        modelBuilder.Entity<Asi>()
+                    .HasOne<Race>(x => x.Race)
                     .WithMany(x => x.Asi)
                     .HasForeignKey(x => x.RaceId);
         
-        modelBuilder.Entity<SpeedEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<SpeedEntity>()
-            .HasOne<RaceEntity>(x => x.Race)
+        modelBuilder.Entity<Speed>().HasKey(x => x.Id);
+        modelBuilder.Entity<Speed>()
+            .HasOne<Race>(x => x.Race)
             .WithMany(x => x.Speed)
             .HasForeignKey(x => x.RaceId);
         
@@ -43,6 +47,6 @@ public class DndContext : DbContext
 
         modelBuilder.Entity<CharacterStats>().HasKey(x => x.CharacterId);
         
-        modelBuilder.Entity<UserEntity>().HasKey(x => x.Id);
+        modelBuilder.Entity<User>().HasKey(x => x.Id);
     }
 }

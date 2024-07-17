@@ -1,7 +1,6 @@
 ﻿using Data.Abstractions;
 using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models;
-using DndSolution.Application.Services.Mappers;
 
 namespace DndSolution.Application.Services;
 
@@ -16,7 +15,6 @@ public class UserService : IUserService
 
     public async Task SaveUserAsync(User user, CancellationToken token)
     {
-        var entity = UserMapper.MapToEntity(user);
-        await _repository.SaveUserAsync(entity, token);
+        await _repository.SaveUserAsync(user, token);
     }
 }

@@ -12,7 +12,6 @@
       <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
       <ProjectReference Include="..\DndSolution.Core.Sdk\DndSolution.Core.Sdk.csproj" />
       <ProjectReference Include="..\DndSolution.Data.Abstractions\DndSolution.Data.Abstractions.csproj" />
-      <ProjectReference Include="..\DndSolution.Data.Entities\DndSolution.Data.Entities.csproj" />
       <ProjectReference Include="..\DndSolution.Neccessary\DndSolution.Neccessary.csproj" />
     </ItemGroup>
 

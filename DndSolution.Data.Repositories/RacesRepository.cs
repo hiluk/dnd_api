@@ -1,5 +1,5 @@
 ﻿using Data.Abstractions;
-using Data.Entities.Entities;
+using DndSolution.Application.Models.Models.Races;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -16,26 +16,26 @@ public class RacesRepository : IRacesRepository
         _logger = logger;
     }
 
-    public async Task SaveRaceAsync(RaceEntity race, CancellationToken token)
+    public async Task SaveRaceAsync(Race race, CancellationToken token)
     {
-        await _context.Set<RaceEntity>().AddAsync(race, token);
+        await _context.Races.AddAsync(race, token);
 
         foreach (var asi in race.Asi)
         {
-            await _context.Set<AsiEntity>().AddAsync(asi, token);
+            await _context.Set<Asi>().AddAsync(asi, token);
         }
 
         foreach (var speed in race.Speed)
         {
-            await _context.Set<SpeedEntity>().AddAsync(speed, token);
+            await _context.Set<Speed>().AddAsync(speed, token);
         }
         
         await _context.SaveChangesAsync(token); 
     }
 
-    public async Task<List<RaceEntity>> GetAllRaces(CancellationToken token)
+    public async Task<List<Race>> GetAllRaces(CancellationToken token)
     {
-        var races = await _context.Set<RaceEntity>()
+        var races = await _context.Set<Race>()
             .AsNoTracking()
             .Include(x => x.Asi)
             .Include(x => x.Speed)

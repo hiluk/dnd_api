@@ -1,5 +1,4 @@
 ﻿using Data.Abstractions;
-using Data.Entities.Entities;
 using DndSolution.Application.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
