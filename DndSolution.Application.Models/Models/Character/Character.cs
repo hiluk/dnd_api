@@ -1,5 +1,6 @@
 ﻿
 
+using System.ComponentModel.DataAnnotations.Schema;
 using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models.Classes;
 using DndSolution.Application.Models.Models.Races;
@@ -8,6 +9,8 @@ namespace DndSolution.Application.Models.Models;
 
 public class Character
 {
+
+    public int Id { get; set; }
     /// <summary>
     /// Имя персонажа
     /// </summary>
@@ -33,4 +36,5 @@ public class Character
     /// Характеристики персонажа
     /// </summary>
     public CharacterStats Stats { get; init; }
+    
 }

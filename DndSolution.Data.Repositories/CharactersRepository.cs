@@ -27,43 +27,42 @@ public class CharactersRepository : ICharactersRepository
     }
 
     /// <inheritdoc />
-    public async Task SaveCharacterAsync(CharacterEntity character, CancellationToken token)
+    public async Task SaveCharacterAsync(Character character, string email, CancellationToken token)
     {
-        await _context.Set<CharacterEntity>().AddAsync(character, token);
+        await _context.Characters.AddAsync(character, token);
+        _context.Characters.Entry(character).Property<string>("Email").CurrentValue = email;
         
-        await _context.Set<CharacterStatsEntity>().AddAsync(character.Stats, token);
+        await _context.Set<CharacterStats>().AddAsync(character.Stats, token);
         await _context.SaveChangesAsync(token);
     }
     
     /// <inheritdoc />
-    public async Task<IReadOnlyList<CharacterEntity>> GetAllUserCharactersAsync(string email, CancellationToken token)
+    public async Task<IReadOnlyList<Character>> GetAllUserCharactersAsync(string email, CancellationToken token)
     {
-        var characters = await _context.Set<CharacterEntity>()
+        return await _context.Characters
+            .Where(c => EF.Property<string>(c, "Email") == email)
+            .Include(c => c.Stats)
             .AsNoTracking()
-            .Where(x => x.Email == email)
-            .Include(x => x.Stats)
             .ToListAsync(token);
-
-        return characters;
     }
 
     /// <inheritdoc />
-    public async Task<CharacterEntity> GetCharacterAsync(string email, string name, CancellationToken token)
+    public async Task<Character> GetCharacterAsync(string email, string name, CancellationToken token)
     {
-        var character = await _context.Set<CharacterEntity>()
-            .Where(x => x.Email == email && x.Name == name)
-            .Include(x => x.Stats)
+        return await _context.Characters
+            .Where(c => EF.Property<string>(c, "Email") == email)
+            .Include(c => c.Stats)
+            .AsNoTracking()
             .FirstAsync(token);
-        
-        
-        return character;
     }
 
     /// <inheritdoc />
     public async Task DeleteCharacterAsync(string email, string name, CancellationToken token)
     {
-        await _context.Set<CharacterEntity>()
-            .Where(x => x.Email == email && x.Name == name)
+        await _context.Characters
+            .Where(c => EF.Property<string>(c, "Email") == email && c.Name == name)
+            .Include(c => c.Stats)
+            .AsNoTracking()
             .ExecuteDeleteAsync(token);
         
         await _context.SaveChangesAsync(token);

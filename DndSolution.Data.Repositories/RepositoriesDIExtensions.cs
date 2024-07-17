@@ -15,7 +15,9 @@ public static class RepositoriesDIExtensions
     {
         var connectionString = configuration.GetSection("PostgresSQL").Value;
 
-        services.AddEntityFrameworkNpgsql().AddEntityFrameworkNamingConventions();
+        services
+            .AddEntityFrameworkNpgsql()
+            .AddEntityFrameworkNamingConventions();
         
         services.AddDbContext<DndContext>(options =>
             {

@@ -31,4 +31,8 @@ public class CharacterStats
     /// 
     /// </summary>
     public int Charisma { get; set; }
+
+    public int CharacterId { get; set; }
+
+    public Character Character { get; set; }
 }

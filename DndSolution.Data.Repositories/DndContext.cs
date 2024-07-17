@@ -1,12 +1,15 @@
 ﻿using Data.Entities;
 using Data.Entities.Class;
 using Data.Entities.Entities;
+using DndSolution.Application.Models.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
 
 public class DndContext : DbContext
 {
+
+    public DbSet<Character> Characters { get; set; }
     public DndContext(DbContextOptions options) : base(options)
     {
         
@@ -30,14 +33,15 @@ public class DndContext : DbContext
             .WithMany(x => x.Speed)
             .HasForeignKey(x => x.RaceId);
         
-        modelBuilder.Entity<CharacterEntity>().HasKey(x => x.Id);
-        modelBuilder.Entity<CharacterEntity>()
+        modelBuilder.Entity<Character>().HasKey(x => x.Id);
+        modelBuilder.Entity<Character>().Property<string>("Email").IsRequired();
+        modelBuilder.Entity<Character>()
             .HasOne(x => x.Stats)
             .WithOne(x => x.Character)
-            .HasForeignKey<CharacterStatsEntity>(x => x.CharacterId)
+            .HasForeignKey<CharacterStats>(x => x.CharacterId)
             .IsRequired();
 
-        modelBuilder.Entity<CharacterStatsEntity>().HasKey(x => x.Id);
+        modelBuilder.Entity<CharacterStats>().HasKey(x => x.CharacterId);
         
         modelBuilder.Entity<UserEntity>().HasKey(x => x.Id);
     }
