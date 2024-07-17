@@ -1,6 +1,7 @@
 ﻿using Data.Abstractions;
 using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Character;
 
 namespace DndSolution.Application.Services;
 

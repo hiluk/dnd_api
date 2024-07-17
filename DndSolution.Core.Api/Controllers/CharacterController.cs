@@ -52,8 +52,8 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="token">Токен отмены операции</param>
-    [HttpPost("")]
-    public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters([FromBody] string email, CancellationToken token)
+    [HttpGet("")]
+    public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters(string email, CancellationToken token)
     {
         try
         {
@@ -75,11 +75,11 @@ public class CharacterController : ControllerBase
     /// <param name="request">Запрос на получение персонажа</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpPost("get-by-name")]
-    public async Task<CharacterDto> GetCharacterByName(CharacterRequest request, CancellationToken token)
+    public async Task<CharacterDto> GetCharacterByName(string email,[FromBody] CharacterRequest request, CancellationToken token)
     {
         try
         {
-            var model = await _service.GetCharacterAsync(request.Email, request.Name, token);
+            var model = await _service.GetCharacterAsync(email, request.Name, token);
             return CharacterMapper.MapToDto(model);
         }
         catch (Exception e)
@@ -95,11 +95,11 @@ public class CharacterController : ControllerBase
     /// <param name="request"></param>
     /// <param name="token"></param>
     [HttpDelete("delete")]
-    public async Task DeleteCharacter([FromBody] CharacterRequest request, CancellationToken token)
+    public async Task DeleteCharacter(string email, [FromBody] CharacterRequest request, CancellationToken token)
     {
         try
         {
-            await _service.DeleteCharacterAsync(request.Email, request.Name, token);
+            await _service.DeleteCharacterAsync(email, request.Name, token);
         }
         catch (Exception e)
         {

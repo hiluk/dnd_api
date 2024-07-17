@@ -34,5 +34,5 @@ public class CharacterStats
 
     public int CharacterId { get; set; }
 
-    public Character Character { get; set; }
+    public Character.Character Character { get; set; }
 }

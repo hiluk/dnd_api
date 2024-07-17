@@ -5,10 +5,6 @@
 /// </summary>
 public class CharacterRequest
 {
-    /// <summary>
-    /// Эмейл владельца персонажа
-    /// </summary>
-    public required string Email { get; init; }
     
     /// <summary>
     /// Имя персонажа

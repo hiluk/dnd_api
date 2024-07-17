@@ -1,6 +1,7 @@
 ﻿
 using DndSolution.Application.Models;
 using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Character;
 using DndSolution.Application.Models.Models.Classes;
 using DndSolution.Application.Models.Models.Races;
 using Microsoft.EntityFrameworkCore;

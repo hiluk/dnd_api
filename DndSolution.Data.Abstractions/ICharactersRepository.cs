@@ -1,4 +1,5 @@
 ﻿using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Character;
 
 namespace Data.Abstractions;
 

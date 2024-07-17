@@ -3,6 +3,7 @@ using Core.Sdk.Dtos.Characters;
 using Core.Sdk.Enums;
 using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Character;
 using DndSolution.Application.Models.Models.Classes;
 
 namespace Core.Api.Mappings;
