@@ -1,5 +1,6 @@
 ﻿using Data.Abstractions;
 using Data.Entities.Entities;
+using DndSolution.Application.Models.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +13,7 @@ public class CharactersRepository : ICharactersRepository
 {
     private readonly DndContext _context;
     private readonly ILogger<ICharactersRepository> _logger;
+    private ICharactersRepository _charactersRepositoryImplementation;
 
     /// <summary>
     /// .ctor

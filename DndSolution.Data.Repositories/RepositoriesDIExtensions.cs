@@ -14,7 +14,16 @@ public static class RepositoriesDIExtensions
     public static IServiceCollection ConfigureRepositories(this IServiceCollection services, IConfiguration configuration)
     {
         var connectionString = configuration.GetSection("PostgresSQL").Value;
-        services.AddDbContext<DndContext>(options => { options.UseNpgsql(connectionString); }
+
+        services.AddEntityFrameworkNpgsql().AddEntityFrameworkNamingConventions();
+        
+        services.AddDbContext<DndContext>(options =>
+            {
+                options
+                    .UseNpgsql(connectionString)
+                    .UseSnakeCaseNamingConvention()
+                    .EnableSensitiveDataLogging();
+            }
             , ServiceLifetime.Scoped);
 
         services.AddTransient<IRacesRepository, RacesRepository>();

@@ -10,7 +10,7 @@ public class ClassModelMapper
         return new CharacterClass
         {
             Equipment = dto.Equipment,
-            Description = dto.Equipment,
+            Description = dto.Description,
             Name = dto.Name,
             HitDice = dto.HitDice,
             ProfArmor = dto.ProfArmor,
@@ -29,7 +29,7 @@ public class ClassModelMapper
         return new CharacterClassDto
         {
             Equipment = model.Equipment,
-            Description = model.Equipment,
+            Description = model.Description,
             Name = model.Name,
             HitDice = model.HitDice,
             ProfArmor = model.ProfArmor,

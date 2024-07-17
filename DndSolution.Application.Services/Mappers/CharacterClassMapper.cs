@@ -10,7 +10,7 @@ public class CharacterClassMapper
         return new CharacterClass
         {
             Equipment = entity.Equipment,
-            Description = entity.Equipment,
+            Description = entity.Description,
             Name = entity.Name,
             HitDice = entity.HitDice,
             ProfArmor = entity.ProfArmor,
@@ -29,7 +29,7 @@ public class CharacterClassMapper
         return new CharacterClassEntity
         {
             Equipment = model.Equipment,
-            Description = model.Equipment,
+            Description = model.Description,
             Name = model.Name,
             HitDice = model.HitDice,
             ProfArmor = model.ProfArmor,

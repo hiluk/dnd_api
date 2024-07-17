@@ -3,56 +3,45 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities.Entities;
 
-[Table("stats")]
 public class CharacterStatsEntity
 {
-    [Column("id")]
     public long Id { get; set; }
     
     /// <summary>
     /// Уникальный идентификатор персонажа
     /// </summary>
-    [ForeignKey("character_id")]
-    [Column("character_id")]
     public long CharacterId { get; set; }
     
-    [Column("character")]
     public CharacterEntity Character { get; init; }
     
     /// <summary>
     /// Сила
     /// </summary>
-    [Column("strength")]
     public int Strength { get; set; }
     
     /// <summary>
     /// Интеллект
     /// </summary>
-    [Column("intelligence")]
     public int Intelligence { get; set; }
     
     /// <summary>
     /// Мудрость
     /// </summary>
-    [Column("wisdom")]
     public int Wisdom { get; set; }
     
     /// <summary>
     /// Выносливость
     /// </summary>
-    [Column("constitution")]
     public int Constitution { get; set; }
     
     /// <summary>
     /// Ловкость
     /// </summary>
-    [Column("dexterity")]
     public int Dexterity { get; set; }
     
     
     /// <summary>
     /// Харизма
     /// </summary>
-    [Column("charisma")]
     public int Charisma { get; set; }
 }

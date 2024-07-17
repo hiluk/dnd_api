@@ -1,4 +1,6 @@
-﻿using Data.Entities.Class;
+﻿
+using Data.Entities.Class;
+using DndSolution.Application.Models.Models.Classes;
 
 namespace Data.Abstractions;
 

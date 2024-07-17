@@ -23,12 +23,7 @@ public class RacesController : ControllerBase
         _service = service;
     }
 
-    /// <summary>
-    /// Сохраниние новой расы
-    /// </summary>
-    /// <param name="dto"></param>
-    /// <param name="token"></param>
-    /// <summary>
+
     /// Сохранить расу
     /// </summary>
     /// <param name="dto"></param>
@@ -49,12 +44,7 @@ public class RacesController : ControllerBase
         }
     }
     
-    /// <summary>
-    /// Получение всех рас
-    /// </summary>
-    /// <param name="token"></param>
-    /// <returns></returns>
-    /// <summary>
+
     /// Получить все расы
     /// </summary>
     /// <param name="token"></param>
