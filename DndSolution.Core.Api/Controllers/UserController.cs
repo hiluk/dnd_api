@@ -1,6 +1,7 @@
 ﻿using Core.Api.Mappings;
 using Core.Sdk.Dtos;
 using DndSolution.Application.Abstractions;
+using DndSolution.Application.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Api.Controllers;
@@ -9,7 +10,7 @@ namespace Core.Api.Controllers;
 /// Контроллер работы с персонажами
 /// </summary>
 [ApiController]
-[Route("api/v1/user")]
+[Route("auth")]
 public class UserController : ControllerBase
 {
     private readonly ILogger<UserController> _logger;
@@ -21,20 +22,34 @@ public class UserController : ControllerBase
         _service = service;
     }
 
-    [HttpPost("saveUser")]
-    public async Task SaveUser(UserDto dto, CancellationToken token)
+    [HttpPost("register")]
+    public async Task<IActionResult> Register(RegisterRequest request, CancellationToken token)
     {
         try
         {
-            var model = UserMapper.MapToModel(dto);
-            await _service.SaveUserAsync(model, token);
+            var jwt = await _service.Register(request.UserName, request.Email, request.Password, token);
+
+            return Ok(jwt);
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"Не удалось сохранить пользователя");
-            throw;
+            return BadRequest(e.Message);
         }
     }
-    
-    
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(LoginRequest request, CancellationToken token)
+    {
+        try
+        {
+            var jwt = await _service.Login(request.Email, request.Password, token);
+
+            return Ok(jwt);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+
 }

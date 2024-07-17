@@ -1,6 +1,7 @@
 using Core.Api;
 using Data.Repositories;
 using DndSolution.Application.Services;
+using DndSolution.Neccessary;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,10 +10,10 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.ConfigureRepositories(builder.Configuration);
+builder.Services.ConfigureDb(builder.Configuration);
 builder.Services.ConfigureServices();
+builder.Services.AddApiAuthenication(builder.Configuration);
 
-// builder.Services.AddAuth();
 
 var app = builder.Build();
 
@@ -29,8 +30,7 @@ await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>(
     context.Database.EnsureCreated();
 }
 
-// app.UseAuthentication();
-// app.UseAuthorization();
+
 
 app.UseHttpsRedirection();
 app.MapControllers();

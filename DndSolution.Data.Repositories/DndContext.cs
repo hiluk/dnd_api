@@ -14,7 +14,9 @@ public class DndContext : DbContext
     public DbSet<Character> Characters { get; set; }
     public DbSet<Race> Races { get; set; }
     public DbSet<CharacterClass> Classes { get; set; }
+    
     public DbSet<User> Users { get; set; }
+    
     public DndContext(DbContextOptions options) : base(options)
     {
         

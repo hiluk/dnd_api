@@ -2,6 +2,7 @@
 using Core.Sdk.Dtos.Character;
 using Core.Sdk.Dtos.Characters;
 using DndSolution.Application.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Api.Controllers;
@@ -33,6 +34,7 @@ public class CharacterController : ControllerBase
     /// <param name="dto">Дто с информацеий о персонаже</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpPost("create")]
+    [Authorize]
     public async Task CreateCharacter([FromBody]CharacterFullDto dto, CancellationToken token)
     {
         try
@@ -53,6 +55,7 @@ public class CharacterController : ControllerBase
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpGet("")]
+    [Authorize]
     public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters(string email, CancellationToken token)
     {
         try
@@ -75,6 +78,7 @@ public class CharacterController : ControllerBase
     /// <param name="request">Запрос на получение персонажа</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpPost("get-by-name")]
+    [Authorize]
     public async Task<CharacterDto> GetCharacterByName(string email,[FromBody] CharacterRequest request, CancellationToken token)
     {
         try
@@ -95,6 +99,7 @@ public class CharacterController : ControllerBase
     /// <param name="request"></param>
     /// <param name="token"></param>
     [HttpDelete("delete")]
+    [Authorize]
     public async Task DeleteCharacter(string email, [FromBody] CharacterRequest request, CancellationToken token)
     {
         try

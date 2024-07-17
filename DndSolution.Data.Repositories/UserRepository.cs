@@ -1,5 +1,6 @@
 ﻿using Data.Abstractions;
 using DndSolution.Application.Models;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories;
@@ -26,5 +27,13 @@ public class UserRepository : IUserRepository
             
         await _context.Set<User>().AddAsync(user, token);
         await _context.SaveChangesAsync(token);
+    }
+
+    public async Task<User> GetByEmail(string email, CancellationToken token)
+    {
+        return await _context.Users
+            .Where(u => u.Email == email)
+            .AsNoTracking()
+            .FirstAsync(token);
     }
 }

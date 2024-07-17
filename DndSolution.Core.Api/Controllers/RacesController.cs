@@ -1,6 +1,7 @@
 ﻿using Core.Api.Mappings;
 using Core.Sdk.Dtos.Race;
 using DndSolution.Application.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
@@ -52,6 +53,7 @@ public class RacesController : ControllerBase
     [HttpGet("", Name = "Получить все расы")]
     [ProducesResponseType<List<RaceDto>>(200)]
     [ProducesResponseType<string>(404)]
+
     public async Task<IActionResult> GetAllRacesAsync(CancellationToken token)
     {
         try
