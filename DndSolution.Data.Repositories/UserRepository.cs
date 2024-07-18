@@ -33,6 +33,7 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users
             .Where(u => u.Email == email)
+            .Include(u => u.RefreshToken)
             .AsNoTracking()
             .FirstAsync(token);
     }

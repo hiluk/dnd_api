@@ -14,8 +14,9 @@ public class DndContext : DbContext
     public DbSet<Character> Characters { get; set; }
     public DbSet<Race> Races { get; set; }
     public DbSet<CharacterClass> Classes { get; set; }
-    
     public DbSet<User> Users { get; set; }
+    
+    public DbSet<RefreshToken> Tokens { get; set; }
     
     public DndContext(DbContextOptions options) : base(options)
     {
@@ -25,6 +26,12 @@ public class DndContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<RefreshToken>().HasKey(x => x.UserId);
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne(t => t.User)
+            .WithOne(u => u.RefreshToken)
+            .HasForeignKey<RefreshToken>(t => t.UserId);
+        
         modelBuilder.Entity<Race>().HasKey(x => x.Id);
         modelBuilder.Entity<CharacterClass>().HasKey(x => x.Id);
         
@@ -47,7 +54,7 @@ public class DndContext : DbContext
             .WithOne(x => x.Character)
             .HasForeignKey<CharacterStats>(x => x.CharacterId)
             .IsRequired();
-
+    
         modelBuilder.Entity<CharacterStats>().HasKey(x => x.CharacterId);
         
         modelBuilder.Entity<User>().HasKey(x => x.Id);

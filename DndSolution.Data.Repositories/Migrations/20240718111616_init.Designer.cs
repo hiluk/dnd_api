@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    [Migration("20240717211532_init")]
+    [Migration("20240718111616_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -285,6 +285,27 @@ namespace Data.Repositories.Migrations
                     b.ToTable("speed", (string)null);
                 });
 
+            modelBuilder.Entity("DndSolution.Application.Models.RefreshToken", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
+                    b.Property<string>("TokenHash")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("token_hash");
+
+                    b.Property<DateTime>("ValidUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("valid_until");
+
+                    b.HasKey("UserId")
+                        .HasName("pk_tokens");
+
+                    b.ToTable("tokens", (string)null);
+                });
+
             modelBuilder.Entity("DndSolution.Application.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -355,6 +376,18 @@ namespace Data.Repositories.Migrations
                     b.Navigation("Race");
                 });
 
+            modelBuilder.Entity("DndSolution.Application.Models.RefreshToken", b =>
+                {
+                    b.HasOne("DndSolution.Application.Models.User", "User")
+                        .WithOne("RefreshToken")
+                        .HasForeignKey("DndSolution.Application.Models.RefreshToken", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_tokens_users_user_id");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("DndSolution.Application.Models.Models.Character.Character", b =>
                 {
                     b.Navigation("Stats")
@@ -366,6 +399,12 @@ namespace Data.Repositories.Migrations
                     b.Navigation("Asi");
 
                     b.Navigation("Speed");
+                });
+
+            modelBuilder.Entity("DndSolution.Application.Models.User", b =>
+                {
+                    b.Navigation("RefreshToken")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -2,9 +2,11 @@
 
 namespace DndSolution.Application.Abstractions;
 
-public interface IUserService
+public interface IAuthService
 {
-    public Task<string> Register(string userName, string email, string password, CancellationToken token);
+    public Task<TokensModel> Register(string userName, string email, string password, CancellationToken token);
     
-    public Task<string> Login(string email, string password, CancellationToken token);
+    public Task<TokensModel> Login(string email, string password, CancellationToken token);
+
+    public Task<TokensModel> Refresh(string refreshToken, string email, CancellationToken token);
 }

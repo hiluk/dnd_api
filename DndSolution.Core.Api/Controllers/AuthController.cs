@@ -10,13 +10,12 @@ namespace Core.Api.Controllers;
 /// Контроллер работы с персонажами
 /// </summary>
 [ApiController]
-[Route("auth")]
-public class UserController : ControllerBase
+public class AuthController : ControllerBase
 {
-    private readonly ILogger<UserController> _logger;
-    private readonly IUserService _service;
+    private readonly ILogger<AuthController> _logger;
+    private readonly IAuthService _service;
 
-    public UserController(ILogger<UserController> logger, IUserService service)
+    public AuthController(ILogger<AuthController> logger, IAuthService service)
     {
         _logger = logger;
         _service = service;
@@ -43,6 +42,21 @@ public class UserController : ControllerBase
         try
         {
             var jwt = await _service.Login(request.Email, request.Password, token);
+
+            return Ok(jwt);
+        }
+        catch (Exception e)
+        {
+            return BadRequest(e.Message);
+        }
+    }
+    
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh([FromBody] string refreshToken, string email, CancellationToken token)
+    {
+        try
+        {
+            var jwt = await _service.Refresh(refreshToken, email, token);
 
             return Ok(jwt);
         }

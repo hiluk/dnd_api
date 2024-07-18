@@ -12,9 +12,10 @@ public static class ServicesDIExtensions
         services.AddTransient<IJwtOptions, JwtOptions>();
         services.AddTransient<IJwtProvider, JwtProvider>();
         services.AddTransient<IPasswordHasher, PasswordHasher>();
+        services.AddTransient<ITokenHasher, TokenHasher>();
         services.AddTransient<IClassService, ClassService>();
         services.AddTransient<ICharacterService, CharacterService>();
-        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<IAuthService, AuthService>();
         
         
         return services;

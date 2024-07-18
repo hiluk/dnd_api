@@ -153,6 +153,25 @@ namespace Data.Repositories.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "tokens",
+                columns: table => new
+                {
+                    user_id = table.Column<int>(type: "integer", nullable: false),
+                    token_hash = table.Column<string>(type: "text", nullable: false),
+                    valid_until = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_tokens", x => x.user_id);
+                    table.ForeignKey(
+                        name: "fk_tokens_users_user_id",
+                        column: x => x.user_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_asi_race_id",
                 table: "asi",
@@ -180,13 +199,16 @@ namespace Data.Repositories.Migrations
                 name: "speed");
 
             migrationBuilder.DropTable(
-                name: "users");
+                name: "tokens");
 
             migrationBuilder.DropTable(
                 name: "characters");
 
             migrationBuilder.DropTable(
                 name: "races");
+
+            migrationBuilder.DropTable(
+                name: "users");
         }
     }
 }
