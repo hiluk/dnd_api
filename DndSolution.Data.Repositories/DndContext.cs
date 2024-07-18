@@ -20,17 +20,16 @@ public class DndContext : DbContext
     
     public DndContext(DbContextOptions options) : base(options)
     {
-        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        modelBuilder.Entity<RefreshToken>().HasKey(x => x.UserId);
+        modelBuilder.Entity<RefreshToken>().HasKey(x => x.Id);
         modelBuilder.Entity<RefreshToken>()
             .HasOne(t => t.User)
-            .WithOne(u => u.RefreshToken)
-            .HasForeignKey<RefreshToken>(t => t.UserId);
+            .WithMany(u => u.RefreshTokens)
+            .HasForeignKey(t => t.UserId);
         
         modelBuilder.Entity<Race>().HasKey(x => x.Id);
         modelBuilder.Entity<CharacterClass>().HasKey(x => x.Id);

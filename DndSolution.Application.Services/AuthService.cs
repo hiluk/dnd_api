@@ -35,10 +35,10 @@ public class AuthService : IAuthService
             Email = email,
             PasswordHash = hashedPassword,
             UserName = userName,
-            RefreshToken = new RefreshToken()
+            RefreshTokens = [new RefreshToken()
             {
                 TokenHash = _tokenHasher.Generate(refreshToken),
-            }
+            }]
         }, token);
         
         var user = await _userRepository.GetByEmail(email, token);
@@ -59,7 +59,12 @@ public class AuthService : IAuthService
         if (!isPassCorrect) throw new Exception("Неверный пароль");
         
         var refreshToken = RandomString(12);
-        await _tokensRepository.Refresh(user.Id, _tokenHasher.Generate(refreshToken), token);
+        
+        await _tokensRepository.Refresh(new RefreshToken()
+        {
+            TokenHash = _tokenHasher.Generate(refreshToken),
+            UserId = user.Id,
+        }, token);
 
         return new TokensModel()
         {
@@ -76,7 +81,12 @@ public class AuthService : IAuthService
         if (!isTokenCorrect) throw new Exception("Неверный токен");
         
         var newToken = RandomString(12);
-        await _tokensRepository.Refresh(user.Id, _tokenHasher.Generate(newToken), token);
+        
+        await _tokensRepository.Refresh(new RefreshToken()
+        {
+            TokenHash = _tokenHasher.Generate(refreshToken),
+            UserId = user.Id,
+        }, token);
 
         return new TokensModel()
         {

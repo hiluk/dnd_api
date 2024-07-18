@@ -14,12 +14,14 @@ public class UserRepository : IUserRepository
     {
         _context = context;
         _logger = logger;
+
+        context.Tokens.Where(t => (DateTime.UtcNow - t.ValidUntil).Milliseconds > 0).ExecuteDelete();
     }
 
     public async Task SaveUserAsync(User user, CancellationToken token)
     {
-        var emails = _context.Set<User>().Select(x => x.Email).ToList();
-        if (emails.Contains(user.Email))
+        var emails = _context.Set<User>().Where(u => u.Email == user.Email).FirstOrDefaultAsync(token);
+        if (emails != null)
         {
             _logger.LogError("Пользователь с таким эмэйлом уже есть");
             throw new ArgumentException();
@@ -33,7 +35,7 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users
             .Where(u => u.Email == email)
-            .Include(u => u.RefreshToken)
+            .Include(u => u.RefreshTokens)
             .AsNoTracking()
             .FirstAsync(token);
     }

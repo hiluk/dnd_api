@@ -4,5 +4,5 @@ namespace Data.Repositories;
 
 public interface ITokensRepository
 {
-    public Task Refresh(int userId, string tokenHash, CancellationToken token);
+    public Task Refresh(RefreshToken refreshToken, CancellationToken token);
 }

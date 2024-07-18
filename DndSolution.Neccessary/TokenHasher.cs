@@ -9,12 +9,17 @@ public class TokenHasher : ITokenHasher
 
         public bool Verify(string password, User user)
         {
-            var timeNow = DateTime.UtcNow;
-            var lifeTime = user.RefreshToken.ValidUntil;
+            var tokens = user.RefreshTokens.ToList();
 
-            if ((timeNow - lifeTime).Milliseconds > 0) return false;
+            foreach (var token in tokens)
+            {
+                if (BCrypt.Net.BCrypt.EnhancedVerify(password, token.TokenHash))
+                {
+                    return true;
+                }
+            }
             
-           return BCrypt.Net.BCrypt.EnhancedVerify(password, user.RefreshToken.TokenHash);     
+            return false;
         } 
         
 }

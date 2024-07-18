@@ -10,6 +10,7 @@ namespace Core.Api.Controllers;
 /// Контроллер работы с персонажами
 /// </summary>
 [ApiController]
+[Route("auth")]
 public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;

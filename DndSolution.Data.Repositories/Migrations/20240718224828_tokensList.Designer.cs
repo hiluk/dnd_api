@@ -3,6 +3,7 @@ using System;
 using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    partial class DndContextModelSnapshot : ModelSnapshot
+    [Migration("20240718224828_tokensList")]
+    partial class tokensList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -284,31 +287,25 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("DndSolution.Application.Models.RefreshToken", b =>
                 {
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer")
+                        .HasColumnName("user_id");
+
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("TokenHash")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("token_hash");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
                     b.Property<DateTime>("ValidUntil")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("valid_until");
 
-                    b.HasKey("Id")
+                    b.HasKey("UserId")
                         .HasName("pk_tokens");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_tokens_user_id");
 
                     b.ToTable("tokens", (string)null);
                 });

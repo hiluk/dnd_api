@@ -13,16 +13,13 @@ public class TokensRepository : ITokensRepository
     {
         _context = context;
         _logger = logger;
+        
+        context.Tokens.Where(t => (DateTime.UtcNow - t.ValidUntil).Milliseconds > 0).ExecuteDeleteAsync();
     }
 
-    public async Task Refresh(int userId, string tokenHash, CancellationToken token)
-    {
-       var refreshToken =  await _context.Tokens.FirstOrDefaultAsync(t => t.UserId == userId, token);
-
-       if (refreshToken == null) throw new Exception("Токен не найден");
-
-       refreshToken.TokenHash = tokenHash;
-       refreshToken.ValidUntil = DateTime.UtcNow.AddDays(7);
-       await _context.SaveChangesAsync(token);
+    public async Task Refresh(RefreshToken refreshToken, CancellationToken token)
+    { 
+        await _context.Tokens.AddAsync(refreshToken, token);
+        await _context.SaveChangesAsync(token);
     }
 }
