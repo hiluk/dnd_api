@@ -1,7 +1,9 @@
-﻿using Core.Api.Mappings;
+﻿using System.Security.Claims;
+using Core.Api.Mappings;
 using Core.Sdk.Dtos.Character;
 using Core.Sdk.Dtos.Characters;
 using DndSolution.Application.Abstractions;
+using DndSolution.Application.Models.Models.Character;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,12 +37,20 @@ public class CharacterController : ControllerBase
     /// <param name="token">Токен отмены операции</param>
     [HttpPost("create")]
     [Authorize]
-    public async Task CreateCharacter([FromBody]CharacterFullDto dto, CancellationToken token)
+    [ProducesResponseType<string>(200)]
+    public async Task<IActionResult> CreateCharacter([FromBody]CharacterDto dto, CancellationToken token)
     {
         try
         {
-            var character = CharacterMapper.MapToModel(dto.Character);
-            await _service.CreateCharacterAsync(character, dto.email, token);
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (userEmail == null) return BadRequest("Ошибка");
+            
+            var character = CharacterMapper.MapToModel(dto);
+            
+            await _service.CreateCharacterAsync(userEmail, character, token);
+            
+            return Ok("Персонаж успешно создан");
         }
         catch (Exception e)
         {
@@ -56,14 +66,19 @@ public class CharacterController : ControllerBase
     /// <param name="token">Токен отмены операции</param>
     [HttpGet("")]
     [Authorize]
-    public async Task<IReadOnlyList<CharacterDto>> GetAllUserCharacters(string email, CancellationToken token)
+    [ProducesResponseType<List<CharacterDto>>(200)]
+    public async Task<IActionResult> GetAllUserCharacters(CancellationToken token)
     {
         try
         {
-            var model = await _service.GetAllUserCharactersAsync(email, token);
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (userEmail == null) return BadRequest("Пользователь не найден");
+            
+            var model = await _service.GetAllUserCharactersAsync(userEmail ,token);
             var result = model.Select(CharacterMapper.MapToDto).ToList();
 
-            return result;
+            return Ok(result);
         }
         catch (Exception e)
         {
@@ -79,12 +94,17 @@ public class CharacterController : ControllerBase
     /// <param name="token">Токен отмены операции</param>
     [HttpPost("get-by-name")]
     [Authorize]
-    public async Task<CharacterDto> GetCharacterByName(string email,[FromBody] CharacterRequest request, CancellationToken token)
+    public async Task<IActionResult> GetCharacterByName([FromBody] CharacterRequest request, CancellationToken token)
     {
         try
         {
-            var model = await _service.GetCharacterAsync(email, request.Name, token);
-            return CharacterMapper.MapToDto(model);
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (userEmail == null) return BadRequest("Пользователь не найден");
+
+            var model = await _service.GetCharacterAsync(userEmail, request.Name, token);
+            
+            return Ok(CharacterMapper.MapToDto(model));
         }
         catch (Exception e)
         {
@@ -100,11 +120,17 @@ public class CharacterController : ControllerBase
     /// <param name="token"></param>
     [HttpDelete("delete")]
     [Authorize]
-    public async Task DeleteCharacter(string email, [FromBody] CharacterRequest request, CancellationToken token)
+    public async Task<IActionResult> DeleteCharacter([FromBody] CharacterRequest request, CancellationToken token)
     {
         try
         {
-            await _service.DeleteCharacterAsync(email, request.Name, token);
+            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
+            
+            if (userEmail == null) return BadRequest("Пользователь не найден");
+            
+            await _service.DeleteCharacterAsync(userEmail, request.Name, token);
+
+            return Ok("Персонаж удален");
         }
         catch (Exception e)
         {

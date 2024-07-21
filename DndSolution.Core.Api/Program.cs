@@ -1,19 +1,30 @@
 using Core.Api;
+using Core.Api.Swagger;
 using Data.Repositories;
+using DndSolution.Application.Models;
 using DndSolution.Application.Services;
 using DndSolution.Neccessary;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+services.AddControllers();
+services.AddEndpointsApiExplorer();
+services.ConfigureSwagger();
 
-builder.Services.ConfigureDb(builder.Configuration);
-builder.Services.ConfigureServices();
-builder.Services.AddApiAuthenication(builder.Configuration);
+services.ConfigureDb(builder.Configuration);
+services.ConfigureServices();
 
+services.AddAuthorization();
+services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+
+services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<DndContext>()
+    .AddApiEndpoints();
 
 var app = builder.Build();
 
@@ -21,6 +32,8 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
+    app.ApplyMigrations();
 }
 
 using var scope = app.Services.CreateScope();
@@ -31,8 +44,10 @@ await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>(
 }
 
 
+app.MapIdentityApi<User>();
 
 app.UseHttpsRedirection();
+
 app.MapControllers();
 
 app.Run();

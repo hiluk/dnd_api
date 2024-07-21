@@ -1,7 +1,9 @@
 ﻿using Data.Abstractions;
 using DndSolution.Application.Abstractions;
+using DndSolution.Application.Models;
 using DndSolution.Application.Models.Models;
 using DndSolution.Application.Models.Models.Character;
+using Microsoft.AspNetCore.Identity;
 
 namespace DndSolution.Application.Services;
 
@@ -11,20 +13,21 @@ namespace DndSolution.Application.Services;
 public class CharacterService : ICharacterService
 {
     private readonly ICharactersRepository _repository;
+    private readonly UserManager<User> _manager;
 
     /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="repository">Репозиторий для работы с персонажами</param>
-    public CharacterService(ICharactersRepository repository)
+    public CharacterService(ICharactersRepository repository, UserManager<User> manager)
     {
         _repository = repository;
+        _manager = manager;
     }
 
     /// <inheritdoc />>
-    public async Task CreateCharacterAsync(Character character, string email, CancellationToken token)
+    public async Task CreateCharacterAsync(string email, Character character, CancellationToken token)
     {
-        
         await _repository.SaveCharacterAsync(character, email, token);
     }
 

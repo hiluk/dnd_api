@@ -33,13 +33,10 @@ public static class DIExtensions
             }
             , ServiceLifetime.Scoped);
         
-        services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
         services.AddTransient<IRacesRepository, RacesRepository>();
-        
         services.AddTransient<IClassesRepository, ClassesRepository>();
         services.AddTransient<ICharactersRepository, CharactersRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
-        services.AddTransient<ITokensRepository, TokensRepository>();
         
     }
 }

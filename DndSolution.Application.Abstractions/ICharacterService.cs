@@ -14,7 +14,7 @@ public interface ICharacterService
     /// </summary>
     /// <param name="character">Данные о персонаже</param>
     /// <param name="token">Токен отмены операции</param>
-    public Task CreateCharacterAsync(Character character, string email, CancellationToken token);
+    public Task CreateCharacterAsync(string email, Character character, CancellationToken token);
 
     /// <summary>
     /// Получить всех персонажей пользователя

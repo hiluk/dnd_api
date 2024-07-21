@@ -10,7 +10,7 @@ public static class UserMapper
         return new User
         {
             Email = dto.Email,
-            UserId = dto.UserId,
+            Id = dto.UserId,
             PasswordHash = dto.PasswordHash,
             UserName = dto.UserName,
         };
