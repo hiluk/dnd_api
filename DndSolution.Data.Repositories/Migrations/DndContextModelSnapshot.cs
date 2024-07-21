@@ -311,7 +311,7 @@ namespace Data.Repositories.Migrations
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("asp_net_roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -341,7 +341,7 @@ namespace Data.Repositories.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_asp_net_role_claims_role_id");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("asp_net_role_claims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", b =>
@@ -359,12 +359,6 @@ namespace Data.Repositories.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("text")
                         .HasColumnName("concurrency_stamp");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("character varying(21)")
-                        .HasColumnName("discriminator");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -418,8 +412,7 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("user_name");
 
-                    b.HasKey("Id")
-                        .HasName("pk_asp_net_users");
+                    b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -428,11 +421,9 @@ namespace Data.Repositories.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("asp_net_users", (string)null);
 
-                    b.HasDiscriminator().HasValue("IdentityUser<Guid>");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -462,7 +453,7 @@ namespace Data.Repositories.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_asp_net_user_claims_user_id");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("asp_net_user_claims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -489,7 +480,7 @@ namespace Data.Repositories.Migrations
                     b.HasIndex("UserId")
                         .HasDatabaseName("ix_asp_net_user_logins_user_id");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("asp_net_user_logins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -508,7 +499,7 @@ namespace Data.Repositories.Migrations
                     b.HasIndex("RoleId")
                         .HasDatabaseName("ix_asp_net_user_roles_role_id");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("asp_net_user_roles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -532,14 +523,14 @@ namespace Data.Repositories.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name")
                         .HasName("pk_asp_net_user_tokens");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("asp_net_user_tokens", (string)null);
                 });
 
             modelBuilder.Entity("DndSolution.Application.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>");
 
-                    b.HasDiscriminator().HasValue("User");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("DndSolution.Application.Models.Models.CharacterStats", b =>
@@ -633,6 +624,16 @@ namespace Data.Repositories.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
+                });
+
+            modelBuilder.Entity("DndSolution.Application.Models.User", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
+                        .WithOne()
+                        .HasForeignKey("DndSolution.Application.Models.User", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_users_asp_net_users_id");
                 });
 
             modelBuilder.Entity("DndSolution.Application.Models.Models.Character.Character", b =>

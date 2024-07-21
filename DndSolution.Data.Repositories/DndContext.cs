@@ -4,6 +4,7 @@ using DndSolution.Application.Models.Models;
 using DndSolution.Application.Models.Models.Character;
 using DndSolution.Application.Models.Models.Classes;
 using DndSolution.Application.Models.Models.Races;
+using DndSolution.Neccessary.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -53,5 +54,12 @@ public class DndContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Gui
             .IsRequired();
 
         modelBuilder.Entity<CharacterStats>().HasKey(x => x.CharacterId);
+        
+        foreach (var entity in modelBuilder.Model.GetEntityTypes())
+        {
+            // Replace table names
+            entity.SetTableName(entity.GetTableName()?.ToSnakeCase());
+                
+        }
     }
 }
