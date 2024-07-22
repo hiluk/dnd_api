@@ -36,7 +36,5 @@ public static class DIExtensions
         services.AddTransient<IRacesRepository, RacesRepository>();
         services.AddTransient<IClassesRepository, ClassesRepository>();
         services.AddTransient<ICharactersRepository, CharactersRepository>();
-        services.AddTransient<IUserRepository, UserRepository>();
-        
     }
 }

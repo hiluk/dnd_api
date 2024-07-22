@@ -22,7 +22,15 @@ services.ConfigureServices();
 services.AddAuthorization();
 services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
 
-services.AddIdentityCore<User>()
+services.AddIdentityCore<User>(options =>
+    {
+        options.Password.RequireDigit = true;
+        options.Password.RequireLowercase = true;
+        options.Password.RequireNonAlphanumeric = false;
+        options.Password.RequireUppercase = true;
+        options.Password.RequiredLength = 6;
+        options.Password.RequiredUniqueChars = 1;
+    })
     .AddEntityFrameworkStores<DndContext>()
     .AddApiEndpoints();
 
@@ -43,8 +51,7 @@ await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>(
     context.Database.EnsureCreated();
 }
 
-
-app.MapIdentityApi<User>();
+app.MapCustomIdentityApi<User>();
 
 app.UseHttpsRedirection();
 
