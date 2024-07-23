@@ -51,8 +51,6 @@ await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>(
     context.Database.EnsureCreated();
 }
 
-app.MapCustomIdentityApi<User>();
-
 app.UseHttpsRedirection();
 
 app.MapControllers();
