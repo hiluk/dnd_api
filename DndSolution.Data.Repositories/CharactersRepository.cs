@@ -13,7 +13,6 @@ public class CharactersRepository : ICharactersRepository
 {
     private readonly DndContext _context;
     private readonly ILogger<ICharactersRepository> _logger;
-    private ICharactersRepository _charactersRepositoryImplementation;
 
     /// <summary>
     /// .ctor
@@ -31,6 +30,7 @@ public class CharactersRepository : ICharactersRepository
     {
         await _context.Characters.AddAsync(character, token);
         _context.Characters.Entry(character).Property<string>("Email").CurrentValue = email;
+        _context.Characters.Entry(character).Property<DateTime>("CreationTime").CurrentValue = DateTime.UtcNow;
         
         await _context.Set<CharacterStats>().AddAsync(character.Stats, token);
         await _context.SaveChangesAsync(token);
@@ -41,16 +41,18 @@ public class CharactersRepository : ICharactersRepository
     {
         return await _context.Characters
             .Where(c => EF.Property<string>(c, "Email") == email)
+            .OrderByDescending(c => EF.Property<DateTime>(c, "CreationTime"))
             .Include(c => c.Stats)
             .AsNoTracking()
             .ToListAsync(token);
+        
     }
 
     /// <inheritdoc />
-    public async Task<Character> GetCharacterAsync(string email, string name, CancellationToken token)
+    public async Task<Character> GetCharacterByIdAsync(string email, Guid id, CancellationToken token)
     {
         return await _context.Characters
-            .Where(c => EF.Property<string>(c, "Email") == email)
+            .Where(c => EF.Property<string>(c, "Email") == email && c.Id == id)
             .Include(c => c.Stats)
             .AsNoTracking()
             .FirstAsync(token);

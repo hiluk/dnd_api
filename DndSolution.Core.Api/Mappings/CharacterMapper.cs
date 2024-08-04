@@ -36,6 +36,7 @@ public static class CharacterMapper
     {
         var character = new CharacterDto
         {
+            Id = model.Id,
             Name = model.Name,
             Level = model.Level,
             CharacterClass = (CharacterClassTypeDto)model.CharacterClass,

@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Core.Api</RootNamespace>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,6 +38,12 @@
       <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
       <ProjectReference Include="..\DndSolution.Application.Services\DndSolution.Application.Services.csproj" />
       <ProjectReference Include="..\DndSolution.Core.Sdk\DndSolution.Core.Sdk.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

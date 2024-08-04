@@ -4,7 +4,7 @@ namespace DndSolution.Application.Models.Models.Character;
 
 public class Character
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     
     /// <summary>
     /// Имя персонажа

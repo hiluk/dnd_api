@@ -24,12 +24,10 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("DndSolution.Application.Models.Models.Character.Character", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CharacterClass")
                         .HasColumnType("integer")
@@ -38,6 +36,10 @@ namespace Data.Repositories.Migrations
                     b.Property<int>("CharacterRace")
                         .HasColumnType("integer")
                         .HasColumnName("character_race");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creation_time");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -61,8 +63,8 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("DndSolution.Application.Models.Models.CharacterStats", b =>
                 {
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid")
                         .HasColumnName("character_id");
 
                     b.Property<int>("Charisma")

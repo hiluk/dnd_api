@@ -30,7 +30,7 @@ public interface ICharactersRepository
     /// <param name="email">Эмейл пользователя</param>
     /// <param name="name">Имя персонажа</param>
     /// <param name="token">Токен отмены операции</param>
-    public Task<Character> GetCharacterAsync(string email, string name, CancellationToken token);
+    public Task<Character> GetCharacterByIdAsync(string email, Guid id, CancellationToken token);
     
     /// <summary>
     /// Удалить персонажа

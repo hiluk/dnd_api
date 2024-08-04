@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,12 +55,12 @@ namespace Data.Repositories.Migrations
                 name: "characters",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     level = table.Column<byte>(type: "smallint", nullable: false),
                     character_class = table.Column<int>(type: "integer", nullable: false),
                     character_race = table.Column<int>(type: "integer", nullable: false),
+                    creation_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -238,7 +238,7 @@ namespace Data.Repositories.Migrations
                 name: "character_stats",
                 columns: table => new
                 {
-                    character_id = table.Column<int>(type: "integer", nullable: false),
+                    character_id = table.Column<Guid>(type: "uuid", nullable: false),
                     strength = table.Column<int>(type: "integer", nullable: false),
                     intelligence = table.Column<int>(type: "integer", nullable: false),
                     wisdom = table.Column<int>(type: "integer", nullable: false),

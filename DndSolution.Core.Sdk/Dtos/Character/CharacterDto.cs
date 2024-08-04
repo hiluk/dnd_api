@@ -8,6 +8,11 @@ namespace Core.Sdk.Dtos.Characters;
 public class CharacterDto 
 {
     /// <summary>
+    /// Id персонажа
+    /// </summary>
+    public Guid Id { get; init; }
+    
+    /// <summary>
     /// Имя персонажа
     /// </summary>
     public string Name { get; init; }

@@ -21,16 +21,15 @@ namespace Core.Api.Controllers;
 public class AuthController : ControllerBase
 {
     private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
     private static readonly EmailAddressAttribute _emailAddressAttribute = new();
 
-    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
+    public AuthController(SignInManager<User> signInManager)
     {
         _signInManager = signInManager;
-        _userManager = userManager;
     }
 
     [HttpPost("/refresh")]
+    [ProducesResponseType<AccessTokenResponse>(200)]
     public async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult, SignInHttpResult, ChallengeHttpResult>>
         Refresh([FromBody] RefreshRequest refreshRequest, [FromServices] IServiceProvider sp)
     {
@@ -54,6 +53,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost("/login")]
+    [ProducesResponseType<AccessTokenResponse>(200)]
     public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login([FromBody]CustomLoginRequest request)
     {
         _signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;

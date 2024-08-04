@@ -47,6 +47,7 @@ public class DndContext : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Gui
         
         modelBuilder.Entity<Character>().HasKey(x => x.Id);
         modelBuilder.Entity<Character>().Property<string>("Email").IsRequired();
+        modelBuilder.Entity<Character>().Property<DateTime>("CreationTime").IsRequired();
         modelBuilder.Entity<Character>()
             .HasOne(x => x.Stats)
             .WithOne(x => x.Character)

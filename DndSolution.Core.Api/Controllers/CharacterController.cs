@@ -90,11 +90,11 @@ public class CharacterController : ControllerBase
     /// <summary>
     /// Получить персонажа по имени
     /// </summary>
-    /// <param name="request">Запрос на получение персонажа</param>
+    /// <param name="id">Id персонажа</param>
     /// <param name="token">Токен отмены операции</param>
-    [HttpPost("get-by-name")]
+    [HttpGet("{id:guid}")]
     [Authorize]
-    public async Task<IActionResult> GetCharacterByName([FromBody] CharacterRequest request, CancellationToken token)
+    public async Task<IActionResult> GetCharacterById([FromRoute] Guid id ,CancellationToken token)
     {
         try
         {
@@ -102,7 +102,7 @@ public class CharacterController : ControllerBase
             
             if (userEmail == null) return BadRequest("Пользователь не найден");
 
-            var model = await _service.GetCharacterAsync(userEmail, request.Name, token);
+            var model = await _service.GetCharacterAsync(id, userEmail, token);
             
             return Ok(CharacterMapper.MapToDto(model));
         }

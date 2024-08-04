@@ -1,0 +1,22 @@
+# This is a generated file. Not intended for manual editing.
+version: "3"
+services:
+  dndsolution.core.api:
+    build:
+      context: "K:\\DndSolution\\Dnd_staff"
+      dockerfile: "K:/DndSolution/DndSolution.Core.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/DndSolution.Core.Api.dll"
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "dndsolution.core.api:dev"
+    ports: []
+    volumes:
+    - "C:\\Users\\kesto\\.nuget\\packages:/home/app/.nuget/packages"
+    - "K:\\DndSolution\\DndSolution.Core.Api:/app:rw"
+    - "K:\\DndSolution:/src:rw"
+    working_dir: "/app"

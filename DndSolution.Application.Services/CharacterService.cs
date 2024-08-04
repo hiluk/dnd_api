@@ -40,9 +40,9 @@ public class CharacterService : ICharacterService
     }
 
     /// <inheritdoc />
-    public async Task<Character> GetCharacterAsync(string email, string name, CancellationToken token)
+    public async Task<Character> GetCharacterAsync(Guid id, string email, CancellationToken token)
     {
-        return await _repository.GetCharacterAsync(email, name, token);
+        return await _repository.GetCharacterByIdAsync(email, id, token);
     }
 
     /// <inheritdoc />
