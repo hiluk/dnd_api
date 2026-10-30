@@ -1,46 +1,35 @@
-﻿using Data.Abstractions;
+using Data.Abstractions;
 using DndSolution.Application.Models.Models.Races;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
-namespace Data.Repositories.Migrations;
+namespace Data.Repositories;
 
 public class RacesRepository : IRacesRepository
 {
     private readonly DndContext _context;
-    private readonly ILogger<IRacesRepository> _logger;
 
-    public RacesRepository(DndContext context, ILogger<IRacesRepository> logger)
+    public RacesRepository(DndContext context)
     {
         _context = context;
-        _logger = logger;
     }
 
+    /// <inheritdoc />
     public async Task SaveRaceAsync(Race race, CancellationToken token)
     {
+        // Asi и Speed добавляются вместе с расой как связанные сущности
         await _context.Races.AddAsync(race, token);
-
-        foreach (var asi in race.Asi)
-        {
-            await _context.Set<Asi>().AddAsync(asi, token);
-        }
-
-        foreach (var speed in race.Speed)
-        {
-            await _context.Set<Speed>().AddAsync(speed, token);
-        }
-        
-        await _context.SaveChangesAsync(token); 
+        await _context.SaveChangesAsync(token);
     }
 
+    /// <inheritdoc />
     public async Task<List<Race>> GetAllRaces(CancellationToken token)
     {
-        var races = await _context.Set<Race>()
+        return await _context.Races
             .AsNoTracking()
             .Include(x => x.Asi)
             .Include(x => x.Speed)
+            .AsSplitQuery()
+            .OrderBy(x => x.Id)
             .ToListAsync(token);
-
-        return races;
     }
 }

@@ -1,14 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Diagnostics;
-using System.Security.Claims;
-using Core.Api.Mappings;
 using Core.Sdk;
 using Core.Sdk.Dtos;
-using Core.Sdk.Dtos.Character;
-using Core.Sdk.Dtos.Characters;
-using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models;
-using DndSolution.Application.Models.Models.Character;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -18,113 +10,109 @@ using Microsoft.Extensions.Options;
 
 namespace Core.Api.Controllers;
 
+/// <summary>
+/// Регистрация, вход и обновление токенов
+/// </summary>
+[ApiController]
 public class AuthController : ControllerBase
 {
     private readonly SignInManager<User> _signInManager;
-    private static readonly EmailAddressAttribute _emailAddressAttribute = new();
+    private readonly UserManager<User> _userManager;
 
-    public AuthController(SignInManager<User> signInManager)
+    /// <summary>
+    /// .ctor
+    /// </summary>
+    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
     {
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
-    [HttpPost("/refresh")]
-    [ProducesResponseType<AccessTokenResponse>(200)]
-    public async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult, SignInHttpResult, ChallengeHttpResult>>
-        Refresh([FromBody] RefreshRequest refreshRequest, [FromServices] IServiceProvider sp)
+    /// <summary>
+    /// Зарегистрировать нового пользователя
+    /// </summary>
+    [HttpPost("/register")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType<HttpValidationProblemDetails>(StatusCodes.Status400BadRequest)]
+    public async Task<Results<Ok, ValidationProblem>> Register([FromBody] CustomRegisterRequest request)
     {
-        var signInManager = sp.GetRequiredService<SignInManager<User>>();
-        var timeProvider = sp.GetRequiredService<TimeProvider>();
-        var bearerTokenOptions = sp.GetRequiredService<IOptionsMonitor<BearerTokenOptions>>();
+        var user = new User
+        {
+            UserName = request.Login.Trim(),
+            Email = request.Email.Trim(),
+        };
+
+        var result = await _userManager.CreateAsync(user, request.Password);
+
+        return result.Succeeded
+            ? TypedResults.Ok()
+            : CreateValidationProblem(result);
+    }
+
+    /// <summary>
+    /// Войти по логину или эмейлу. Возвращает access и refresh токены
+    /// </summary>
+    [HttpPost("/login")]
+    [ProducesResponseType<AccessTokenResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
+    public async Task<Results<EmptyHttpResult, ProblemHttpResult>> Login([FromBody] CustomLoginRequest request)
+    {
+        var user = await _userManager.FindByNameAsync(request.Login)
+                   ?? await _userManager.FindByEmailAsync(request.Login);
+
+        if (user is null)
+        {
+            return InvalidCredentials();
+        }
+
+        _signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
+        var result = await _signInManager.PasswordSignInAsync(user, request.Password, isPersistent: false, lockoutOnFailure: true);
+
+        if (result.IsLockedOut)
+        {
+            return TypedResults.Problem("Слишком много неудачных попыток, попробуйте позже",
+                statusCode: StatusCodes.Status401Unauthorized);
+        }
+
+        // При успехе SignInManager сам записывает токены в ответ
+        return result.Succeeded ? TypedResults.Empty : InvalidCredentials();
+    }
+
+    /// <summary>
+    /// Обновить пару токенов по refresh токену
+    /// </summary>
+    [HttpPost("/refresh")]
+    [ProducesResponseType<AccessTokenResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<Results<SignInHttpResult, ChallengeHttpResult>> Refresh(
+        [FromBody] RefreshRequest refreshRequest,
+        [FromServices] TimeProvider timeProvider,
+        [FromServices] IOptionsMonitor<BearerTokenOptions> bearerTokenOptions)
+    {
         var refreshTokenProtector = bearerTokenOptions.Get(IdentityConstants.BearerScheme).RefreshTokenProtector;
         var refreshTicket = refreshTokenProtector.Unprotect(refreshRequest.RefreshToken);
 
-        // Reject the /refresh attempt with a 401 if the token expired or the security stamp validation fails
+        // 401, если токен просрочен или не прошла проверка security stamp
         if (refreshTicket?.Properties?.ExpiresUtc is not { } expiresUtc ||
             timeProvider.GetUtcNow() >= expiresUtc ||
-            await signInManager.ValidateSecurityStampAsync(refreshTicket.Principal) is not User user)
-
+            await _signInManager.ValidateSecurityStampAsync(refreshTicket.Principal) is not { } user)
         {
             return TypedResults.Challenge();
         }
 
-        var newPrincipal = await signInManager.CreateUserPrincipalAsync(user);
+        var newPrincipal = await _signInManager.CreateUserPrincipalAsync(user);
         return TypedResults.SignIn(newPrincipal, authenticationScheme: IdentityConstants.BearerScheme);
     }
-    
-    [HttpPost("/login")]
-    [ProducesResponseType<AccessTokenResponse>(200)]
-    public async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>> Login([FromBody]CustomLoginRequest request)
-    {
-        _signInManager.AuthenticationScheme = IdentityConstants.BearerScheme;
-        var result = await _signInManager.PasswordSignInAsync(request.Login, request.Password, false, false);
 
-        if (result.Succeeded)
-        {
-            return TypedResults.Empty;
-        }
+    private static ProblemHttpResult InvalidCredentials() =>
+        TypedResults.Problem("Неверный логин или пароль", statusCode: StatusCodes.Status401Unauthorized);
 
-        return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
-    }
-
-    [HttpPost("/register")]
-    public async Task<Results<Ok, ValidationProblem>> Register([FromBody] CustomRegisterRequest request,[FromServices] IServiceProvider sp)
-    {
-        var userManager = sp.GetRequiredService<UserManager<User>>();
-
-        if (!userManager.SupportsUserEmail)
-        {
-            throw new NotSupportedException($"{nameof(AuthController)} requires a user store with email support.");
-        }
-
-        var userStore = sp.GetRequiredService<IUserStore<User>>();
-        var emailStore = (IUserEmailStore<User>)userStore;
-        var email = request.Email;
-        var userName = request.Login;
-
-        if (string.IsNullOrEmpty(email) || !_emailAddressAttribute.IsValid(email))
-        {
-            return CreateValidationProblem(IdentityResult.Failed(userManager.ErrorDescriber.InvalidEmail(email)));
-        }
-
-        var user = new User();
-        await userStore.SetUserNameAsync(user, userName, CancellationToken.None);
-        await emailStore.SetEmailAsync(user, email, CancellationToken.None);
-        var result = await userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
-        {
-            return CreateValidationProblem(result);
-        }
-        
-        return TypedResults.Ok();
-    }
-    
     private static ValidationProblem CreateValidationProblem(IdentityResult result)
     {
-        // We expect a single error code and description in the normal case.
-        // This could be golfed with GroupBy and ToDictionary, but perf! :P
-        Debug.Assert(!result.Succeeded);
-        var errorDictionary = new Dictionary<string, string[]>(1);
+        var errors = result.Errors
+            .GroupBy(e => e.Code)
+            .ToDictionary(g => g.Key, g => g.Select(e => e.Description).ToArray());
 
-        foreach (var error in result.Errors)
-        {
-            string[] newDescriptions;
-
-            if (errorDictionary.TryGetValue(error.Code, out var descriptions))
-            {
-                newDescriptions = new string[descriptions.Length + 1];
-                Array.Copy(descriptions, newDescriptions, descriptions.Length);
-                newDescriptions[descriptions.Length] = error.Description;
-            }
-            else
-            {
-                newDescriptions = [error.Description];
-            }
-
-            errorDictionary[error.Code] = newDescriptions;
-        }
-
-        return TypedResults.ValidationProblem(errorDictionary);
+        return TypedResults.ValidationProblem(errors);
     }
 }

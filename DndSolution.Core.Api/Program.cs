@@ -3,27 +3,28 @@ using Core.Api.Swagger;
 using Data.Repositories;
 using DndSolution.Application.Models;
 using DndSolution.Application.Services;
-using DndSolution.Neccessary;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
+
+const string DevCorsPolicy = "DevCors";
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddControllers();
+services.AddProblemDetails();
 services.AddEndpointsApiExplorer();
 services.ConfigureSwagger();
 
-services.ConfigureDb(builder.Configuration);
+services.ConfigureDb(builder.Configuration, builder.Environment);
 services.ConfigureServices();
 
 services.AddAuthorization();
-services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+services.AddAuthentication(IdentityConstants.BearerScheme)
+    .AddBearerToken(IdentityConstants.BearerScheme);
 
 services.AddIdentityCore<User>(options =>
     {
+        options.User.RequireUniqueEmail = true;
         options.Password.RequireDigit = true;
         options.Password.RequireLowercase = true;
         options.Password.RequireNonAlphanumeric = false;
@@ -31,28 +32,44 @@ services.AddIdentityCore<User>(options =>
         options.Password.RequiredLength = 6;
         options.Password.RequiredUniqueChars = 1;
     })
+    .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<DndContext>()
-    .AddApiEndpoints();
+    .AddErrorDescriber<RussianIdentityErrorDescriber>()
+    .AddSignInManager()
+    .AddDefaultTokenProviders();
+
+// Flutter web в режиме разработки запускается на случайном порту
+services.AddCors(options => options.AddPolicy(DevCorsPolicy, policy =>
+    policy.SetIsOriginAllowed(origin => new Uri(origin).IsLoopback)
+        .AllowAnyHeader()
+        .AllowAnyMethod()));
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    
-    app.ApplyMigrations();
+    app.UseCors(DevCorsPolicy);
 }
-
-using var scope = app.Services.CreateScope();
-await using (var context = scope.ServiceProvider.GetRequiredService<DndContext>())
+else
 {
-    context.Database.Migrate();
-    context.Database.EnsureCreated();
+    app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
+await app.Services.InitializeDbAsync();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
+/// <summary>
+/// Точка входа (нужна для интеграционных тестов)
+/// </summary>
+public partial class Program;

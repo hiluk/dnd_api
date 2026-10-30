@@ -48,24 +48,7 @@ namespace Data.Repositories.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_asp_net_users", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "characters",
-                columns: table => new
-                {
-                    id = table.Column<Guid>(type: "uuid", nullable: false),
-                    name = table.Column<string>(type: "text", nullable: false),
-                    level = table.Column<byte>(type: "smallint", nullable: false),
-                    character_class = table.Column<int>(type: "integer", nullable: false),
-                    character_race = table.Column<int>(type: "integer", nullable: false),
-                    creation_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    email = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_characters", x => x.id);
+                    table.PrimaryKey("pk_asp_net_users", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -218,41 +201,24 @@ namespace Data.Repositories.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "users",
+                name: "characters",
                 columns: table => new
                 {
-                    id = table.Column<Guid>(type: "uuid", nullable: false)
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    name = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false),
+                    level = table.Column<byte>(type: "smallint", nullable: false),
+                    character_class = table.Column<int>(type: "integer", nullable: false),
+                    character_race = table.Column<int>(type: "integer", nullable: false),
+                    creation_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_users", x => x.id);
+                    table.PrimaryKey("pk_characters", x => x.id);
                     table.ForeignKey(
-                        name: "fk_users_asp_net_users_id",
-                        column: x => x.id,
+                        name: "fk_characters_asp_net_users_user_id",
+                        column: x => x.user_id,
                         principalTable: "asp_net_users",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "character_stats",
-                columns: table => new
-                {
-                    character_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    strength = table.Column<int>(type: "integer", nullable: false),
-                    intelligence = table.Column<int>(type: "integer", nullable: false),
-                    wisdom = table.Column<int>(type: "integer", nullable: false),
-                    constitution = table.Column<int>(type: "integer", nullable: false),
-                    dexterity = table.Column<int>(type: "integer", nullable: false),
-                    charisma = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("pk_character_stats", x => x.character_id);
-                    table.ForeignKey(
-                        name: "fk_character_stats_characters_character_id",
-                        column: x => x.character_id,
-                        principalTable: "characters",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -295,6 +261,29 @@ namespace Data.Repositories.Migrations
                         name: "fk_speed_races_race_id",
                         column: x => x.race_id,
                         principalTable: "races",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "character_stats",
+                columns: table => new
+                {
+                    character_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    strength = table.Column<int>(type: "integer", nullable: false),
+                    intelligence = table.Column<int>(type: "integer", nullable: false),
+                    wisdom = table.Column<int>(type: "integer", nullable: false),
+                    constitution = table.Column<int>(type: "integer", nullable: false),
+                    dexterity = table.Column<int>(type: "integer", nullable: false),
+                    charisma = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_character_stats", x => x.character_id);
+                    table.ForeignKey(
+                        name: "fk_character_stats_characters_character_id",
+                        column: x => x.character_id,
+                        principalTable: "characters",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -342,6 +331,23 @@ namespace Data.Repositories.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_characters_user_id",
+                table: "characters",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_classes_name",
+                table: "classes",
+                column: "name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_races_name",
+                table: "races",
+                column: "name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_speed_race_id",
                 table: "speed",
                 column: "race_id");
@@ -376,9 +382,6 @@ namespace Data.Repositories.Migrations
 
             migrationBuilder.DropTable(
                 name: "speed");
-
-            migrationBuilder.DropTable(
-                name: "users");
 
             migrationBuilder.DropTable(
                 name: "asp_net_roles");

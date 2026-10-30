@@ -6,44 +6,23 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>Core.Api</RootNamespace>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-        <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
-        <PackageReference Include="Mapster" Version="7.4.0" />
-        <PackageReference Include="Mapster.Async" Version="2.0.1" />
-        <PackageReference Include="Mapster.Core" Version="1.2.1" />
-        <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-        <PackageReference Include="Mapster.EFCore" Version="5.1.1" />
-        <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
-        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-        </PackageReference>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
         <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="8.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
       <ProjectReference Include="..\DndSolution.Application.Services\DndSolution.Application.Services.csproj" />
       <ProjectReference Include="..\DndSolution.Core.Sdk\DndSolution.Core.Sdk.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+      <ProjectReference Include="..\DndSolution.Data.Repositories\DndSolution.Data.Repositories.csproj" />
     </ItemGroup>
 
 </Project>

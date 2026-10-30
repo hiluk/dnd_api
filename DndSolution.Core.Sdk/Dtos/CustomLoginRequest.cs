@@ -1,14 +1,21 @@
-﻿namespace Core.Sdk;
+using System.ComponentModel.DataAnnotations;
 
+namespace Core.Sdk;
+
+/// <summary>
+/// Запрос на вход
+/// </summary>
 public sealed class CustomLoginRequest
 {
     /// <summary>
-    /// The user's email address which acts as a user name.
+    /// Логин пользователя
     /// </summary>
-    public String Login { get; init; }
+    [Required]
+    public string Login { get; init; } = string.Empty;
 
     /// <summary>
-    /// The user's password.
+    /// Пароль пользователя
     /// </summary>
-    public String Password { get; init; }
+    [Required]
+    public string Password { get; init; } = string.Empty;
 }

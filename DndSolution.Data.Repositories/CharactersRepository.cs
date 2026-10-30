@@ -1,8 +1,6 @@
-﻿using Data.Abstractions;
-using DndSolution.Application.Models.Models;
+using Data.Abstractions;
 using DndSolution.Application.Models.Models.Character;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Data.Repositories;
 
@@ -11,62 +9,59 @@ namespace Data.Repositories;
 /// </summary>
 public class CharactersRepository : ICharactersRepository
 {
+    private const string UserIdProperty = DndContext.CharacterUserIdProperty;
+    private const string CreationTimeProperty = DndContext.CharacterCreationTimeProperty;
+
     private readonly DndContext _context;
-    private readonly ILogger<ICharactersRepository> _logger;
 
     /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="context">Контекст БД</param>
-    /// <param name="logger">Логгер</param>
-    public CharactersRepository(DndContext context, ILogger<ICharactersRepository> logger)
+    public CharactersRepository(DndContext context)
     {
         _context = context;
-        _logger = logger;
     }
 
     /// <inheritdoc />
-    public async Task SaveCharacterAsync(Character character, string email, CancellationToken token)
+    public async Task SaveCharacterAsync(Character character, Guid userId, CancellationToken token)
     {
-        await _context.Characters.AddAsync(character, token);
-        _context.Characters.Entry(character).Property<string>("Email").CurrentValue = email;
-        _context.Characters.Entry(character).Property<DateTime>("CreationTime").CurrentValue = DateTime.UtcNow;
-        
-        await _context.Set<CharacterStats>().AddAsync(character.Stats, token);
+        var entry = await _context.Characters.AddAsync(character, token);
+        entry.Property<Guid>(UserIdProperty).CurrentValue = userId;
+        entry.Property<DateTime>(CreationTimeProperty).CurrentValue = DateTime.UtcNow;
+
         await _context.SaveChangesAsync(token);
     }
-    
+
     /// <inheritdoc />
-    public async Task<IReadOnlyList<Character>> GetAllUserCharactersAsync(string email, CancellationToken token)
+    public async Task<IReadOnlyList<Character>> GetAllUserCharactersAsync(Guid userId, CancellationToken token)
     {
         return await _context.Characters
-            .Where(c => EF.Property<string>(c, "Email") == email)
-            .OrderByDescending(c => EF.Property<DateTime>(c, "CreationTime"))
-            .Include(c => c.Stats)
             .AsNoTracking()
+            .Where(c => EF.Property<Guid>(c, UserIdProperty) == userId)
+            .OrderByDescending(c => EF.Property<DateTime>(c, CreationTimeProperty))
+            .Include(c => c.Stats)
             .ToListAsync(token);
-        
     }
 
     /// <inheritdoc />
-    public async Task<Character> GetCharacterByIdAsync(string email, Guid id, CancellationToken token)
+    public async Task<Character?> GetCharacterByIdAsync(Guid userId, Guid id, CancellationToken token)
     {
         return await _context.Characters
-            .Where(c => EF.Property<string>(c, "Email") == email && c.Id == id)
-            .Include(c => c.Stats)
             .AsNoTracking()
-            .FirstAsync(token);
+            .Where(c => EF.Property<Guid>(c, UserIdProperty) == userId && c.Id == id)
+            .Include(c => c.Stats)
+            .FirstOrDefaultAsync(token);
     }
 
     /// <inheritdoc />
-    public async Task DeleteCharacterAsync(string email, string name, CancellationToken token)
+    public async Task<bool> DeleteCharacterAsync(Guid userId, Guid id, CancellationToken token)
     {
-        await _context.Characters
-            .Where(c => EF.Property<string>(c, "Email") == email && c.Name == name)
-            .Include(c => c.Stats)
-            .AsNoTracking()
+        // Характеристики удаляются каскадно на уровне БД
+        var deleted = await _context.Characters
+            .Where(c => EF.Property<Guid>(c, UserIdProperty) == userId && c.Id == id)
             .ExecuteDeleteAsync(token);
-        
-        await _context.SaveChangesAsync(token);
+
+        return deleted > 0;
     }
 }

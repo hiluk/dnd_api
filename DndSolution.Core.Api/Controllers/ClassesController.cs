@@ -1,57 +1,54 @@
-﻿using Core.Api.Mappings;
+using Core.Api.Mappings;
 using Core.Sdk.Dtos.Classes;
 using DndSolution.Application.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Api.Controllers;
 
+/// <summary>
+/// Справочник классов
+/// </summary>
 [ApiController]
-[Route("classes", Name = "Classes") ]
+[Route("classes")]
 public class ClassesController : ControllerBase
 {
     private readonly IClassService _service;
 
+    /// <summary>
+    /// .ctor
+    /// </summary>
+    /// <param name="service">Сервис классов</param>
     public ClassesController(IClassService service)
     {
         _service = service;
     }
-    
-    [HttpPost("save-new", Name = "Сохранить класс")]
-    public async Task SaveClassAsync(CharacterClassDto dto, CancellationToken token)
+
+    /// <summary>
+    /// Сохранить класс
+    /// </summary>
+    /// <param name="dto">Класс</param>
+    /// <param name="token">Токен отмены операции</param>
+    [HttpPost("save-new")]
+    [Authorize(Roles = Roles.Admin)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> SaveClassAsync([FromBody] CharacterClassDto dto, CancellationToken token)
     {
-        try
-        {
-            var model = ClassModelMapper.MapToModel(dto);
-            
-            await _service.SaveClassAsync(model, token);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-        
+        await _service.SaveClassAsync(ClassModelMapper.MapToModel(dto), token);
+
+        return NoContent();
     }
-    
-    [HttpGet("", Name = "Получить все классы")]
-    [ProducesResponseType<List<CharacterClassDto>>(200)]
-    [ProducesResponseType<string>(404)]
+
+    /// <summary>
+    /// Получить все классы
+    /// </summary>
+    /// <param name="token">Токен отмены операции</param>
+    [HttpGet("")]
+    [ProducesResponseType<List<CharacterClassDto>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllClassesAsync(CancellationToken token)
-   {
-       try
-       {
-           var models = await _service.GetAllClassesAsync(token);
+    {
+        var models = await _service.GetAllClassesAsync(token);
 
-           var dtos = models.Select(x => ClassModelMapper.MapToDto(x)).ToList();
-
-           if (dtos.IsNullOrEmpty()) return NoContent();
-
-           return Ok(dtos);
-       }
-       catch (Exception e)
-       {
-           return BadRequest(e.Message);
-       }
-   }
+        return Ok(models.Select(ClassModelMapper.MapToDto).ToList());
+    }
 }

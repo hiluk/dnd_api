@@ -1,39 +1,20 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <NoWarn>$(NoWarn);CS1591</NoWarn>
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj" />
-      <ProjectReference Include="..\DndSolution.Application.Models\DndSolution.Application.Models.csproj" />
-      <ProjectReference Include="..\DndSolution.Core.Sdk\DndSolution.Core.Sdk.csproj" />
-      <ProjectReference Include="..\DndSolution.Data.Abstractions\DndSolution.Data.Abstractions.csproj" />
-      <ProjectReference Include="..\DndSolution.Neccessary\DndSolution.Neccessary.csproj" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-      <PackageReference Include="EFCore.NamingConventions" Version="8.0.3" />
-      <PackageReference Include="Mapster" Version="7.4.0" />
-      <PackageReference Include="Mapster.Async" Version="2.0.1" />
-      <PackageReference Include="Mapster.Core" Version="1.2.1" />
-      <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
-      <PackageReference Include="Mapster.EFCore" Version="5.1.1" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7" />
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.7">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.7">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+      <ProjectReference Include="..\DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj" />
+      <ProjectReference Include="..\DndSolution.Data.Abstractions\DndSolution.Data.Abstractions.csproj" />
     </ItemGroup>
 
 </Project>

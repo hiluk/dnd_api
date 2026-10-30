@@ -1,39 +1,46 @@
-﻿using Core.Sdk.Dtos.Classes;
-using Core.Sdk.Dtos.Race;
+using System.ComponentModel.DataAnnotations;
 using Core.Sdk.Enums;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Core.Sdk.Dtos.Characters;
 
-public class CharacterDto 
+/// <summary>
+/// Персонаж
+/// </summary>
+public class CharacterDto
 {
     /// <summary>
-    /// Id персонажа
+    /// Id персонажа (заполняется сервером)
     /// </summary>
     public Guid Id { get; init; }
-    
+
     /// <summary>
     /// Имя персонажа
     /// </summary>
-    public string Name { get; init; }
-    
+    [Required(AllowEmptyStrings = false)]
+    [StringLength(64)]
+    public string Name { get; init; } = string.Empty;
+
     /// <summary>
     /// Уровень персонажа
     /// </summary>
-    public byte Level { get; init; }
-    
+    [Range(1, 20)]
+    public byte Level { get; init; } = 1;
+
     /// <summary>
     /// Класс персонажа
     /// </summary>
+    [EnumDataType(typeof(CharacterClassTypeDto))]
     public CharacterClassTypeDto CharacterClass { get; init; }
 
     /// <summary>
-    /// Расса персонажа
+    /// Раса персонажа
     /// </summary>
+    [EnumDataType(typeof(CharacterRaceTypeDto))]
     public CharacterRaceTypeDto CharacterRace { get; init; }
-    
+
     /// <summary>
-    /// Информация о очках характеристик персонажа
+    /// Характеристики персонажа
     /// </summary>
-    public CharacterStatsDto CharacterStats { get; init; }
+    [Required]
+    public CharacterStatsDto CharacterStats { get; init; } = new();
 }

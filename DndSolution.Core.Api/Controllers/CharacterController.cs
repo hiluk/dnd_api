@@ -1,141 +1,98 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Core.Api.Mappings;
-using Core.Sdk.Dtos.Character;
 using Core.Sdk.Dtos.Characters;
 using DndSolution.Application.Abstractions;
-using DndSolution.Application.Models.Models.Character;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Core.Api.Controllers;
 
 /// <summary>
-/// Контроллер работы с персонажами
+/// Контроллер работы с персонажами текущего пользователя
 /// </summary>
 [ApiController]
+[Authorize]
 [Route("/characters")]
 public class CharacterController : ControllerBase
 {
     private readonly ICharacterService _service;
-    private readonly ILogger<CharacterController> _logger;
 
     /// <summary>
     /// .ctor
     /// </summary>
     /// <param name="service">Сервис для работы с персонажами</param>
-    /// <param name="logger">Логгер</param>
-    public CharacterController(ICharacterService service, ILogger<CharacterController> logger)
+    public CharacterController(ICharacterService service)
     {
         _service = service;
-        _logger = logger;
     }
+
+    private Guid CurrentUserId =>
+        Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)
+                   ?? throw new InvalidOperationException("В токене нет Id пользователя"));
 
     /// <summary>
     /// Создать нового персонажа
     /// </summary>
-    /// <param name="dto">Дто с информацеий о персонаже</param>
+    /// <param name="dto">Дто с информацией о персонаже</param>
     /// <param name="token">Токен отмены операции</param>
+    /// <returns>Созданный персонаж</returns>
     [HttpPost("create")]
-    [Authorize]
-    [ProducesResponseType<string>(200)]
-    public async Task<IActionResult> CreateCharacter([FromBody]CharacterDto dto, CancellationToken token)
+    [ProducesResponseType<CharacterDto>(StatusCodes.Status201Created)]
+    [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CreateCharacter([FromBody] CharacterDto dto, CancellationToken token)
     {
-        try
-        {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            
-            if (userEmail == null) return BadRequest("Ошибка");
-            
-            var character = CharacterMapper.MapToModel(dto);
-            
-            await _service.CreateCharacterAsync(userEmail, character, token);
-            
-            return Ok("Персонаж успешно создан");
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e,"Не удалось сохранить персонажа");
-            throw;
-        }        
+        var character = CharacterMapper.MapToModel(dto);
+
+        await _service.CreateCharacterAsync(CurrentUserId, character, token);
+
+        var result = CharacterMapper.MapToDto(character);
+        return CreatedAtAction(nameof(GetCharacterById), new { id = result.Id }, result);
     }
 
     /// <summary>
     /// Получить всех персонажей пользователя
     /// </summary>
-    /// <param name="email">Эмейл пользователя</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpGet("")]
-    [Authorize]
-    [ProducesResponseType<List<CharacterDto>>(200)]
+    [ProducesResponseType<List<CharacterDto>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllUserCharacters(CancellationToken token)
     {
-        try
-        {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            
-            if (userEmail == null) return BadRequest("Пользователь не найден");
-            
-            var model = await _service.GetAllUserCharactersAsync(userEmail ,token);
-            var result = model.Select(CharacterMapper.MapToDto).ToList();
+        var models = await _service.GetAllUserCharactersAsync(CurrentUserId, token);
 
-            return Ok(result);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Не удалось получить персонажей пользователя");
-            throw;
-        }
+        return Ok(models.Select(CharacterMapper.MapToDto).ToList());
     }
 
     /// <summary>
-    /// Получить персонажа по имени
+    /// Получить персонажа по Id
     /// </summary>
     /// <param name="id">Id персонажа</param>
     /// <param name="token">Токен отмены операции</param>
     [HttpGet("{id:guid}")]
-    [Authorize]
-    public async Task<IActionResult> GetCharacterById([FromRoute] Guid id ,CancellationToken token)
+    [ProducesResponseType<CharacterDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCharacterById([FromRoute] Guid id, CancellationToken token)
     {
-        try
-        {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            
-            if (userEmail == null) return BadRequest("Пользователь не найден");
+        var model = await _service.GetCharacterAsync(id, CurrentUserId, token);
 
-            var model = await _service.GetCharacterAsync(id, userEmail, token);
-            
-            return Ok(CharacterMapper.MapToDto(model));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Не удалось получить персонажа");
-            throw;
-        }
+        return model is null
+            ? Problem("Персонаж не найден", statusCode: StatusCodes.Status404NotFound)
+            : Ok(CharacterMapper.MapToDto(model));
     }
 
     /// <summary>
     /// Удалить персонажа пользователя
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="token"></param>
-    [HttpDelete("delete")]
-    [Authorize]
-    public async Task<IActionResult> DeleteCharacter([FromBody] CharacterRequest request, CancellationToken token)
+    /// <param name="id">Id персонажа</param>
+    /// <param name="token">Токен отмены операции</param>
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteCharacter([FromRoute] Guid id, CancellationToken token)
     {
-        try
-        {
-            var userEmail = User.FindFirst(ClaimTypes.Email)?.Value;
-            
-            if (userEmail == null) return BadRequest("Пользователь не найден");
-            
-            await _service.DeleteCharacterAsync(userEmail, request.Name, token);
+        var deleted = await _service.DeleteCharacterAsync(id, CurrentUserId, token);
 
-            return Ok("Персонаж удален");
-        }
-        catch (Exception e)
-        {
-            _logger.LogError("Не удалось удалить персонажа");
-            throw;
-        }
+        return deleted
+            ? NoContent()
+            : Problem("Персонаж не найден", statusCode: StatusCodes.Status404NotFound);
     }
 }

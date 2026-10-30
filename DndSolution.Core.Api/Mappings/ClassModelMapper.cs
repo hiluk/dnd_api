@@ -3,7 +3,7 @@ using DndSolution.Application.Models.Models.Classes;
 
 namespace Core.Api.Mappings;
 
-public class ClassModelMapper
+public static class ClassModelMapper
 {
     public static CharacterClass MapToModel(CharacterClassDto dto)
     {
@@ -20,7 +20,7 @@ public class ClassModelMapper
             HpAt1stLevel = dto.HpAt1stLevel,
             ProfSavingThrows = dto.ProfSavingThrows,
             SpellCastingAbility = dto.SpellCastingAbility,
-            HpAtHigherLevels = dto.SpellCastingAbility,
+            HpAtHigherLevels = dto.HpAtHigherLevels,
         };
     }
     
@@ -39,7 +39,7 @@ public class ClassModelMapper
             HpAt1stLevel = model.HpAt1stLevel,
             ProfSavingThrows = model.ProfSavingThrows,
             SpellCastingAbility = model.SpellCastingAbility,
-            HpAtHigherLevels = model.SpellCastingAbility,
+            HpAtHigherLevels = model.HpAtHigherLevels,
         };
     }
 }
