@@ -2,6 +2,9 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json.Nodes;
+using Data.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DndSolution.Tests;
 
@@ -49,8 +52,12 @@ public class ApiTests : IClassFixture<ApiFactory>
         var races = await client.GetFromJsonAsync<JsonArray>("/races");
         var classes = await client.GetFromJsonAsync<JsonArray>("/classes");
 
-        Assert.Equal(["Человек", "Полуэльф"], races!.Select(x => x!["name"]!.GetValue<string>()));
-        Assert.Equal(["Воин", "Варвар", "Рейнджер", "Вор"], classes!.Select(x => x!["name"]!.GetValue<string>()));
+        Assert.Equal(
+            ["Человек", "Полуэльф", "Дварф", "Эльф", "Полурослик", "Драконорождённый", "Гном", "Полуорк", "Тифлинг"],
+            races!.Select(x => x!["name"]!.GetValue<string>()));
+        Assert.Equal(
+            ["Воин", "Варвар", "Следопыт", "Плут", "Бард", "Жрец", "Друид", "Монах", "Паладин", "Чародей", "Колдун", "Волшебник"],
+            classes!.Select(x => x!["name"]!.GetValue<string>()));
     }
 
     [Fact]
@@ -161,5 +168,28 @@ public class ApiTests : IClassFixture<ApiFactory>
         });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Старые_названия_классов_переименовываются_в_официальные()
+    {
+        using (var scope = _factory.Services.CreateScope())
+        {
+            var context = scope.ServiceProvider.GetRequiredService<DndContext>();
+            await context.Classes.Where(x => x.Name == "Следопыт")
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(c => c.Name, "Рейнджер")
+                    .SetProperty(c => c.Description, "старое описание"));
+        }
+
+        await _factory.Services.InitializeDbAsync();
+
+        var classes = await _factory.CreateClient().GetFromJsonAsync<JsonArray>("/classes");
+        var names = classes!.Select(x => x!["name"]!.GetValue<string>()).ToList();
+        Assert.Contains("Следопыт", names);
+        Assert.DoesNotContain("Рейнджер", names);
+        Assert.Equal(12, names.Count);
+        var ranger = classes!.Single(x => x!["name"]!.GetValue<string>() == "Следопыт")!;
+        Assert.NotEqual("старое описание", ranger["description"]!.GetValue<string>());
     }
 }

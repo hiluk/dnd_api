@@ -7,12 +7,8 @@ using Microsoft.Extensions.Logging;
 namespace Data.Repositories;
 
 /// <summary>
-/// Применение миграций и заполнение справочников рас и классов
+/// Применение миграций и синхронизация справочников рас и классов с <see cref="CatalogSeed"/>
 /// </summary>
-/// <remarks>
-/// Клиент сопоставляет значения enum с записями справочника по названию,
-/// поэтому названия здесь должны совпадать с клиентскими.
-/// </remarks>
 public static class DbInitializer
 {
     public static async Task InitializeDbAsync(this IServiceProvider services, CancellationToken token = default)
@@ -23,123 +19,93 @@ public static class DbInitializer
 
         await context.Database.MigrateAsync(token);
 
-        var existingRaces = await context.Races.Select(x => x.Name).ToListAsync(token);
-        var newRaces = Races.Where(x => !existingRaces.Contains(x.Name)).ToList();
-        await context.Races.AddRangeAsync(newRaces, token);
-
-        var existingClasses = await context.Classes.Select(x => x.Name).ToListAsync(token);
-        var newClasses = Classes.Where(x => !existingClasses.Contains(x.Name)).ToList();
-        await context.Classes.AddRangeAsync(newClasses, token);
-
+        var (racesAdded, racesUpdated) = await SyncRacesAsync(context, token);
+        var (classesAdded, classesUpdated) = await SyncClassesAsync(context, token);
         await context.SaveChangesAsync(token);
 
-        if (newRaces.Count + newClasses.Count > 0)
+        if (racesAdded + racesUpdated + classesAdded + classesUpdated > 0)
         {
-            logger.LogInformation("Добавлено рас: {Races}, классов: {Classes}", newRaces.Count, newClasses.Count);
+            logger.LogInformation(
+                "Справочники обновлены. Расы: +{RacesAdded}, изменено {RacesUpdated}. Классы: +{ClassesAdded}, изменено {ClassesUpdated}",
+                racesAdded, racesUpdated, classesAdded, classesUpdated);
         }
     }
 
-    private static IEnumerable<Race> Races =>
-    [
-        new Race
-        {
-            Name = "Человек",
-            Description = "Самая молодая и самая распространённая из рас. Люди амбициозны, изобретательны и легко приспосабливаются к любым условиям.",
-            Age = "Взрослеют к 20 годам и редко живут дольше столетия.",
-            Size = "Средний",
-            Language = "Общий и ещё один язык на выбор.",
-            Vision = "Обычное",
-            Traits = "Увеличение всех характеристик на 1.",
-            Asi =
-            [
-                new Asi { Stat = "Сила", Value = 1 },
-                new Asi { Stat = "Ловкость", Value = 1 },
-                new Asi { Stat = "Телосложение", Value = 1 },
-                new Asi { Stat = "Интеллект", Value = 1 },
-                new Asi { Stat = "Мудрость", Value = 1 },
-                new Asi { Stat = "Харизма", Value = 1 },
-            ],
-            Speed = [new Speed { Type = "Ходьба", Value = 30 }],
-        },
-        new Race
-        {
-            Name = "Полуэльф",
-            Description = "Полуэльфы сочетают лучшие черты людей и эльфов: любознательность и амбиции одних с утончённостью и обаянием других.",
-            Age = "Взрослеют к 20 годам, живут более 180 лет.",
-            Size = "Средний",
-            Language = "Общий, эльфийский и ещё один язык на выбор.",
-            Vision = "Тёмное зрение, 60 футов",
-            Traits = "Наследие фей, владение двумя навыками на выбор.",
-            Asi =
-            [
-                new Asi { Stat = "Харизма", Value = 2 },
-                new Asi { Stat = "Любые две", Value = 1 },
-            ],
-            Speed = [new Speed { Type = "Ходьба", Value = 30 }],
-        },
-    ];
+    private static async Task<(int Added, int Updated)> SyncRacesAsync(DndContext context, CancellationToken token)
+    {
+        var existing = await context.Races
+            .Include(x => x.Asi.OrderBy(a => a.Id))
+            .Include(x => x.Speed.OrderBy(s => s.Id))
+            .AsSplitQuery()
+            .ToDictionaryAsync(x => x.Name, token);
 
-    private static IEnumerable<CharacterClass> Classes =>
-    [
-        new CharacterClass
+        var (added, updated) = (0, 0);
+        foreach (var seed in CatalogSeed.Races)
         {
-            Name = "Воин",
-            Description = "Мастер боевых искусств, искусно владеющий любым оружием и доспехами.",
-            HitDice = "1к10",
-            HpAt1stLevel = "10 + модификатор Телосложения",
-            HpAtHigherLevels = "1к10 (или 6) + модификатор Телосложения за каждый уровень после первого",
-            ProfArmor = "Все доспехи, щиты",
-            ProfWeapon = "Простое и воинское оружие",
-            ProfTool = "Нет",
-            ProfSavingThrows = "Сила, Телосложение",
-            ProfSkills = "Два навыка из: Акробатика, Атлетика, Восприятие, Выживание, Запугивание, История, Проницательность, Уход за животными",
-            Equipment = "Кольчуга, воинское оружие и щит, лёгкий арбалет, набор исследователя подземелий",
-            SpellCastingAbility = "Нет",
-        },
-        new CharacterClass
+            if (!existing.TryGetValue(seed.Name, out var race))
+            {
+                context.Races.Add(seed);
+                added++;
+                continue;
+            }
+
+            var changed = race.Description != seed.Description || race.Age != seed.Age || race.Size != seed.Size
+                          || race.Language != seed.Language || race.Vision != seed.Vision || race.Traits != seed.Traits
+                          || !race.Asi.Select(a => (a.Stat, a.Value)).SequenceEqual(seed.Asi.Select(a => (a.Stat, a.Value)))
+                          || !race.Speed.Select(s => (s.Type, s.Value)).SequenceEqual(seed.Speed.Select(s => (s.Type, s.Value)));
+            if (!changed)
+            {
+                continue;
+            }
+
+            // Свойства рас init-only, поэтому значения переписываются через EF
+            context.Entry(race).CurrentValues.SetValues(new
+            {
+                seed.Description, seed.Age, seed.Size, seed.Language, seed.Vision, seed.Traits,
+            });
+            context.RemoveRange(race.Asi);
+            context.RemoveRange(race.Speed);
+            race.Asi.AddRange(seed.Asi);
+            race.Speed.AddRange(seed.Speed);
+            updated++;
+        }
+
+        return (added, updated);
+    }
+
+    private static async Task<(int Added, int Updated)> SyncClassesAsync(DndContext context, CancellationToken token)
+    {
+        var classes = await context.Classes.ToListAsync(token);
+
+        foreach (var characterClass in classes)
         {
-            Name = "Варвар",
-            Description = "Свирепый воин, способный впадать в боевую ярость.",
-            HitDice = "1к12",
-            HpAt1stLevel = "12 + модификатор Телосложения",
-            HpAtHigherLevels = "1к12 (или 7) + модификатор Телосложения за каждый уровень после первого",
-            ProfArmor = "Лёгкие и средние доспехи, щиты",
-            ProfWeapon = "Простое и воинское оружие",
-            ProfTool = "Нет",
-            ProfSavingThrows = "Сила, Телосложение",
-            ProfSkills = "Два навыка из: Атлетика, Восприятие, Выживание, Запугивание, Природа, Уход за животными",
-            Equipment = "Секира, два ручных топора, набор путешественника, четыре метательных копья",
-            SpellCastingAbility = "Нет",
-        },
-        new CharacterClass
+            if (CatalogSeed.ClassRenames.TryGetValue(characterClass.Name, out var newName)
+                && classes.All(x => x.Name != newName))
+            {
+                characterClass.Name = newName;
+            }
+        }
+
+        var existing = classes.ToDictionary(x => x.Name);
+        var (added, updated) = (0, 0);
+        foreach (var seed in CatalogSeed.Classes)
         {
-            Name = "Рейнджер",
-            Description = "Охотник и следопыт, сражающийся с угрозами на границах цивилизации.",
-            HitDice = "1к10",
-            HpAt1stLevel = "10 + модификатор Телосложения",
-            HpAtHigherLevels = "1к10 (или 6) + модификатор Телосложения за каждый уровень после первого",
-            ProfArmor = "Лёгкие и средние доспехи, щиты",
-            ProfWeapon = "Простое и воинское оружие",
-            ProfTool = "Нет",
-            ProfSavingThrows = "Сила, Ловкость",
-            ProfSkills = "Три навыка из: Атлетика, Внимательность, Выживание, Природа, Проницательность, Расследование, Скрытность, Уход за животными",
-            Equipment = "Чешуйчатый доспех, два коротких меча, длинный лук и колчан с 20 стрелами",
-            SpellCastingAbility = "Мудрость",
-        },
-        new CharacterClass
-        {
-            Name = "Вор",
-            Description = "Ловкий и хитрый плут, полагающийся на скрытность и точные удары.",
-            HitDice = "1к8",
-            HpAt1stLevel = "8 + модификатор Телосложения",
-            HpAtHigherLevels = "1к8 (или 5) + модификатор Телосложения за каждый уровень после первого",
-            ProfArmor = "Лёгкие доспехи",
-            ProfWeapon = "Простое оружие, ручные арбалеты, длинные мечи, рапиры, короткие мечи",
-            ProfTool = "Воровские инструменты",
-            ProfSavingThrows = "Ловкость, Интеллект",
-            ProfSkills = "Четыре навыка из: Акробатика, Атлетика, Восприятие, Выступление, Запугивание, Ловкость рук, Обман, Проницательность, Расследование, Скрытность, Убеждение",
-            Equipment = "Рапира, короткий лук и колчан с 20 стрелами, кожаный доспех, два кинжала, воровские инструменты",
-            SpellCastingAbility = "Нет",
-        },
-    ];
+            if (!existing.TryGetValue(seed.Name, out var characterClass))
+            {
+                context.Classes.Add(seed);
+                added++;
+                continue;
+            }
+
+            var entry = context.Entry(characterClass);
+            seed.Id = characterClass.Id;
+            entry.CurrentValues.SetValues(seed);
+            if (entry.State == EntityState.Modified)
+            {
+                updated++;
+            }
+        }
+
+        return (added, updated);
+    }
 }

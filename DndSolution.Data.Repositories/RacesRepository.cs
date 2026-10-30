@@ -26,8 +26,8 @@ public class RacesRepository : IRacesRepository
     {
         return await _context.Races
             .AsNoTracking()
-            .Include(x => x.Asi)
-            .Include(x => x.Speed)
+            .Include(x => x.Asi.OrderBy(a => a.Id))
+            .Include(x => x.Speed.OrderBy(s => s.Id))
             .AsSplitQuery()
             .OrderBy(x => x.Id)
             .ToListAsync(token);
