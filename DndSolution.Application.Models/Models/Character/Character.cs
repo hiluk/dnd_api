@@ -27,7 +27,17 @@ public class Character
     public CharacterRaceType CharacterRace { get; set; }
     
     /// <summary>
-    /// Характеристики персонажа
+    /// Базовые характеристики (до бонусов расы)
     /// </summary>
     public CharacterStats Stats { get; init; }
+
+    /// <summary>
+    /// Способ генерации характеристик
+    /// </summary>
+    public GenerationMethod GenerationMethod { get; init; }
+
+    /// <summary>
+    /// Характеристики, выбранные для бонусов расы «на выбор»
+    /// </summary>
+    public List<Ability> BonusChoices { get; init; } = [];
 }

@@ -1,8 +1,20 @@
-﻿namespace Core.Sdk.Dtos.Classes;
+﻿using Core.Sdk.Enums;
+
+namespace Core.Sdk.Dtos.Classes;
 
 public class CharacterClassDto
 {
     public string Name { get; set; }
+
+    /// <summary>
+    /// Кость хитов: 6, 8, 10 или 12
+    /// </summary>
+    public int HitDie { get; set; }
+
+    /// <summary>
+    /// Спасброски, которыми владеет класс
+    /// </summary>
+    public List<AbilityDto> SavingThrows { get; set; } = [];
     
     public string Description { get; set; }
     

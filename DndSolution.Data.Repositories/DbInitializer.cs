@@ -49,9 +49,11 @@ public static class DbInitializer
                 continue;
             }
 
-            var changed = race.Description != seed.Description || race.Age != seed.Age || race.Size != seed.Size
+            var changed = race.Type != seed.Type
+                          || race.Description != seed.Description || race.Age != seed.Age || race.Size != seed.Size
                           || race.Language != seed.Language || race.Vision != seed.Vision || race.Traits != seed.Traits
-                          || !race.Asi.Select(a => (a.Stat, a.Value)).SequenceEqual(seed.Asi.Select(a => (a.Stat, a.Value)))
+                          || !race.Asi.Select(a => (a.Stat, a.Value, a.Ability, a.Choices))
+                              .SequenceEqual(seed.Asi.Select(a => (a.Stat, a.Value, a.Ability, a.Choices)))
                           || !race.Speed.Select(s => (s.Type, s.Value)).SequenceEqual(seed.Speed.Select(s => (s.Type, s.Value)));
             if (!changed)
             {
@@ -61,7 +63,7 @@ public static class DbInitializer
             // Свойства рас init-only, поэтому значения переписываются через EF
             context.Entry(race).CurrentValues.SetValues(new
             {
-                seed.Description, seed.Age, seed.Size, seed.Language, seed.Vision, seed.Traits,
+                seed.Type, seed.Description, seed.Age, seed.Size, seed.Language, seed.Vision, seed.Traits,
             });
             context.RemoveRange(race.Asi);
             context.RemoveRange(race.Speed);

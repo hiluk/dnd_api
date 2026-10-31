@@ -54,6 +54,7 @@ public class DndContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
             .HasForeignKey(x => x.RaceId);
 
         modelBuilder.Entity<Character>().HasKey(x => x.Id);
+        modelBuilder.Entity<Character>().Property(x => x.BonusChoices).IsRequired();
         modelBuilder.Entity<Character>().Property(x => x.Name).HasMaxLength(64);
         modelBuilder.Entity<Character>().Property<DateTime>(CharacterCreationTimeProperty).IsRequired();
         modelBuilder.Entity<Character>()

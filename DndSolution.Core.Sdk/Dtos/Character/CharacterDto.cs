@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using Core.Sdk.Enums;
 
 namespace Core.Sdk.Dtos.Characters;
@@ -9,38 +8,47 @@ namespace Core.Sdk.Dtos.Characters;
 public class CharacterDto
 {
     /// <summary>
-    /// Id персонажа (заполняется сервером)
+    /// Id персонажа
     /// </summary>
     public Guid Id { get; init; }
 
     /// <summary>
     /// Имя персонажа
     /// </summary>
-    [Required(AllowEmptyStrings = false)]
-    [StringLength(64)]
-    public string Name { get; init; } = string.Empty;
+    public required string Name { get; init; }
 
     /// <summary>
     /// Уровень персонажа
     /// </summary>
-    [Range(1, 20)]
-    public byte Level { get; init; } = 1;
+    public byte Level { get; init; }
 
     /// <summary>
     /// Класс персонажа
     /// </summary>
-    [EnumDataType(typeof(CharacterClassTypeDto))]
     public CharacterClassTypeDto CharacterClass { get; init; }
 
     /// <summary>
     /// Раса персонажа
     /// </summary>
-    [EnumDataType(typeof(CharacterRaceTypeDto))]
     public CharacterRaceTypeDto CharacterRace { get; init; }
 
     /// <summary>
-    /// Характеристики персонажа
+    /// Способ генерации характеристик
     /// </summary>
-    [Required]
-    public CharacterStatsDto CharacterStats { get; init; } = new();
+    public GenerationMethodDto GenerationMethod { get; init; }
+
+    /// <summary>
+    /// Базовые характеристики (до бонусов расы)
+    /// </summary>
+    public required CharacterStatsDto BaseStats { get; init; }
+
+    /// <summary>
+    /// Характеристики, выбранные для бонусов расы «на выбор»
+    /// </summary>
+    public required List<AbilityDto> BonusChoices { get; init; }
+
+    /// <summary>
+    /// Итоговые и производные значения
+    /// </summary>
+    public required CharacterSheetDto Sheet { get; init; }
 }

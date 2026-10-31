@@ -1,4 +1,6 @@
 ﻿using Core.Sdk.Dtos.Race;
+using Core.Sdk.Enums;
+using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models.Races;
 
 namespace Core.Api.Mappings;
@@ -18,6 +20,8 @@ public static class RaceModelMapper
             {
                 Stat = asiDto.Stat,
                 Value = asiDto.Value,
+                Ability = (Ability?)asiDto.Ability,
+                Choices = asiDto.Choices,
             });
         }
 
@@ -67,6 +71,8 @@ public static class RaceModelMapper
             {
                 Stat = asi.Stat,
                 Value = asi.Value,
+                Ability = (AbilityDto?)asi.Ability,
+                Choices = asi.Choices,
             });
         }
 

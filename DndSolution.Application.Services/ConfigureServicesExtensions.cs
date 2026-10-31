@@ -10,6 +10,7 @@ public static class ConfigureServicesExtensions
         services.AddScoped<IRaceService, RaceService>();
         services.AddScoped<IClassService, ClassService>();
         services.AddScoped<ICharacterService, CharacterService>();
+        services.AddSingleton<IAbilityRollService, AbilityRollService>();
 
         return services;
     }

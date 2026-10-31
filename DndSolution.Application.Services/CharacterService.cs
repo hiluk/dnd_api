@@ -1,6 +1,11 @@
 using Data.Abstractions;
 using DndSolution.Application.Abstractions;
+using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models.Character;
+using DndSolution.Application.Models.Models.Classes;
+using DndSolution.Application.Models.Models.Races;
+using DndSolution.Application.Models.Models.Rules;
+using DndSolution.Application.Services.Rules;
 
 namespace DndSolution.Application.Services;
 
@@ -10,29 +15,120 @@ namespace DndSolution.Application.Services;
 public class CharacterService : ICharacterService
 {
     private readonly ICharactersRepository _repository;
+    private readonly IRacesRepository _races;
+    private readonly IClassesRepository _classes;
+    private readonly IAbilityRollService _rolls;
 
     /// <summary>
     /// .ctor
     /// </summary>
-    /// <param name="repository">Репозиторий для работы с персонажами</param>
-    public CharacterService(ICharactersRepository repository)
+    public CharacterService(
+        ICharactersRepository repository,
+        IRacesRepository races,
+        IClassesRepository classes,
+        IAbilityRollService rolls)
     {
         _repository = repository;
+        _races = races;
+        _classes = classes;
+        _rolls = rolls;
     }
 
     /// <inheritdoc />
-    public Task CreateCharacterAsync(Guid userId, Character character, CancellationToken token)
-        => _repository.SaveCharacterAsync(character, userId, token);
+    public async Task<CharacterSheet> PreviewAsync(
+        Guid userId, CharacterDraft draft, string? rollToken, CancellationToken token)
+    {
+        var catalog = await LoadCatalogAsync(token);
+
+        return Evaluate(catalog, WithRolls(draft, userId, rollToken));
+    }
 
     /// <inheritdoc />
-    public Task<IReadOnlyList<Character>> GetAllUserCharactersAsync(Guid userId, CancellationToken token)
-        => _repository.GetAllUserCharactersAsync(userId, token);
+    public async Task<CharacterWithSheet> CreateCharacterAsync(
+        Guid userId, string name, CharacterDraft draft, string? rollToken, CancellationToken token)
+    {
+        var catalog = await LoadCatalogAsync(token);
+        draft = WithRolls(draft, userId, rollToken);
+        var sheet = Evaluate(catalog, draft);
+
+        var character = new Character
+        {
+            Name = name.Trim(),
+            Level = CharacterRules.Level,
+            CharacterRace = draft.Race,
+            CharacterClass = draft.Class,
+            GenerationMethod = draft.Method,
+            Stats = draft.BaseScores.ToStats(),
+            BonusChoices = draft.BonusChoices.ToList(),
+        };
+        await _repository.SaveCharacterAsync(character, userId, token);
+
+        return new CharacterWithSheet(character, sheet);
+    }
 
     /// <inheritdoc />
-    public Task<Character?> GetCharacterAsync(Guid id, Guid userId, CancellationToken token)
-        => _repository.GetCharacterByIdAsync(userId, id, token);
+    public async Task<IReadOnlyList<CharacterWithSheet>> GetAllUserCharactersAsync(Guid userId, CancellationToken token)
+    {
+        var characters = await _repository.GetAllUserCharactersAsync(userId, token);
+        var catalog = await LoadCatalogAsync(token);
+
+        return characters.Select(c => new CharacterWithSheet(c, Evaluate(catalog, c))).ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<CharacterWithSheet?> GetCharacterAsync(Guid id, Guid userId, CancellationToken token)
+    {
+        var character = await _repository.GetCharacterByIdAsync(userId, id, token);
+        if (character is null)
+        {
+            return null;
+        }
+
+        var catalog = await LoadCatalogAsync(token);
+        return new CharacterWithSheet(character, Evaluate(catalog, character));
+    }
 
     /// <inheritdoc />
     public Task<bool> DeleteCharacterAsync(Guid id, Guid userId, CancellationToken token)
         => _repository.DeleteCharacterAsync(userId, id, token);
+
+    private CharacterDraft WithRolls(CharacterDraft draft, Guid userId, string? rollToken) =>
+        draft.Method == GenerationMethod.Roll
+            ? draft with { RolledValues = _rolls.Verify(rollToken, userId) }
+            : draft;
+
+    /// <summary>
+    /// Сохранённый персонаж уже прошёл проверку бросков при создании,
+    /// поэтому при чтении база считается подтверждённым результатом бросков
+    /// </summary>
+    private static CharacterSheet Evaluate(Catalog catalog, Character character)
+    {
+        var scores = AbilityScores.From(character.Stats);
+        var draft = new CharacterDraft(
+            character.CharacterRace, character.CharacterClass, character.GenerationMethod,
+            scores, character.BonusChoices, scores.Values.ToList());
+
+        return Evaluate(catalog, draft);
+    }
+
+    private static CharacterSheet Evaluate(Catalog catalog, CharacterDraft draft)
+    {
+        var race = catalog.Races.FirstOrDefault(r => r.Type == draft.Race);
+        var characterClass = catalog.Classes.FirstOrDefault(c => c.Type == draft.Class);
+        if (race is null || characterClass is null)
+        {
+            throw new CharacterRulesException(new Dictionary<string, string[]>
+            {
+                [race is null ? "CharacterRace" : "CharacterClass"] =
+                    [race is null ? "Неизвестная раса" : "Неизвестный класс"],
+            });
+        }
+
+        return CharacterRules.Evaluate(draft, race, characterClass);
+    }
+
+    private async Task<Catalog> LoadCatalogAsync(CancellationToken token) =>
+        new(await _races.GetAllRaces(token), await _classes.GetAllClassesAsync(token));
+
+    private sealed record Catalog(IReadOnlyList<Race> Races, IReadOnlyList<CharacterClass> Classes);
 }

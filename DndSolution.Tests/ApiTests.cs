@@ -18,13 +18,20 @@ public class ApiTests : IClassFixture<ApiFactory>
         _factory = factory;
     }
 
+    private static object Stats(int str, int dex, int con, int @int, int wis, int cha) =>
+        new { strength = str, dexterity = dex, constitution = con, intelligence = @int, wisdom = wis, charisma = cha };
+
+    /// <summary>
+    /// Дварф-воин, стандартный набор
+    /// </summary>
     private static object NewCharacter(string name) => new
     {
         name,
-        level = 2,
-        characterClass = 3,
-        characterRace = 2,
-        characterStats = new { strength = 10, dexterity = 15, constitution = 12, intelligence = 11, wisdom = 13, charisma = 14 },
+        characterRace = 3,
+        characterClass = 1,
+        generationMethod = 1,
+        baseStats = Stats(15, 14, 13, 12, 10, 8),
+        bonusChoices = Array.Empty<int>(),
     };
 
     private async Task<(HttpClient Client, string RefreshToken)> LoggedClientAsync()
@@ -129,10 +136,10 @@ public class ApiTests : IClassFixture<ApiFactory>
         Assert.Single(list!);
 
         var character = await client.GetFromJsonAsync<JsonObject>($"/characters/{id}");
-        var stats = character!["characterStats"]!;
+        var stats = character!["baseStats"]!;
         Assert.Equal("Леголас", character["name"]!.GetValue<string>());
-        Assert.Equal(15, stats["dexterity"]!.GetValue<int>());
-        Assert.Equal(12, stats["constitution"]!.GetValue<int>());
+        Assert.Equal(14, stats["dexterity"]!.GetValue<int>());
+        Assert.Equal(13, stats["constitution"]!.GetValue<int>());
 
         Assert.Equal(HttpStatusCode.NoContent, (await client.DeleteAsync($"/characters/{id}")).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync($"/characters/{id}")).StatusCode);
@@ -161,13 +168,140 @@ public class ApiTests : IClassFixture<ApiFactory>
         var response = await client.PostAsJsonAsync("/characters/create", new
         {
             name = "",
-            level = 99,
-            characterClass = 42,
             characterRace = 1,
-            characterStats = new { strength = 100 },
+            characterClass = 42,
+            generationMethod = 1,
+            baseStats = Stats(15, 14, 13, 12, 10, 8),
+            bonusChoices = Array.Empty<int>(),
         });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task Лист_персонажа_считается_сервером()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var created = await client.PostAsJsonAsync("/characters/create", NewCharacter("Торин"));
+        var character = (await created.Content.ReadFromJsonAsync<JsonObject>())!;
+        var sheet = character["sheet"]!;
+
+        Assert.Equal(1, character["level"]!.GetValue<int>());
+        Assert.Equal(13, character["baseStats"]!["constitution"]!.GetValue<int>());
+        Assert.Equal(15, sheet["stats"]!["constitution"]!.GetValue<int>());
+        Assert.Equal(2, sheet["modifiers"]!["constitution"]!.GetValue<int>());
+        Assert.Equal(12, sheet["hitPoints"]!.GetValue<int>());
+        Assert.Equal(12, sheet["armorClass"]!.GetValue<int>());
+        Assert.Equal(25, sheet["speed"]!.GetValue<int>());
+        Assert.Equal(6, sheet["savingThrows"]!.AsArray().Count);
+    }
+
+    [Fact]
+    public async Task Превью_не_сохраняет_персонажа()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var response = await client.PostAsJsonAsync("/characters/preview", NewCharacter("Черновик"));
+        var sheet = (await response.Content.ReadFromJsonAsync<JsonObject>())!;
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal(12, sheet["hitPoints"]!.GetValue<int>());
+        Assert.Empty((await client.GetFromJsonAsync<JsonArray>("/characters"))!);
+    }
+
+    [Fact]
+    public async Task Нарушение_правил_возвращает_понятную_ошибку()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var response = await client.PostAsJsonAsync("/characters/preview", new
+        {
+            characterRace = 3,
+            characterClass = 1,
+            generationMethod = 2,
+            baseStats = Stats(15, 15, 15, 9, 8, 8),
+            bonusChoices = Array.Empty<int>(),
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = (await response.Content.ReadFromJsonAsync<JsonObject>())!;
+        Assert.Equal("Потрачено 28 очков из 27", problem["errors"]!["BaseStats"]![0]!.GetValue<string>());
+    }
+
+    [Fact]
+    public async Task Полуэльф_с_выбором_бонусов_и_покупкой_очков()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var response = await client.PostAsJsonAsync("/characters/create", new
+        {
+            name = "Танис",
+            characterRace = 2,
+            characterClass = 3,
+            generationMethod = 2,
+            baseStats = Stats(13, 15, 14, 10, 12, 8),
+            bonusChoices = new[] { 2, 5 },
+        });
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var stats = (await response.Content.ReadFromJsonAsync<JsonObject>())!["sheet"]!["stats"]!;
+        Assert.Equal(16, stats["dexterity"]!.GetValue<int>());
+        Assert.Equal(13, stats["wisdom"]!.GetValue<int>());
+        Assert.Equal(10, stats["charisma"]!.GetValue<int>());
+    }
+
+    [Fact]
+    public async Task Создание_по_броскам_сервера()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var roll = (await (await client.PostAsync("/abilities/roll", null)).Content.ReadFromJsonAsync<JsonObject>())!;
+        var values = roll["values"]!.AsArray().Select(v => v!.GetValue<int>()).ToArray();
+        Assert.Equal(6, values.Length);
+        Assert.All(values, v => Assert.InRange(v, 3, 18));
+
+        object Draft(int[] scores, string? token) => new
+        {
+            name = "Везунчик",
+            characterRace = 1,
+            characterClass = 12,
+            generationMethod = 3,
+            baseStats = Stats(scores[0], scores[1], scores[2], scores[3], scores[4], scores[5]),
+            bonusChoices = Array.Empty<int>(),
+            rollToken = token,
+        };
+
+        var token = roll["token"]!.GetValue<string>();
+        var reversed = values.Reverse().ToArray();
+
+        var ok = await client.PostAsJsonAsync("/characters/create", Draft(reversed, token));
+        Assert.Equal(HttpStatusCode.Created, ok.StatusCode);
+
+        var forged = await client.PostAsJsonAsync("/characters/create", Draft([18, 18, 18, 18, 18, 18], token));
+        Assert.Equal(HttpStatusCode.BadRequest, forged.StatusCode);
+
+        var noToken = await client.PostAsJsonAsync("/characters/create", Draft(values, null));
+        Assert.Equal(HttpStatusCode.BadRequest, noToken.StatusCode);
+
+        var (stranger, _) = await LoggedClientAsync();
+        var stolen = await stranger.PostAsJsonAsync("/characters/create", Draft(values, token));
+        Assert.Equal(HttpStatusCode.BadRequest, stolen.StatusCode);
+    }
+
+    [Fact]
+    public async Task Справочники_содержат_структурные_поля()
+    {
+        var client = _factory.CreateClient();
+
+        var halfElf = (await client.GetFromJsonAsync<JsonArray>("/races"))![1]!;
+        var wizard = (await client.GetFromJsonAsync<JsonArray>("/classes"))![11]!;
+
+        Assert.Equal(6, halfElf["asi"]![0]!["ability"]!.GetValue<int>());
+        Assert.Null(halfElf["asi"]![1]!["ability"]);
+        Assert.Equal(2, halfElf["asi"]![1]!["choices"]!.GetValue<int>());
+        Assert.Equal(6, wizard["hitDie"]!.GetValue<int>());
+        Assert.Equal([4, 5], wizard["savingThrows"]!.AsArray().Select(x => x!.GetValue<int>()));
     }
 
     [Fact]

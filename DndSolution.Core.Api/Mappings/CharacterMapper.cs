@@ -2,51 +2,61 @@ using Core.Sdk.Dtos;
 using Core.Sdk.Dtos.Characters;
 using Core.Sdk.Enums;
 using DndSolution.Application.Models.Enums;
-using DndSolution.Application.Models.Models;
-using DndSolution.Application.Models.Models.Character;
+using DndSolution.Application.Models.Models.Rules;
 
 namespace Core.Api.Mappings;
 
 public static class CharacterMapper
 {
-    public static Character MapToModel(CharacterDto dto)
+    public static CharacterDraft MapToDraft(CharacterDraftDto dto) => new(
+        (CharacterRaceType)dto.CharacterRace,
+        (CharacterClassType)dto.CharacterClass,
+        (GenerationMethod)dto.GenerationMethod,
+        MapToScores(dto.BaseStats),
+        dto.BonusChoices.Select(a => (Ability)a).ToList());
+
+    public static CharacterDto MapToDto(CharacterWithSheet model)
     {
-        return new Character
+        var (character, sheet) = model;
+
+        return new CharacterDto
         {
-            Name = dto.Name.Trim(),
-            Level = dto.Level,
-            CharacterClass = (CharacterClassType)dto.CharacterClass,
-            CharacterRace = (CharacterRaceType)dto.CharacterRace,
-            Stats = new CharacterStats
-            {
-                Strength = dto.CharacterStats.Strength,
-                Dexterity = dto.CharacterStats.Dexterity,
-                Intelligence = dto.CharacterStats.Intelligence,
-                Wisdom = dto.CharacterStats.Wisdom,
-                Charisma = dto.CharacterStats.Charisma,
-                Constitution = dto.CharacterStats.Constitution,
-            },
+            Id = character.Id,
+            Name = character.Name,
+            Level = character.Level,
+            CharacterClass = (CharacterClassTypeDto)character.CharacterClass,
+            CharacterRace = (CharacterRaceTypeDto)character.CharacterRace,
+            GenerationMethod = (GenerationMethodDto)character.GenerationMethod,
+            BaseStats = MapToDto(AbilityScores.From(character.Stats)),
+            BonusChoices = character.BonusChoices.Select(a => (AbilityDto)a).ToList(),
+            Sheet = MapToDto(sheet),
         };
     }
 
-    public static CharacterDto MapToDto(Character model)
+    public static CharacterSheetDto MapToDto(CharacterSheet sheet) => new()
     {
-        return new CharacterDto
-        {
-            Id = model.Id,
-            Name = model.Name,
-            Level = model.Level,
-            CharacterClass = (CharacterClassTypeDto)model.CharacterClass,
-            CharacterRace = (CharacterRaceTypeDto)model.CharacterRace,
-            CharacterStats = new CharacterStatsDto
-            {
-                Strength = model.Stats.Strength,
-                Dexterity = model.Stats.Dexterity,
-                Intelligence = model.Stats.Intelligence,
-                Wisdom = model.Stats.Wisdom,
-                Charisma = model.Stats.Charisma,
-                Constitution = model.Stats.Constitution,
-            },
-        };
-    }
+        Stats = MapToDto(sheet.Scores),
+        Modifiers = MapToDto(sheet.Modifiers),
+        HitPoints = sheet.HitPoints,
+        ArmorClass = sheet.ArmorClass,
+        Initiative = sheet.Initiative,
+        Speed = sheet.Speed,
+        ProficiencyBonus = sheet.ProficiencyBonus,
+        SavingThrows = sheet.SavingThrows
+            .Select(s => new SavingThrowDto { Ability = (AbilityDto)s.Ability, Bonus = s.Bonus, Proficient = s.Proficient })
+            .ToList(),
+    };
+
+    private static AbilityScores MapToScores(CharacterStatsDto dto) => new(
+        dto.Strength, dto.Dexterity, dto.Constitution, dto.Intelligence, dto.Wisdom, dto.Charisma);
+
+    private static CharacterStatsDto MapToDto(AbilityScores scores) => new()
+    {
+        Strength = scores.Strength,
+        Dexterity = scores.Dexterity,
+        Constitution = scores.Constitution,
+        Intelligence = scores.Intelligence,
+        Wisdom = scores.Wisdom,
+        Charisma = scores.Charisma,
+    };
 }

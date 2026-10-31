@@ -29,6 +29,11 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<int[]>("BonusChoices")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("bonus_choices");
+
                     b.Property<int>("CharacterClass")
                         .HasColumnType("integer")
                         .HasColumnName("character_class");
@@ -40,6 +45,10 @@ namespace Data.Repositories.Migrations
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("creation_time");
+
+                    b.Property<int>("GenerationMethod")
+                        .HasColumnType("integer")
+                        .HasColumnName("generation_method");
 
                     b.Property<byte>("Level")
                         .HasColumnType("smallint")
@@ -124,6 +133,10 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("hit_dice");
 
+                    b.Property<int>("HitDie")
+                        .HasColumnType("integer")
+                        .HasColumnName("hit_die");
+
                     b.Property<string>("HpAt1stLevel")
                         .IsRequired()
                         .HasColumnType("text")
@@ -164,10 +177,19 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("prof_weapon");
 
+                    b.Property<int[]>("SavingThrows")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("saving_throws");
+
                     b.Property<string>("SpellCastingAbility")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("spell_casting_ability");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
 
                     b.HasKey("Id")
                         .HasName("pk_classes");
@@ -187,6 +209,14 @@ namespace Data.Repositories.Migrations
                         .HasColumnName("id");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("Ability")
+                        .HasColumnType("integer")
+                        .HasColumnName("ability");
+
+                    b.Property<int>("Choices")
+                        .HasColumnType("integer")
+                        .HasColumnName("choices");
 
                     b.Property<int>("RaceId")
                         .HasColumnType("integer")
@@ -248,6 +278,10 @@ namespace Data.Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("traits");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
 
                     b.Property<string>("Vision")
                         .IsRequired()

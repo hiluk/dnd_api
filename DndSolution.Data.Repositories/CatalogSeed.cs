@@ -1,3 +1,4 @@
+using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models.Classes;
 using DndSolution.Application.Models.Models.Races;
 
@@ -32,109 +33,118 @@ internal static class CatalogSeed
         new Race
         {
             Name = "Человек",
+            Type = CharacterRaceType.Human,
             Description = "Самый молодой и самый распространённый народ. Люди амбициозны, изобретательны и легко приспосабливаются к любым условиям.",
             Age = "Взрослеют к 20 годам и редко живут дольше столетия.",
             Size = Medium,
             Language = "Общий и ещё один язык на выбор.",
             Vision = NormalVision,
             Traits = "Значения всех характеристик увеличиваются на 1.",
-            Asi = Asi(("Сила", 1), ("Ловкость", 1), ("Телосложение", 1), ("Интеллект", 1), ("Мудрость", 1), ("Харизма", 1)),
+            Asi = [Asi("Сила", 1), Asi("Ловкость", 1), Asi("Телосложение", 1), Asi("Интеллект", 1), Asi("Мудрость", 1), Asi("Харизма", 1)],
             Speed = Speed(30),
         },
         new Race
         {
             Name = "Полуэльф",
+            Type = CharacterRaceType.HalfElf,
             Description = "Полуэльфы сочетают лучшие черты людей и эльфов: любознательность и амбиции одних с утончённостью и обаянием других.",
             Age = "Взрослеют к 20 годам, живут более 180 лет.",
             Size = Medium,
             Language = "Общий, эльфийский и ещё один язык на выбор.",
             Vision = Darkvision,
             Traits = "Наследие фей: преимущество на спасброски от очарования, магия не может усыпить. Универсальность навыков: владение двумя навыками на выбор.",
-            Asi = Asi(("Харизма", 2), ("Две другие на выбор", 1)),
+            Asi = [Asi("Харизма", 2), new Asi { Stat = "Две другие на выбор", Value = 1, Choices = 2 }],
             Speed = Speed(30),
         },
         new Race
         {
             Name = "Дварф",
+            Type = CharacterRaceType.Dwarf,
             Description = "Отважные и выносливые жители гор и подземных крепостей, искусные воины, рудокопы и мастера по камню и металлу.",
             Age = "Взрослеют к 50 годам, живут около 350 лет.",
             Size = Medium,
             Language = "Общий и дварфийский.",
             Vision = Darkvision,
             Traits = "Дварфийская устойчивость к яду. Боевая подготовка дварфов: боевые топоры, ручные топоры, лёгкие и боевые молоты. Знание камня. Скорость не снижается от тяжёлых доспехов.",
-            Asi = Asi(("Телосложение", 2)),
+            Asi = [Asi("Телосложение", 2)],
             Speed = Speed(25),
         },
         new Race
         {
             Name = "Эльф",
+            Type = CharacterRaceType.Elf,
             Description = "Волшебный народ неземного изящества, живущий в мире, но не вполне принадлежащий ему.",
             Age = "Считаются взрослыми около 100 лет, живут до 750 лет.",
             Size = Medium,
             Language = "Общий и эльфийский.",
             Vision = Darkvision,
             Traits = "Обострённые чувства: владение Внимательностью. Наследие фей. Транс: вместо сна медитируют 4 часа.",
-            Asi = Asi(("Ловкость", 2)),
+            Asi = [Asi("Ловкость", 2)],
             Speed = Speed(30),
         },
         new Race
         {
             Name = "Полурослик",
+            Type = CharacterRaceType.Halfling,
             Description = "Небольшой и дружелюбный народ, ценящий домашний уют, хорошую еду и спокойную жизнь, но способный на удивительную храбрость.",
             Age = "Взрослеют к 20 годам, живут до середины второго столетия.",
             Size = Small,
             Language = "Общий и язык полуросликов.",
             Vision = NormalVision,
             Traits = "Везучий: можно перебросить 1 на к20. Храбрый: преимущество на спасброски от испуга. Проворство полуросликов: можно проходить сквозь существ крупнее себя.",
-            Asi = Asi(("Ловкость", 2)),
+            Asi = [Asi("Ловкость", 2)],
             Speed = Speed(25),
         },
         new Race
         {
             Name = "Драконорождённый",
+            Type = CharacterRaceType.Dragonborn,
             Description = "Гордые потомки драконов, внешне похожие на гуманоидных драконов, без крыльев и хвоста.",
             Age = "Взрослеют к 15 годам, живут около 80 лет.",
             Size = Medium,
             Language = "Общий и драконий.",
             Vision = NormalVision,
             Traits = "Наследие драконов: вид дракона определяет оружие дыхания и сопротивление урону. Оружие дыхания.",
-            Asi = Asi(("Сила", 2), ("Харизма", 1)),
+            Asi = [Asi("Сила", 2), Asi("Харизма", 1)],
             Speed = Speed(30),
         },
         new Race
         {
             Name = "Гном",
+            Type = CharacterRaceType.Gnome,
             Description = "Энергичные изобретатели и исследователи, полные любопытства и жизнелюбия.",
             Age = "Взрослеют к 40 годам, живут от 350 до почти 500 лет.",
             Size = Small,
             Language = "Общий и гномий.",
             Vision = Darkvision,
             Traits = "Гномья хитрость: преимущество на спасброски Интеллекта, Мудрости и Харизмы против магии.",
-            Asi = Asi(("Интеллект", 2)),
+            Asi = [Asi("Интеллект", 2)],
             Speed = Speed(25),
         },
         new Race
         {
             Name = "Полуорк",
+            Type = CharacterRaceType.HalfOrc,
             Description = "Потомки людей и орков, сочетающие человеческую решимость с орочьей силой и яростью.",
             Age = "Взрослеют к 14 годам, редко живут дольше 75 лет.",
             Size = Medium,
             Language = "Общий и орочий.",
             Vision = Darkvision,
             Traits = "Угрожающий вид: владение Запугиванием. Непоколебимая стойкость: раз в день при падении до 0 хитов остаётся 1. Свирепые атаки: дополнительная кость урона при критическом ударе.",
-            Asi = Asi(("Сила", 2), ("Телосложение", 1)),
+            Asi = [Asi("Сила", 2), Asi("Телосложение", 1)],
             Speed = Speed(30),
         },
         new Race
         {
             Name = "Тифлинг",
+            Type = CharacterRaceType.Tiefling,
             Description = "Люди, несущие на себе печать договора с силами Девяти Преисподних: рога, хвост и глаза без зрачков.",
             Age = "Взрослеют как люди, живут чуть дольше.",
             Size = Medium,
             Language = "Общий и инфернальный.",
             Vision = Darkvision,
             Traits = "Адское сопротивление: сопротивление урону огнём. Дьявольское наследие: знают заклинание «Чудотворство», позже «Адское возмездие» и «Тьма».",
-            Asi = Asi(("Харизма", 2), ("Интеллект", 1)),
+            Asi = [Asi("Харизма", 2), Asi("Интеллект", 1)],
             Speed = Speed(30),
         },
     ];
@@ -144,6 +154,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Воин",
+            Type = CharacterClassType.Fighter,
+            HitDie = 10,
+            SavingThrows = [Ability.Strength, Ability.Constitution],
             Description = "Мастер боевых искусств, искусно владеющий любым оружием и доспехами.",
             HitDice = "1к10",
             HpAt1stLevel = Hp1(10),
@@ -159,6 +172,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Варвар",
+            Type = CharacterClassType.Barbarian,
+            HitDie = 12,
+            SavingThrows = [Ability.Strength, Ability.Constitution],
             Description = "Свирепый воин примитивного происхождения, способный впадать в боевую ярость.",
             HitDice = "1к12",
             HpAt1stLevel = Hp1(12),
@@ -174,6 +190,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Следопыт",
+            Type = CharacterClassType.Ranger,
+            HitDie = 10,
+            SavingThrows = [Ability.Strength, Ability.Dexterity],
             Description = "Воин, использующий боевые навыки и магию природы для борьбы с угрозами на границах цивилизации.",
             HitDice = "1к10",
             HpAt1stLevel = Hp1(10),
@@ -189,6 +208,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Плут",
+            Type = CharacterClassType.Rogue,
+            HitDie = 8,
+            SavingThrows = [Ability.Dexterity, Ability.Intelligence],
             Description = "Ловкий и хитрый мошенник, полагающийся на скрытность, хитрость и точные удары.",
             HitDice = "1к8",
             HpAt1stLevel = Hp1(8),
@@ -204,6 +226,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Бард",
+            Type = CharacterClassType.Bard,
+            HitDie = 8,
+            SavingThrows = [Ability.Dexterity, Ability.Charisma],
             Description = "Вдохновляющий маг, чья сила звучит в музыке и словах творения.",
             HitDice = "1к8",
             HpAt1stLevel = Hp1(8),
@@ -219,6 +244,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Жрец",
+            Type = CharacterClassType.Cleric,
+            HitDie = 8,
+            SavingThrows = [Ability.Wisdom, Ability.Charisma],
             Description = "Жреческий поборник, владеющий божественной магией во имя высших сил.",
             HitDice = "1к8",
             HpAt1stLevel = Hp1(8),
@@ -234,6 +262,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Друид",
+            Type = CharacterClassType.Druid,
+            HitDie = 8,
+            SavingThrows = [Ability.Intelligence, Ability.Wisdom],
             Description = "Жрец Старой Веры, повелевающий силами природы и принимающий облик животных.",
             HitDice = "1к8",
             HpAt1stLevel = Hp1(8),
@@ -249,6 +280,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Монах",
+            Type = CharacterClassType.Monk,
+            HitDie = 8,
+            SavingThrows = [Ability.Strength, Ability.Dexterity],
             Description = "Мастер боевых искусств, использующий силу тела и духа — ци — для достижения совершенства.",
             HitDice = "1к8",
             HpAt1stLevel = Hp1(8),
@@ -264,6 +298,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Паладин",
+            Type = CharacterClassType.Paladin,
+            HitDie = 10,
+            SavingThrows = [Ability.Wisdom, Ability.Charisma],
             Description = "Святой воин, связанный священной клятвой.",
             HitDice = "1к10",
             HpAt1stLevel = Hp1(10),
@@ -279,6 +316,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Чародей",
+            Type = CharacterClassType.Sorcerer,
+            HitDie = 6,
+            SavingThrows = [Ability.Constitution, Ability.Charisma],
             Description = "Заклинатель, черпающий магию из дара или родословной.",
             HitDice = "1к6",
             HpAt1stLevel = Hp1(6),
@@ -294,6 +334,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Колдун",
+            Type = CharacterClassType.Warlock,
+            HitDie = 8,
+            SavingThrows = [Ability.Wisdom, Ability.Charisma],
             Description = "Владелец магии, полученной в результате сделки с потусторонним покровителем.",
             HitDice = "1к8",
             HpAt1stLevel = Hp1(8),
@@ -309,6 +352,9 @@ internal static class CatalogSeed
         new CharacterClass
         {
             Name = "Волшебник",
+            Type = CharacterClassType.Wizard,
+            HitDie = 6,
+            SavingThrows = [Ability.Intelligence, Ability.Wisdom],
             Description = "Учёный-маг, способный управлять структурами реальности.",
             HitDice = "1к6",
             HpAt1stLevel = Hp1(6),
@@ -323,8 +369,18 @@ internal static class CatalogSeed
         },
     ];
 
-    private static List<Asi> Asi(params (string Stat, int Value)[] values) =>
-        values.Select(x => new Asi { Stat = x.Stat, Value = x.Value }).ToList();
+    private static readonly Dictionary<string, Ability> AbilityByName = new()
+    {
+        ["Сила"] = Ability.Strength,
+        ["Ловкость"] = Ability.Dexterity,
+        ["Телосложение"] = Ability.Constitution,
+        ["Интеллект"] = Ability.Intelligence,
+        ["Мудрость"] = Ability.Wisdom,
+        ["Харизма"] = Ability.Charisma,
+    };
+
+    private static Asi Asi(string stat, int value) =>
+        new() { Stat = stat, Value = value, Ability = AbilityByName[stat] };
 
     private static List<Speed> Speed(int walk) => [new Speed { Type = Walk, Value = walk }];
 

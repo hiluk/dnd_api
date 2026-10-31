@@ -1,4 +1,6 @@
 ﻿using Core.Sdk.Dtos.Classes;
+using Core.Sdk.Enums;
+using DndSolution.Application.Models.Enums;
 using DndSolution.Application.Models.Models.Classes;
 
 namespace Core.Api.Mappings;
@@ -9,6 +11,8 @@ public static class ClassModelMapper
     {
         return new CharacterClass
         {
+            HitDie = dto.HitDie,
+            SavingThrows = dto.SavingThrows.Select(a => (Ability)a).ToList(),
             Equipment = dto.Equipment,
             Description = dto.Description,
             Name = dto.Name,
@@ -28,6 +32,8 @@ public static class ClassModelMapper
     {
         return new CharacterClassDto
         {
+            HitDie = model.HitDie,
+            SavingThrows = model.SavingThrows.Select(a => (AbilityDto)a).ToList(),
             Equipment = model.Equipment,
             Description = model.Description,
             Name = model.Name,
