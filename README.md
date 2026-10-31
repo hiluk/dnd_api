@@ -49,12 +49,18 @@ dotnet test
 | POST | `/refresh` | Новая пара токенов `{ refreshToken }` |
 | GET | `/races`, `/classes` | Справочники (без авторизации) |
 | POST | `/races/save-new`, `/classes/save-new` | Добавить в справочник (роль `Admin`) |
-| GET | `/characters` | Персонажи текущего пользователя |
+| POST | `/abilities/roll` | Бросить 4к6 для шести характеристик → `{ values, token }` |
+| POST | `/characters/preview` | Проверить черновик по правилам и посчитать лист, не сохраняя |
+| POST | `/characters/create` | Создать персонажа 1 уровня из черновика |
+| GET | `/characters` | Персонажи текущего пользователя (с вычисленным листом `sheet`) |
 | GET | `/characters/{id}` | Персонаж по Id |
-| POST | `/characters/create` | Создать персонажа |
 | DELETE | `/characters/{id}` | Удалить персонажа |
 
 Ошибки возвращаются в формате `ProblemDetails` / `ValidationProblemDetails`.
+
+Персонаж создаётся по правилам «Книги игрока»: стандартный набор, покупка очков или броски,
+бонусы расы и производные значения считает сервер (`CharacterRules`). Подробности — в
+[спецификации](docs/specs/2026-10-31-ability-generation-design.md).
 
 Выдать пользователю роль администратора:
 
