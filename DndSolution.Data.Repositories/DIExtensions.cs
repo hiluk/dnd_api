@@ -31,5 +31,6 @@ public static class DIExtensions
         services.AddScoped<IRacesRepository, RacesRepository>();
         services.AddScoped<IClassesRepository, ClassesRepository>();
         services.AddScoped<ICharactersRepository, CharactersRepository>();
+        services.AddScoped<IBackgroundsRepository, BackgroundsRepository>();
     }
 }

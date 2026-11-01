@@ -38,6 +38,32 @@ public class CharacterDraftDto
     public List<AbilityDto> BonusChoices { get; init; } = [];
 
     /// <summary>
+    /// Предыстория
+    /// </summary>
+    [EnumDataType(typeof(BackgroundTypeDto))]
+    public BackgroundTypeDto Background { get; init; }
+
+    /// <summary>
+    /// Навыки, выбранные для своей предыстории
+    /// </summary>
+    public List<SkillDto> BackgroundSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки, выбранные от расы (полуэльф)
+    /// </summary>
+    public List<SkillDto> RaceSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки, выбранные из списка класса
+    /// </summary>
+    public List<SkillDto> ClassSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки с компетентностью (плут)
+    /// </summary>
+    public List<SkillDto> Expertise { get; init; } = [];
+
+    /// <summary>
     /// Подпись результата бросков из <c>POST /abilities/roll</c> (для способа «Броски»)
     /// </summary>
     public string? RollToken { get; init; }

@@ -21,8 +21,15 @@ public class ApiTests : IClassFixture<ApiFactory>
     private static object Stats(int str, int dex, int con, int @int, int wis, int cha) =>
         new { strength = str, dexterity = dex, constitution = con, intelligence = @int, wisdom = wis, charisma = cha };
 
+    // Коды навыков
+    private const int Acrobatics = 1, Arcana = 3, Athletics = 4, History = 6, Insight = 7, Intimidation = 8,
+        Investigation = 9, Medicine = 10, Nature = 11, Perception = 12, Stealth = 17, Survival = 18;
+
+    // Коды предысторий
+    private const int Acolyte = 1, Criminal = 3, Soldier = 12, Custom = 14;
+
     /// <summary>
-    /// Дварф-воин, стандартный набор
+    /// Дварф-воин-солдат, стандартный набор
     /// </summary>
     private static object NewCharacter(string name) => new
     {
@@ -32,6 +39,8 @@ public class ApiTests : IClassFixture<ApiFactory>
         generationMethod = 1,
         baseStats = Stats(15, 14, 13, 12, 10, 8),
         bonusChoices = Array.Empty<int>(),
+        background = Soldier,
+        classSkills = new[] { Perception, Survival },
     };
 
     private async Task<(HttpClient Client, string RefreshToken)> LoggedClientAsync()
@@ -222,6 +231,8 @@ public class ApiTests : IClassFixture<ApiFactory>
             generationMethod = 2,
             baseStats = Stats(15, 15, 15, 9, 8, 8),
             bonusChoices = Array.Empty<int>(),
+            background = Soldier,
+            classSkills = new[] { Perception, Survival },
         });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -242,6 +253,9 @@ public class ApiTests : IClassFixture<ApiFactory>
             generationMethod = 2,
             baseStats = Stats(13, 15, 14, 10, 12, 8),
             bonusChoices = new[] { 2, 5 },
+            background = Criminal,
+            raceSkills = new[] { Arcana, Medicine },
+            classSkills = new[] { Survival, Perception, Nature },
         });
 
         Assert.Equal(HttpStatusCode.Created, response.StatusCode);
@@ -270,6 +284,8 @@ public class ApiTests : IClassFixture<ApiFactory>
             baseStats = Stats(scores[0], scores[1], scores[2], scores[3], scores[4], scores[5]),
             bonusChoices = Array.Empty<int>(),
             rollToken = token,
+            background = Acolyte,
+            classSkills = new[] { Arcana, History },
         };
 
         var token = roll["token"]!.GetValue<string>();
@@ -325,5 +341,69 @@ public class ApiTests : IClassFixture<ApiFactory>
         Assert.Equal(12, names.Count);
         var ranger = classes!.Single(x => x!["name"]!.GetValue<string>() == "Следопыт")!;
         Assert.NotEqual("старое описание", ranger["description"]!.GetValue<string>());
+    }
+
+    [Fact]
+    public async Task Справочник_предысторий()
+    {
+        var backgrounds = await _factory.CreateClient().GetFromJsonAsync<JsonArray>("/backgrounds");
+
+        Assert.Equal(14, backgrounds!.Count);
+        Assert.Equal("Прислужник", backgrounds[0]!["name"]!.GetValue<string>());
+        Assert.Equal([Insight, 15], backgrounds[0]!["skills"]!.AsArray().Select(x => x!.GetValue<int>()));
+        Assert.Equal(2, backgrounds[13]!["skillChoices"]!.GetValue<int>());
+    }
+
+    [Fact]
+    public async Task Лист_содержит_навыки()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var response = await client.PostAsJsonAsync("/characters/create", new
+        {
+            name = "Тень",
+            characterRace = 4,
+            characterClass = 4,
+            generationMethod = 1,
+            baseStats = Stats(10, 15, 13, 14, 12, 8),
+            bonusChoices = Array.Empty<int>(),
+            background = Custom,
+            backgroundSkills = new[] { Arcana, History },
+            classSkills = new[] { Acrobatics, Insight, Investigation, Stealth },
+            expertise = new[] { Stealth, Arcana },
+        });
+
+        Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+        var character = (await response.Content.ReadFromJsonAsync<JsonObject>())!;
+        var skills = character["sheet"]!["skills"]!.AsArray().ToDictionary(x => x!["skill"]!.GetValue<int>());
+
+        // Эльф-плут: Ловкость 17 (+3), компетентность в Скрытности: +3 + 4
+        Assert.Equal(7, skills[Stealth]!["bonus"]!.GetValue<int>());
+        Assert.True(skills[Stealth]!["expertise"]!.GetValue<bool>());
+        // Внимательность от расы: Мудрость 12 (+1) + 2, пассивная 13
+        Assert.True(skills[Perception]!["proficient"]!.GetValue<bool>());
+        Assert.Equal(13, character["sheet"]!["passivePerception"]!.GetValue<int>());
+        Assert.Equal(Custom, character["background"]!.GetValue<int>());
+    }
+
+    [Fact]
+    public async Task Повтор_навыка_отклоняется()
+    {
+        var (client, _) = await LoggedClientAsync();
+
+        var response = await client.PostAsJsonAsync("/characters/preview", new
+        {
+            characterRace = 3,
+            characterClass = 1,
+            generationMethod = 1,
+            baseStats = Stats(15, 14, 13, 12, 10, 8),
+            bonusChoices = Array.Empty<int>(),
+            background = Soldier,
+            classSkills = new[] { Athletics, Survival },
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = (await response.Content.ReadFromJsonAsync<JsonObject>())!;
+        Assert.Equal("Навык «Атлетика» уже даёт предыстория", problem["errors"]!["ClassSkills"]![0]!.GetValue<string>());
     }
 }

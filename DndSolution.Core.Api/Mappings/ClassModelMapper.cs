@@ -13,6 +13,9 @@ public static class ClassModelMapper
         {
             HitDie = dto.HitDie,
             SavingThrows = dto.SavingThrows.Select(a => (Ability)a).ToList(),
+            SkillChoices = dto.SkillChoices,
+            SkillOptions = dto.SkillOptions.Select(x => (Skill)x).ToList(),
+            ExpertiseChoices = dto.ExpertiseChoices,
             Equipment = dto.Equipment,
             Description = dto.Description,
             Name = dto.Name,
@@ -34,6 +37,9 @@ public static class ClassModelMapper
         {
             HitDie = model.HitDie,
             SavingThrows = model.SavingThrows.Select(a => (AbilityDto)a).ToList(),
+            SkillChoices = model.SkillChoices,
+            SkillOptions = model.SkillOptions.Select(x => (SkillDto)x).ToList(),
+            ExpertiseChoices = model.ExpertiseChoices,
             Equipment = model.Equipment,
             Description = model.Description,
             Name = model.Name,

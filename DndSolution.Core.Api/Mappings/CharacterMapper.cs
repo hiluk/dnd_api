@@ -13,7 +13,18 @@ public static class CharacterMapper
         (CharacterClassType)dto.CharacterClass,
         (GenerationMethod)dto.GenerationMethod,
         MapToScores(dto.BaseStats),
-        dto.BonusChoices.Select(a => (Ability)a).ToList());
+        dto.BonusChoices.Select(a => (Ability)a).ToList())
+    {
+        Background = (BackgroundType)dto.Background,
+        BackgroundSkills = Skills(dto.BackgroundSkills),
+        RaceSkills = Skills(dto.RaceSkills),
+        ClassSkills = Skills(dto.ClassSkills),
+        Expertise = Skills(dto.Expertise),
+    };
+
+    private static List<Skill> Skills(IEnumerable<SkillDto> skills) => skills.Select(s => (Skill)s).ToList();
+
+    private static List<SkillDto> Skills(IEnumerable<Skill> skills) => skills.Select(s => (SkillDto)s).ToList();
 
     public static CharacterDto MapToDto(CharacterWithSheet model)
     {
@@ -29,6 +40,11 @@ public static class CharacterMapper
             GenerationMethod = (GenerationMethodDto)character.GenerationMethod,
             BaseStats = MapToDto(AbilityScores.From(character.Stats)),
             BonusChoices = character.BonusChoices.Select(a => (AbilityDto)a).ToList(),
+            Background = (BackgroundTypeDto)character.Background,
+            BackgroundSkills = Skills(character.BackgroundSkills),
+            RaceSkills = Skills(character.RaceSkills),
+            ClassSkills = Skills(character.ClassSkills),
+            Expertise = Skills(character.Expertise),
             Sheet = MapToDto(sheet),
         };
     }
@@ -45,6 +61,17 @@ public static class CharacterMapper
         SavingThrows = sheet.SavingThrows
             .Select(s => new SavingThrowDto { Ability = (AbilityDto)s.Ability, Bonus = s.Bonus, Proficient = s.Proficient })
             .ToList(),
+        Skills = sheet.Skills
+            .Select(s => new SkillCheckDto
+            {
+                Skill = (SkillDto)s.Skill,
+                Ability = (AbilityDto)s.Ability,
+                Bonus = s.Bonus,
+                Proficient = s.Proficient,
+                Expertise = s.Expertise,
+            })
+            .ToList(),
+        PassivePerception = sheet.PassivePerception,
     };
 
     private static AbilityScores MapToScores(CharacterStatsDto dto) => new(

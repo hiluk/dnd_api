@@ -28,4 +28,14 @@ public class Race
     public List<Asi> Asi { get; init; }
     
     public List<Speed> Speed { get; init; }
+
+    /// <summary>
+    /// Навыки, которыми раса владеет всегда
+    /// </summary>
+    public List<Skill> Skills { get; set; } = [];
+
+    /// <summary>
+    /// Сколько любых навыков раса даёт выбрать (полуэльф — 2)
+    /// </summary>
+    public int SkillChoices { get; set; }
 }

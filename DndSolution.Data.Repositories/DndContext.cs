@@ -1,4 +1,5 @@
 using DndSolution.Application.Models;
+using DndSolution.Application.Models.Models.Backgrounds;
 using DndSolution.Application.Models.Models;
 using DndSolution.Application.Models.Models.Character;
 using DndSolution.Application.Models.Models.Classes;
@@ -28,6 +29,8 @@ public class DndContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
 
     public DbSet<CharacterClass> Classes => Set<CharacterClass>();
 
+    public DbSet<Background> Backgrounds => Set<Background>();
+
     public DndContext(DbContextOptions<DndContext> options) : base(options)
     {
     }
@@ -40,6 +43,9 @@ public class DndContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
         modelBuilder.Entity<Race>().HasIndex(x => x.Name).IsUnique();
         modelBuilder.Entity<CharacterClass>().HasKey(x => x.Id);
         modelBuilder.Entity<CharacterClass>().HasIndex(x => x.Name).IsUnique();
+
+        modelBuilder.Entity<Background>().HasKey(x => x.Id);
+        modelBuilder.Entity<Background>().HasIndex(x => x.Type).IsUnique();
 
         modelBuilder.Entity<Asi>().HasKey(x => x.Id);
         modelBuilder.Entity<Asi>()

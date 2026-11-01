@@ -40,4 +40,29 @@ public class Character
     /// Характеристики, выбранные для бонусов расы «на выбор»
     /// </summary>
     public List<Ability> BonusChoices { get; init; } = [];
+
+    /// <summary>
+    /// Предыстория
+    /// </summary>
+    public BackgroundType Background { get; init; }
+
+    /// <summary>
+    /// Навыки, выбранные для своей предыстории
+    /// </summary>
+    public List<Skill> BackgroundSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки, выбранные от расы (полуэльф)
+    /// </summary>
+    public List<Skill> RaceSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки, выбранные из списка класса
+    /// </summary>
+    public List<Skill> ClassSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки с компетентностью (плут)
+    /// </summary>
+    public List<Skill> Expertise { get; init; } = [];
 }

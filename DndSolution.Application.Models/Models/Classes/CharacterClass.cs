@@ -20,6 +20,21 @@ public class CharacterClass
     /// Спасброски, которыми владеет класс
     /// </summary>
     public List<Ability> SavingThrows { get; set; } = [];
+
+    /// <summary>
+    /// Сколько навыков выбирается из <see cref="SkillOptions"/>
+    /// </summary>
+    public int SkillChoices { get; set; }
+
+    /// <summary>
+    /// Навыки, из которых выбирает класс
+    /// </summary>
+    public List<Skill> SkillOptions { get; set; } = [];
+
+    /// <summary>
+    /// Сколько навыков получают компетентность на 1 уровне (плут — 2)
+    /// </summary>
+    public int ExpertiseChoices { get; set; }
     public string Name { get; set; }
     
     public string Description { get; set; }

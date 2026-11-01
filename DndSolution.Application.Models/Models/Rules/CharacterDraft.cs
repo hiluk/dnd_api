@@ -12,4 +12,11 @@ public sealed record CharacterDraft(
     GenerationMethod Method,
     AbilityScores BaseScores,
     IReadOnlyList<Ability> BonusChoices,
-    IReadOnlyList<int>? RolledValues = null);
+    IReadOnlyList<int>? RolledValues = null)
+{
+    public BackgroundType Background { get; init; } = BackgroundType.Custom;
+    public IReadOnlyList<Skill> BackgroundSkills { get; init; } = [];
+    public IReadOnlyList<Skill> RaceSkills { get; init; } = [];
+    public IReadOnlyList<Skill> ClassSkills { get; init; } = [];
+    public IReadOnlyList<Skill> Expertise { get; init; } = [];
+}

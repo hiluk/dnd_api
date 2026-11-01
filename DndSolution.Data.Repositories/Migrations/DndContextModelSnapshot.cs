@@ -22,12 +22,83 @@ namespace Data.Repositories.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("DndSolution.Application.Models.Models.Backgrounds.Background", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Equipment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("equipment");
+
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("feature");
+
+                    b.Property<string>("Languages")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("languages");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("SkillChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("skill_choices");
+
+                    b.Property<int[]>("Skills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("skills");
+
+                    b.Property<string>("Tools")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tools");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_backgrounds");
+
+                    b.HasIndex("Type")
+                        .IsUnique()
+                        .HasDatabaseName("ix_backgrounds_type");
+
+                    b.ToTable("backgrounds", (string)null);
+                });
+
             modelBuilder.Entity("DndSolution.Application.Models.Models.Character.Character", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<int>("Background")
+                        .HasColumnType("integer")
+                        .HasColumnName("background");
+
+                    b.Property<int[]>("BackgroundSkills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("background_skills");
 
                     b.Property<int[]>("BonusChoices")
                         .IsRequired()
@@ -42,9 +113,19 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("character_race");
 
+                    b.Property<int[]>("ClassSkills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("class_skills");
+
                     b.Property<DateTime>("CreationTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("creation_time");
+
+                    b.Property<int[]>("Expertise")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("expertise");
 
                     b.Property<int>("GenerationMethod")
                         .HasColumnType("integer")
@@ -59,6 +140,11 @@ namespace Data.Repositories.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("character varying(64)")
                         .HasColumnName("name");
+
+                    b.Property<int[]>("RaceSkills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("race_skills");
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
@@ -128,6 +214,10 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("equipment");
 
+                    b.Property<int>("ExpertiseChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("expertise_choices");
+
                     b.Property<string>("HitDice")
                         .IsRequired()
                         .HasColumnType("text")
@@ -181,6 +271,15 @@ namespace Data.Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("integer[]")
                         .HasColumnName("saving_throws");
+
+                    b.Property<int>("SkillChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("skill_choices");
+
+                    b.Property<int[]>("SkillOptions")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("skill_options");
 
                     b.Property<string>("SpellCastingAbility")
                         .IsRequired()
@@ -273,6 +372,15 @@ namespace Data.Repositories.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("size");
+
+                    b.Property<int>("SkillChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("skill_choices");
+
+                    b.Property<int[]>("Skills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("skills");
 
                     b.Property<string>("Traits")
                         .IsRequired()

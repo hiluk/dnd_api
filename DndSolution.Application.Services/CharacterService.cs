@@ -1,6 +1,7 @@
 using Data.Abstractions;
 using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models.Enums;
+using DndSolution.Application.Models.Models.Backgrounds;
 using DndSolution.Application.Models.Models.Character;
 using DndSolution.Application.Models.Models.Classes;
 using DndSolution.Application.Models.Models.Races;
@@ -17,6 +18,7 @@ public class CharacterService : ICharacterService
     private readonly ICharactersRepository _repository;
     private readonly IRacesRepository _races;
     private readonly IClassesRepository _classes;
+    private readonly IBackgroundsRepository _backgrounds;
     private readonly IAbilityRollService _rolls;
 
     /// <summary>
@@ -26,11 +28,13 @@ public class CharacterService : ICharacterService
         ICharactersRepository repository,
         IRacesRepository races,
         IClassesRepository classes,
+        IBackgroundsRepository backgrounds,
         IAbilityRollService rolls)
     {
         _repository = repository;
         _races = races;
         _classes = classes;
+        _backgrounds = backgrounds;
         _rolls = rolls;
     }
 
@@ -60,6 +64,11 @@ public class CharacterService : ICharacterService
             GenerationMethod = draft.Method,
             Stats = draft.BaseScores.ToStats(),
             BonusChoices = draft.BonusChoices.ToList(),
+            Background = draft.Background,
+            BackgroundSkills = draft.BackgroundSkills.ToList(),
+            RaceSkills = draft.RaceSkills.ToList(),
+            ClassSkills = draft.ClassSkills.ToList(),
+            Expertise = draft.Expertise.ToList(),
         };
         await _repository.SaveCharacterAsync(character, userId, token);
 
@@ -106,7 +115,14 @@ public class CharacterService : ICharacterService
         var scores = AbilityScores.From(character.Stats);
         var draft = new CharacterDraft(
             character.CharacterRace, character.CharacterClass, character.GenerationMethod,
-            scores, character.BonusChoices, scores.Values.ToList());
+            scores, character.BonusChoices, scores.Values.ToList())
+        {
+            Background = character.Background,
+            BackgroundSkills = character.BackgroundSkills,
+            RaceSkills = character.RaceSkills,
+            ClassSkills = character.ClassSkills,
+            Expertise = character.Expertise,
+        };
 
         return Evaluate(catalog, draft);
     }
@@ -115,20 +131,29 @@ public class CharacterService : ICharacterService
     {
         var race = catalog.Races.FirstOrDefault(r => r.Type == draft.Race);
         var characterClass = catalog.Classes.FirstOrDefault(c => c.Type == draft.Class);
-        if (race is null || characterClass is null)
+        var background = catalog.Backgrounds.FirstOrDefault(b => b.Type == draft.Background);
+        var (field, message) = (race, characterClass, background) switch
         {
-            throw new CharacterRulesException(new Dictionary<string, string[]>
-            {
-                [race is null ? "CharacterRace" : "CharacterClass"] =
-                    [race is null ? "Неизвестная раса" : "Неизвестный класс"],
-            });
+            (null, _, _) => ("CharacterRace", "Неизвестная раса"),
+            (_, null, _) => ("CharacterClass", "Неизвестный класс"),
+            (_, _, null) => ("Background", "Неизвестная предыстория"),
+            _ => (null, null),
+        };
+        if (field is not null)
+        {
+            throw new CharacterRulesException(new Dictionary<string, string[]> { [field] = [message!] });
         }
 
-        return CharacterRules.Evaluate(draft, race, characterClass);
+        return CharacterRules.Evaluate(draft, race!, characterClass!, background!);
     }
 
-    private async Task<Catalog> LoadCatalogAsync(CancellationToken token) =>
-        new(await _races.GetAllRaces(token), await _classes.GetAllClassesAsync(token));
+    private async Task<Catalog> LoadCatalogAsync(CancellationToken token) => new(
+        await _races.GetAllRaces(token),
+        await _classes.GetAllClassesAsync(token),
+        await _backgrounds.GetAllAsync(token));
 
-    private sealed record Catalog(IReadOnlyList<Race> Races, IReadOnlyList<CharacterClass> Classes);
+    private sealed record Catalog(
+        IReadOnlyList<Race> Races,
+        IReadOnlyList<CharacterClass> Classes,
+        IReadOnlyList<Background> Backgrounds);
 }

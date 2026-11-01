@@ -13,7 +13,14 @@ public sealed record CharacterSheet(
     int Initiative,
     int Speed,
     int ProficiencyBonus,
-    IReadOnlyList<SavingThrow> SavingThrows);
+    IReadOnlyList<SavingThrow> SavingThrows,
+    IReadOnlyList<SkillCheck> Skills,
+    int PassivePerception);
+
+/// <summary>
+/// Навык: итоговый бонус, владение и компетентность
+/// </summary>
+public sealed record SkillCheck(Skill Skill, Ability Ability, int Bonus, bool Proficient, bool Expertise);
 
 /// <summary>
 /// Спасбросок: итоговый бонус и владение

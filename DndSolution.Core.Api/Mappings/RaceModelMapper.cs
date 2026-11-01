@@ -93,6 +93,8 @@ public static class RaceModelMapper
             Traits = dto.Traits,
             Vision = dto.Vision,
             Speed = MapSpeedToModel(dto.Speed),
+            Skills = dto.Skills.Select(x => (Skill)x).ToList(),
+            SkillChoices = dto.SkillChoices,
         };
     }
     
@@ -109,6 +111,8 @@ public static class RaceModelMapper
             Traits = model.Traits,
             Vision = model.Vision,
             Speed = MapSpeedToDto(model.Speed),
+            Skills = model.Skills.Select(x => (SkillDto)x).ToList(),
+            SkillChoices = model.SkillChoices,
         };
     }
 }

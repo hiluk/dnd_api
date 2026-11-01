@@ -21,13 +21,16 @@ public static class DbInitializer
 
         var (racesAdded, racesUpdated) = await SyncRacesAsync(context, token);
         var (classesAdded, classesUpdated) = await SyncClassesAsync(context, token);
+        var (backgroundsAdded, backgroundsUpdated) = await SyncBackgroundsAsync(context, token);
         await context.SaveChangesAsync(token);
 
-        if (racesAdded + racesUpdated + classesAdded + classesUpdated > 0)
+        if (racesAdded + racesUpdated + classesAdded + classesUpdated + backgroundsAdded + backgroundsUpdated > 0)
         {
             logger.LogInformation(
-                "Справочники обновлены. Расы: +{RacesAdded}, изменено {RacesUpdated}. Классы: +{ClassesAdded}, изменено {ClassesUpdated}",
-                racesAdded, racesUpdated, classesAdded, classesUpdated);
+                "Справочники обновлены. Расы: +{RacesAdded}, изменено {RacesUpdated}. " +
+                "Классы: +{ClassesAdded}, изменено {ClassesUpdated}. " +
+                "Предыстории: +{BackgroundsAdded}, изменено {BackgroundsUpdated}",
+                racesAdded, racesUpdated, classesAdded, classesUpdated, backgroundsAdded, backgroundsUpdated);
         }
     }
 
@@ -50,6 +53,7 @@ public static class DbInitializer
             }
 
             var changed = race.Type != seed.Type
+                          || race.SkillChoices != seed.SkillChoices || !race.Skills.SequenceEqual(seed.Skills)
                           || race.Description != seed.Description || race.Age != seed.Age || race.Size != seed.Size
                           || race.Language != seed.Language || race.Vision != seed.Vision || race.Traits != seed.Traits
                           || !race.Asi.Select(a => (a.Stat, a.Value, a.Ability, a.Choices))
@@ -64,6 +68,7 @@ public static class DbInitializer
             context.Entry(race).CurrentValues.SetValues(new
             {
                 seed.Type, seed.Description, seed.Age, seed.Size, seed.Language, seed.Vision, seed.Traits,
+                seed.Skills, seed.SkillChoices,
             });
             context.RemoveRange(race.Asi);
             context.RemoveRange(race.Speed);
@@ -101,6 +106,32 @@ public static class DbInitializer
 
             var entry = context.Entry(characterClass);
             seed.Id = characterClass.Id;
+            entry.CurrentValues.SetValues(seed);
+            if (entry.State == EntityState.Modified)
+            {
+                updated++;
+            }
+        }
+
+        return (added, updated);
+    }
+
+    private static async Task<(int Added, int Updated)> SyncBackgroundsAsync(DndContext context, CancellationToken token)
+    {
+        var existing = await context.Backgrounds.ToDictionaryAsync(x => x.Type, token);
+        var (added, updated) = (0, 0);
+
+        foreach (var seed in CatalogSeed.Backgrounds)
+        {
+            if (!existing.TryGetValue(seed.Type, out var background))
+            {
+                context.Backgrounds.Add(seed);
+                added++;
+                continue;
+            }
+
+            var entry = context.Entry(background);
+            seed.Id = background.Id;
             entry.CurrentValues.SetValues(seed);
             if (entry.State == EntityState.Modified)
             {

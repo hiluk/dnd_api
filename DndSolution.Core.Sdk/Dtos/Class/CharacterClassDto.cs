@@ -15,6 +15,21 @@ public class CharacterClassDto
     /// Спасброски, которыми владеет класс
     /// </summary>
     public List<AbilityDto> SavingThrows { get; set; } = [];
+
+    /// <summary>
+    /// Сколько навыков выбирается из <see cref="SkillOptions"/>
+    /// </summary>
+    public int SkillChoices { get; set; }
+
+    /// <summary>
+    /// Навыки, из которых выбирает класс
+    /// </summary>
+    public List<SkillDto> SkillOptions { get; set; } = [];
+
+    /// <summary>
+    /// Сколько навыков получают компетентность на 1 уровне
+    /// </summary>
+    public int ExpertiseChoices { get; set; }
     
     public string Description { get; set; }
     

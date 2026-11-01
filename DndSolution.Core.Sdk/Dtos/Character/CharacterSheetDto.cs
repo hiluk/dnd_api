@@ -46,6 +46,41 @@ public class CharacterSheetDto
     /// Спасброски
     /// </summary>
     public required List<SavingThrowDto> SavingThrows { get; init; }
+
+    /// <summary>
+    /// Навыки (все 18)
+    /// </summary>
+    public required List<SkillCheckDto> Skills { get; init; }
+
+    /// <summary>
+    /// Пассивная внимательность
+    /// </summary>
+    public int PassivePerception { get; init; }
+}
+
+/// <summary>
+/// Навык в листе персонажа
+/// </summary>
+public class SkillCheckDto
+{
+    public SkillDto Skill { get; init; }
+
+    /// <summary>
+    /// Характеристика навыка
+    /// </summary>
+    public AbilityDto Ability { get; init; }
+
+    /// <summary>
+    /// Итоговый бонус
+    /// </summary>
+    public int Bonus { get; init; }
+
+    public bool Proficient { get; init; }
+
+    /// <summary>
+    /// Компетентность (двойной бонус мастерства)
+    /// </summary>
+    public bool Expertise { get; init; }
 }
 
 /// <summary>
