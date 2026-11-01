@@ -38,10 +38,11 @@ public class CharacterDraftDto
     public List<AbilityDto> BonusChoices { get; init; } = [];
 
     /// <summary>
-    /// Предыстория
+    /// Предыстория. Для превью можно не указывать — тогда навыки не проверяются
+    /// и считаются без владения; для создания обязательна
     /// </summary>
     [EnumDataType(typeof(BackgroundTypeDto))]
-    public BackgroundTypeDto Background { get; init; }
+    public BackgroundTypeDto? Background { get; init; }
 
     /// <summary>
     /// Навыки, выбранные для своей предыстории

@@ -15,7 +15,7 @@ public static class CharacterMapper
         MapToScores(dto.BaseStats),
         dto.BonusChoices.Select(a => (Ability)a).ToList())
     {
-        Background = (BackgroundType)dto.Background,
+        Background = (BackgroundType?)dto.Background,
         BackgroundSkills = Skills(dto.BackgroundSkills),
         RaceSkills = Skills(dto.RaceSkills),
         ClassSkills = Skills(dto.ClassSkills),

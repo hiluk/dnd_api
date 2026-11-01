@@ -406,4 +406,29 @@ public class ApiTests : IClassFixture<ApiFactory>
         var problem = (await response.Content.ReadFromJsonAsync<JsonObject>())!;
         Assert.Equal("Навык «Атлетика» уже даёт предыстория", problem["errors"]!["ClassSkills"]![0]!.GetValue<string>());
     }
+
+    [Fact]
+    public async Task Превью_без_предыстории_и_создание_без_неё()
+    {
+        var (client, _) = await LoggedClientAsync();
+        var draft = new
+        {
+            name = "Безымянный",
+            characterRace = 4,
+            characterClass = 4,
+            generationMethod = 1,
+            baseStats = Stats(10, 15, 13, 14, 12, 8),
+            bonusChoices = Array.Empty<int>(),
+        };
+
+        var preview = await client.PostAsJsonAsync("/characters/preview", draft);
+        Assert.Equal(HttpStatusCode.OK, preview.StatusCode);
+        var skills = (await preview.Content.ReadFromJsonAsync<JsonObject>())!["skills"]!.AsArray();
+        Assert.All(skills, s => Assert.False(s!["proficient"]!.GetValue<bool>()));
+
+        var create = await client.PostAsJsonAsync("/characters/create", draft);
+        Assert.Equal(HttpStatusCode.BadRequest, create.StatusCode);
+        var problem = (await create.Content.ReadFromJsonAsync<JsonObject>())!;
+        Assert.Equal("Выберите предысторию", problem["errors"]!["Background"]![0]!.GetValue<string>());
+    }
 }

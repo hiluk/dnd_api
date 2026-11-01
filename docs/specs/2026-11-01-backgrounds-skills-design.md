@@ -54,7 +54,9 @@
 
 - `GET /backgrounds` — справочник, без авторизации.
 - Черновик (`/characters/preview`, `/characters/create`): `background`, `backgroundSkills`,
-  `raceSkills`, `classSkills`, `expertise`.
+  `raceSkills`, `classSkills`, `expertise`. В превью `background` можно не указывать: так мастер
+  получает итог характеристик до шага навыков; навыки тогда не проверяются и считаются без
+  владения. Для создания предыстория обязательна («Выберите предысторию»).
 - Персонаж: те же поля. Лист: `skills` (`skill`, `ability`, `bonus`, `proficient`, `expertise`)
   и `passivePerception`.
 - Справочники рас и классов получают новые поля.

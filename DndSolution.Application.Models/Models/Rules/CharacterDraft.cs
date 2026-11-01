@@ -14,7 +14,10 @@ public sealed record CharacterDraft(
     IReadOnlyList<Ability> BonusChoices,
     IReadOnlyList<int>? RolledValues = null)
 {
-    public BackgroundType Background { get; init; } = BackgroundType.Custom;
+    /// <summary>
+    /// Предыстория; null — навыки ещё не выбраны (превью на ранних шагах мастера)
+    /// </summary>
+    public BackgroundType? Background { get; init; }
     public IReadOnlyList<Skill> BackgroundSkills { get; init; } = [];
     public IReadOnlyList<Skill> RaceSkills { get; init; } = [];
     public IReadOnlyList<Skill> ClassSkills { get; init; } = [];

@@ -51,6 +51,14 @@ public class CharacterService : ICharacterService
     public async Task<CharacterWithSheet> CreateCharacterAsync(
         Guid userId, string name, CharacterDraft draft, string? rollToken, CancellationToken token)
     {
+        if (draft.Background is null)
+        {
+            throw new CharacterRulesException(new Dictionary<string, string[]>
+            {
+                ["Background"] = ["Выберите предысторию"],
+            });
+        }
+
         var catalog = await LoadCatalogAsync(token);
         draft = WithRolls(draft, userId, rollToken);
         var sheet = Evaluate(catalog, draft);
@@ -64,7 +72,7 @@ public class CharacterService : ICharacterService
             GenerationMethod = draft.Method,
             Stats = draft.BaseScores.ToStats(),
             BonusChoices = draft.BonusChoices.ToList(),
-            Background = draft.Background,
+            Background = draft.Background.Value,
             BackgroundSkills = draft.BackgroundSkills.ToList(),
             RaceSkills = draft.RaceSkills.ToList(),
             ClassSkills = draft.ClassSkills.ToList(),
@@ -132,11 +140,11 @@ public class CharacterService : ICharacterService
         var race = catalog.Races.FirstOrDefault(r => r.Type == draft.Race);
         var characterClass = catalog.Classes.FirstOrDefault(c => c.Type == draft.Class);
         var background = catalog.Backgrounds.FirstOrDefault(b => b.Type == draft.Background);
-        var (field, message) = (race, characterClass, background) switch
+        var (field, message) = (race, characterClass, background, draft.Background) switch
         {
-            (null, _, _) => ("CharacterRace", "Неизвестная раса"),
-            (_, null, _) => ("CharacterClass", "Неизвестный класс"),
-            (_, _, null) => ("Background", "Неизвестная предыстория"),
+            (null, _, _, _) => ("CharacterRace", "Неизвестная раса"),
+            (_, null, _, _) => ("CharacterClass", "Неизвестный класс"),
+            (_, _, null, not null) => ("Background", "Неизвестная предыстория"),
             _ => (null, null),
         };
         if (field is not null)
@@ -144,7 +152,7 @@ public class CharacterService : ICharacterService
             throw new CharacterRulesException(new Dictionary<string, string[]> { [field] = [message!] });
         }
 
-        return CharacterRules.Evaluate(draft, race!, characterClass!, background!);
+        return CharacterRules.Evaluate(draft, race!, characterClass!, background);
     }
 
     private async Task<Catalog> LoadCatalogAsync(CancellationToken token) => new(

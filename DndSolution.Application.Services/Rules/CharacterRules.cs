@@ -86,8 +86,9 @@ public static class CharacterRules
     /// Проверяет черновик и считает лист персонажа
     /// </summary>
     /// <exception cref="CharacterRulesException">Черновик нарушает правила</exception>
+    /// <param name="background">Предыстория; null, если навыки ещё не выбраны</param>
     public static CharacterSheet Evaluate(
-        CharacterDraft draft, Race race, CharacterClass characterClass, Background background)
+        CharacterDraft draft, Race race, CharacterClass characterClass, Background? background)
     {
         var errors = new Dictionary<string, List<string>>();
         void Error(string field, string message) =>
@@ -95,7 +96,9 @@ public static class CharacterRules
 
         ValidateGeneration(draft, message => Error("BaseStats", message));
         var bonuses = RacialBonuses(draft, race, message => Error("BonusChoices", message));
-        var (proficient, expertise) = Skills(draft, race, characterClass, background, Error);
+        var (proficient, expertise) = background is null
+            ? ([], [])
+            : Skills(draft, race, characterClass, background, Error);
 
         if (errors.Count > 0)
         {

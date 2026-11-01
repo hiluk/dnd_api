@@ -53,12 +53,15 @@ public class CharacterRulesTests
         new(race, CharacterClassType.Fighter, method, scores, choices ?? [], rolled);
 
     /// <summary>
-    /// Предыстория без навыков, чтобы проверять характеристики отдельно от навыков
+    /// Предыстория без навыков (для проверки компетентности вне плута)
     /// </summary>
     private static readonly Background NoBackground = new() { Name = "Без навыков", Type = BackgroundType.Custom };
 
+    /// <summary>
+    /// Характеристики проверяются без предыстории: навыки ещё не выбраны
+    /// </summary>
     private static CharacterSheet Evaluate(CharacterDraft draft, Race race, CharacterClass characterClass) =>
-        CharacterRules.Evaluate(draft, race, characterClass, NoBackground);
+        CharacterRules.Evaluate(draft, race, characterClass, background: null);
 
     private static CharacterRulesException Violation(CharacterDraft draft, Race race, CharacterClass? characterClass = null) =>
         Assert.Throws<CharacterRulesException>(() => Evaluate(draft, race, characterClass ?? Fighter));
