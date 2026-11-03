@@ -1,6 +1,6 @@
 using Core.Sdk;
 using Core.Sdk.Dtos;
-using DndSolution.Application.Models;
+using Data.Entities;
 using Microsoft.AspNetCore.Authentication.BearerToken;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -16,13 +16,13 @@ namespace Core.Api.Controllers;
 [ApiController]
 public class AuthController : ControllerBase
 {
-    private readonly SignInManager<User> _signInManager;
-    private readonly UserManager<User> _userManager;
+    private readonly SignInManager<UserEntity> _signInManager;
+    private readonly UserManager<UserEntity> _userManager;
 
     /// <summary>
     /// .ctor
     /// </summary>
-    public AuthController(SignInManager<User> signInManager, UserManager<User> userManager)
+    public AuthController(SignInManager<UserEntity> signInManager, UserManager<UserEntity> userManager)
     {
         _signInManager = signInManager;
         _userManager = userManager;
@@ -36,7 +36,7 @@ public class AuthController : ControllerBase
     [ProducesResponseType<HttpValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<Results<Ok, ValidationProblem>> Register([FromBody] CustomRegisterRequest request)
     {
-        var user = new User
+        var user = new UserEntity
         {
             UserName = request.Login.Trim(),
             Email = request.Email.Trim(),

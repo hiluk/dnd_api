@@ -1,4 +1,5 @@
 using Data.Abstractions;
+using Data.Repositories.Mappings;
 using DndSolution.Application.Models.Models.Races;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,20 +17,21 @@ public class RacesRepository : IRacesRepository
     /// <inheritdoc />
     public async Task SaveRaceAsync(Race race, CancellationToken token)
     {
-        // Asi и Speed добавляются вместе с расой как связанные сущности
-        await _context.Races.AddAsync(race, token);
+        await _context.Races.AddAsync(race.ToEntity(), token);
         await _context.SaveChangesAsync(token);
     }
 
     /// <inheritdoc />
     public async Task<List<Race>> GetAllRaces(CancellationToken token)
     {
-        return await _context.Races
+        var entities = await _context.Races
             .AsNoTracking()
             .Include(x => x.Asi.OrderBy(a => a.Id))
             .Include(x => x.Speed.OrderBy(s => s.Id))
             .AsSplitQuery()
             .OrderBy(x => x.Id)
             .ToListAsync(token);
+
+        return entities.Select(e => e.ToModel()).ToList();
     }
 }

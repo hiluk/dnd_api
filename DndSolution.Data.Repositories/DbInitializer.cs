@@ -1,5 +1,4 @@
-using DndSolution.Application.Models.Models.Classes;
-using DndSolution.Application.Models.Models.Races;
+using Data.Repositories.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -43,7 +42,7 @@ public static class DbInitializer
             .ToDictionaryAsync(x => x.Name, token);
 
         var (added, updated) = (0, 0);
-        foreach (var seed in CatalogSeed.Races)
+        foreach (var seed in CatalogSeed.Races.Select(r => r.ToEntity()))
         {
             if (!existing.TryGetValue(seed.Name, out var race))
             {
@@ -64,16 +63,19 @@ public static class DbInitializer
                 continue;
             }
 
-            // Свойства рас init-only, поэтому значения переписываются через EF
-            context.Entry(race).CurrentValues.SetValues(new
-            {
-                seed.Type, seed.Description, seed.Age, seed.Size, seed.Language, seed.Vision, seed.Traits,
-                seed.Skills, seed.SkillChoices,
-            });
+            race.Type = seed.Type;
+            race.Description = seed.Description;
+            race.Age = seed.Age;
+            race.Size = seed.Size;
+            race.Language = seed.Language;
+            race.Vision = seed.Vision;
+            race.Traits = seed.Traits;
+            race.Skills = seed.Skills;
+            race.SkillChoices = seed.SkillChoices;
             context.RemoveRange(race.Asi);
             context.RemoveRange(race.Speed);
-            race.Asi.AddRange(seed.Asi);
-            race.Speed.AddRange(seed.Speed);
+            race.Asi = seed.Asi;
+            race.Speed = seed.Speed;
             updated++;
         }
 
@@ -99,15 +101,12 @@ public static class DbInitializer
         {
             if (!existing.TryGetValue(seed.Name, out var characterClass))
             {
-                context.Classes.Add(seed);
+                context.Classes.Add(seed.ToEntity());
                 added++;
                 continue;
             }
 
-            var entry = context.Entry(characterClass);
-            seed.Id = characterClass.Id;
-            entry.CurrentValues.SetValues(seed);
-            if (entry.State == EntityState.Modified)
+            if (context.Entry(characterClass.Apply(seed)).State == EntityState.Modified)
             {
                 updated++;
             }
@@ -125,15 +124,12 @@ public static class DbInitializer
         {
             if (!existing.TryGetValue(seed.Type, out var background))
             {
-                context.Backgrounds.Add(seed);
+                context.Backgrounds.Add(seed.ToEntity());
                 added++;
                 continue;
             }
 
-            var entry = context.Entry(background);
-            seed.Id = background.Id;
-            entry.CurrentValues.SetValues(seed);
-            if (entry.State == EntityState.Modified)
+            if (context.Entry(background.Apply(seed)).State == EntityState.Modified)
             {
                 updated++;
             }

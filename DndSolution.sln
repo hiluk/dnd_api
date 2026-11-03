@@ -30,6 +30,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndSolution.Tests", "DndSolution.Tests\DndSolution.Tests.csproj", "{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndSolution.Data.Entities", "DndSolution.Data.Entities\DndSolution.Data.Entities.csproj", "{B3C4BABB-DF2B-4891-874E-8FECD741F032}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D4D49666-E0F6-4A56-A813-E14249A3040E} = {99E096E5-749B-4754-A689-62196CA877F8}

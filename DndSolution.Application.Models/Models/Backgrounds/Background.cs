@@ -7,7 +7,6 @@ namespace DndSolution.Application.Models.Models.Backgrounds;
 /// </summary>
 public class Background
 {
-    public int Id { get; set; }
 
     public BackgroundType Type { get; set; }
 

@@ -34,8 +34,4 @@ public class CharacterStats
     /// Харизма
     /// </summary>
     public int Charisma { get; set; }
-
-    public Guid CharacterId { get; set; }
-
-    public Character.Character Character { get; set; } = null!;
 }

@@ -1,12 +1,9 @@
-﻿using System.Text.Json.Serialization;
-using DndSolution.Application.Models.Enums;
+﻿using DndSolution.Application.Models.Enums;
 
 namespace DndSolution.Application.Models.Models.Races;
 
 public class Asi
 {
-    [JsonIgnore]
-    public int Id { get; set; }
     public string Stat { get; init; }
     
     public int Value { get; init; }
@@ -20,7 +17,4 @@ public class Asi
     /// Сколько разных характеристик выбирается для бонуса на выбор
     /// </summary>
     public int Choices { get; init; } = 1;
-
-    public int RaceId { get; set; }
-    public Race Race { get; set; }
 }

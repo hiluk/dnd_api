@@ -4,7 +4,6 @@ namespace DndSolution.Application.Models.Models.Classes;
 
 public class CharacterClass
 {
-    public int Id { get; set; }
 
     /// <summary>
     /// Класс, которому соответствует запись справочника

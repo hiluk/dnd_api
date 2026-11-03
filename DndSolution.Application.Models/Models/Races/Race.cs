@@ -4,7 +4,6 @@ namespace DndSolution.Application.Models.Models.Races;
 
 public class Race
 {
-    public int Id { get; set; }
 
     /// <summary>
     /// Раса, которой соответствует запись справочника

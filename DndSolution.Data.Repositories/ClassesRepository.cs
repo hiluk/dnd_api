@@ -1,4 +1,5 @@
 using Data.Abstractions;
+using Data.Repositories.Mappings;
 using DndSolution.Application.Models.Models.Classes;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,16 +17,18 @@ public class ClassesRepository : IClassesRepository
     /// <inheritdoc />
     public async Task SaveClassAsync(CharacterClass entity, CancellationToken token)
     {
-        await _context.Classes.AddAsync(entity, token);
+        await _context.Classes.AddAsync(entity.ToEntity(), token);
         await _context.SaveChangesAsync(token);
     }
 
     /// <inheritdoc />
     public async Task<List<CharacterClass>> GetAllClassesAsync(CancellationToken token)
     {
-        return await _context.Classes
+        var entities = await _context.Classes
             .AsNoTracking()
             .OrderBy(x => x.Id)
             .ToListAsync(token);
+
+        return entities.Select(e => e.ToModel()).ToList();
     }
 }

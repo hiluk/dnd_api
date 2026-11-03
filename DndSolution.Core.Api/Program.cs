@@ -1,7 +1,7 @@
 using Core.Api;
 using Core.Api.Swagger;
 using Data.Repositories;
-using DndSolution.Application.Models;
+using Data.Entities;
 using DndSolution.Application.Services;
 using Microsoft.AspNetCore.Identity;
 
@@ -23,7 +23,7 @@ services.AddAuthorization();
 services.AddAuthentication(IdentityConstants.BearerScheme)
     .AddBearerToken(IdentityConstants.BearerScheme);
 
-services.AddIdentityCore<User>(options =>
+services.AddIdentityCore<UserEntity>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.Password.RequireDigit = true;

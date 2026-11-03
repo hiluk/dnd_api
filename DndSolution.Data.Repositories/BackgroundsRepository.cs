@@ -1,4 +1,5 @@
 using Data.Abstractions;
+using Data.Repositories.Mappings;
 using DndSolution.Application.Models.Models.Backgrounds;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,9 +17,11 @@ public class BackgroundsRepository : IBackgroundsRepository
     /// <inheritdoc />
     public async Task<List<Background>> GetAllAsync(CancellationToken token)
     {
-        return await _context.Backgrounds
+        var entities = await _context.Backgrounds
             .AsNoTracking()
             .OrderBy(x => x.Type)
             .ToListAsync(token);
+
+        return entities.Select(e => e.ToModel()).ToList();
     }
 }

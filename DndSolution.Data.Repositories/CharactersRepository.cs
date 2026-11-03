@@ -1,4 +1,5 @@
 using Data.Abstractions;
+using Data.Repositories.Mappings;
 using DndSolution.Application.Models.Models.Character;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,9 +10,6 @@ namespace Data.Repositories;
 /// </summary>
 public class CharactersRepository : ICharactersRepository
 {
-    private const string UserIdProperty = DndContext.CharacterUserIdProperty;
-    private const string CreationTimeProperty = DndContext.CharacterCreationTimeProperty;
-
     private readonly DndContext _context;
 
     /// <summary>
@@ -26,32 +24,36 @@ public class CharactersRepository : ICharactersRepository
     /// <inheritdoc />
     public async Task SaveCharacterAsync(Character character, Guid userId, CancellationToken token)
     {
-        var entry = await _context.Characters.AddAsync(character, token);
-        entry.Property<Guid>(UserIdProperty).CurrentValue = userId;
-        entry.Property<DateTime>(CreationTimeProperty).CurrentValue = DateTime.UtcNow;
-
+        var entity = character.ToEntity(userId, DateTime.UtcNow);
+        await _context.Characters.AddAsync(entity, token);
         await _context.SaveChangesAsync(token);
+
+        character.Id = entity.Id;
     }
 
     /// <inheritdoc />
     public async Task<IReadOnlyList<Character>> GetAllUserCharactersAsync(Guid userId, CancellationToken token)
     {
-        return await _context.Characters
+        var entities = await _context.Characters
             .AsNoTracking()
-            .Where(c => EF.Property<Guid>(c, UserIdProperty) == userId)
-            .OrderByDescending(c => EF.Property<DateTime>(c, CreationTimeProperty))
+            .Where(c => c.UserId == userId)
+            .OrderByDescending(c => c.CreationTime)
             .Include(c => c.Stats)
             .ToListAsync(token);
+
+        return entities.Select(e => e.ToModel()).ToList();
     }
 
     /// <inheritdoc />
     public async Task<Character?> GetCharacterByIdAsync(Guid userId, Guid id, CancellationToken token)
     {
-        return await _context.Characters
+        var entity = await _context.Characters
             .AsNoTracking()
-            .Where(c => EF.Property<Guid>(c, UserIdProperty) == userId && c.Id == id)
+            .Where(c => c.UserId == userId && c.Id == id)
             .Include(c => c.Stats)
             .FirstOrDefaultAsync(token);
+
+        return entity?.ToModel();
     }
 
     /// <inheritdoc />
@@ -59,7 +61,7 @@ public class CharactersRepository : ICharactersRepository
     {
         // Характеристики удаляются каскадно на уровне БД
         var deleted = await _context.Characters
-            .Where(c => EF.Property<Guid>(c, UserIdProperty) == userId && c.Id == id)
+            .Where(c => c.UserId == userId && c.Id == id)
             .ExecuteDeleteAsync(token);
 
         return deleted > 0;

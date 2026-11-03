@@ -1,9 +1,4 @@
-using DndSolution.Application.Models;
-using DndSolution.Application.Models.Models.Backgrounds;
-using DndSolution.Application.Models.Models;
-using DndSolution.Application.Models.Models.Character;
-using DndSolution.Application.Models.Models.Classes;
-using DndSolution.Application.Models.Models.Races;
+using Data.Entities;
 using DndSolution.Neccessary.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -11,25 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories;
 
-public class DndContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
+public class DndContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid>
 {
-    /// <summary>
-    /// Теневое свойство персонажа с Id владельца
-    /// </summary>
-    public const string CharacterUserIdProperty = "UserId";
+    public DbSet<CharacterEntity> Characters => Set<CharacterEntity>();
 
-    /// <summary>
-    /// Теневое свойство персонажа с датой создания
-    /// </summary>
-    public const string CharacterCreationTimeProperty = "CreationTime";
+    public DbSet<RaceEntity> Races => Set<RaceEntity>();
 
-    public DbSet<Character> Characters => Set<Character>();
+    public DbSet<CharacterClassEntity> Classes => Set<CharacterClassEntity>();
 
-    public DbSet<Race> Races => Set<Race>();
-
-    public DbSet<CharacterClass> Classes => Set<CharacterClass>();
-
-    public DbSet<Background> Backgrounds => Set<Background>();
+    public DbSet<BackgroundEntity> Backgrounds => Set<BackgroundEntity>();
 
     public DndContext(DbContextOptions<DndContext> options) : base(options)
     {
@@ -39,48 +24,53 @@ public class DndContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Race>().HasKey(x => x.Id);
-        modelBuilder.Entity<Race>().HasIndex(x => x.Name).IsUnique();
-        modelBuilder.Entity<CharacterClass>().HasKey(x => x.Id);
-        modelBuilder.Entity<CharacterClass>().HasIndex(x => x.Name).IsUnique();
-
-        modelBuilder.Entity<Background>().HasKey(x => x.Id);
-        modelBuilder.Entity<Background>().HasIndex(x => x.Type).IsUnique();
-
-        modelBuilder.Entity<Asi>().HasKey(x => x.Id);
-        modelBuilder.Entity<Asi>()
-            .HasOne(x => x.Race)
-            .WithMany(x => x.Asi)
-            .HasForeignKey(x => x.RaceId);
-
-        modelBuilder.Entity<Speed>().HasKey(x => x.Id);
-        modelBuilder.Entity<Speed>()
-            .HasOne(x => x.Race)
-            .WithMany(x => x.Speed)
-            .HasForeignKey(x => x.RaceId);
-
-        modelBuilder.Entity<Character>().HasKey(x => x.Id);
-        modelBuilder.Entity<Character>().Property(x => x.BonusChoices).IsRequired();
-        modelBuilder.Entity<Character>().Property(x => x.Name).HasMaxLength(64);
-        modelBuilder.Entity<Character>().Property<DateTime>(CharacterCreationTimeProperty).IsRequired();
-        modelBuilder.Entity<Character>()
-            .HasOne<User>()
-            .WithMany()
-            .HasForeignKey(CharacterUserIdProperty)
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
-        modelBuilder.Entity<Character>()
-            .HasOne(x => x.Stats)
-            .WithOne(x => x.Character)
-            .HasForeignKey<CharacterStats>(x => x.CharacterId)
-            .OnDelete(DeleteBehavior.Cascade)
-            .IsRequired();
-
-        modelBuilder.Entity<CharacterStats>().HasKey(x => x.CharacterId);
-
+        // Таблицы Identity называются по-старому: asp_net_users и т.д.
         foreach (var entity in modelBuilder.Model.GetEntityTypes())
         {
             entity.SetTableName(entity.GetTableName()?.ToSnakeCase());
         }
+
+        // Имена таблиц заданы явно: они не должны зависеть от имён классов сущностей
+        modelBuilder.Entity<RaceEntity>(race =>
+        {
+            race.ToTable("races");
+            race.HasKey(x => x.Id);
+            race.HasIndex(x => x.Name).IsUnique();
+            race.HasMany(x => x.Asi).WithOne(x => x.Race).HasForeignKey(x => x.RaceId);
+            race.HasMany(x => x.Speed).WithOne(x => x.Race).HasForeignKey(x => x.RaceId);
+        });
+        modelBuilder.Entity<AsiEntity>().ToTable("asi").HasKey(x => x.Id);
+        modelBuilder.Entity<SpeedEntity>().ToTable("speed").HasKey(x => x.Id);
+
+        modelBuilder.Entity<CharacterClassEntity>(characterClass =>
+        {
+            characterClass.ToTable("classes");
+            characterClass.HasKey(x => x.Id);
+            characterClass.HasIndex(x => x.Name).IsUnique();
+        });
+
+        modelBuilder.Entity<BackgroundEntity>(background =>
+        {
+            background.ToTable("backgrounds");
+            background.HasKey(x => x.Id);
+            background.HasIndex(x => x.Type).IsUnique();
+        });
+
+        modelBuilder.Entity<CharacterEntity>(character =>
+        {
+            character.ToTable("characters");
+            character.HasKey(x => x.Id);
+            character.Property(x => x.Name).HasMaxLength(64);
+            character.HasOne<UserEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            character.HasOne(x => x.Stats)
+                .WithOne(x => x.Character)
+                .HasForeignKey<CharacterStatsEntity>(x => x.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+        });
+        modelBuilder.Entity<CharacterStatsEntity>().ToTable("character_stats").HasKey(x => x.CharacterId);
     }
 }
