@@ -7,6 +7,7 @@ COPY ["DndSolution.Application.Models/DndSolution.Application.Models.csproj", "D
 COPY ["DndSolution.Application.Services/DndSolution.Application.Services.csproj", "DndSolution.Application.Services/"]
 COPY ["DndSolution.Core.Sdk/DndSolution.Core.Sdk.csproj", "DndSolution.Core.Sdk/"]
 COPY ["DndSolution.Data.Abstractions/DndSolution.Data.Abstractions.csproj", "DndSolution.Data.Abstractions/"]
+COPY ["DndSolution.Data.Entities/DndSolution.Data.Entities.csproj", "DndSolution.Data.Entities/"]
 COPY ["DndSolution.Data.Repositories/DndSolution.Data.Repositories.csproj", "DndSolution.Data.Repositories/"]
 COPY ["DndSolution.Neccessary/DndSolution.Neccessary.csproj", "DndSolution.Neccessary/"]
 RUN dotnet restore "DndSolution.Core.Api/DndSolution.Core.Api.csproj"
