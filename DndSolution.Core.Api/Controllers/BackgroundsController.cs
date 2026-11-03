@@ -1,5 +1,5 @@
+using Core.Api.Mappings;
 using Core.Sdk.Dtos;
-using Core.Sdk.Enums;
 using Data.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,17 +31,6 @@ public class BackgroundsController : ControllerBase
     {
         var backgrounds = await _repository.GetAllAsync(token);
 
-        return Ok(backgrounds.Select(b => new BackgroundDto
-        {
-            Type = (BackgroundTypeDto)b.Type,
-            Name = b.Name,
-            Description = b.Description,
-            Skills = b.Skills.Select(s => (SkillDto)s).ToList(),
-            SkillChoices = b.SkillChoices,
-            Tools = b.Tools,
-            Languages = b.Languages,
-            Equipment = b.Equipment,
-            Feature = b.Feature,
-        }).ToList());
+        return Ok(backgrounds.Select(b => b.ToDto()).ToList());
     }
 }

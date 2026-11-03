@@ -34,7 +34,7 @@ public class RacesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> SaveRace([FromBody] RaceDto dto, CancellationToken token)
     {
-        await _service.SaveRaceAsync(RaceModelMapper.MapToModel(dto), token);
+        await _service.SaveRaceAsync(dto.ToModel(), token);
 
         return NoContent();
     }
@@ -49,6 +49,6 @@ public class RacesController : ControllerBase
     {
         var races = await _service.GetAllRacesAsync(token);
 
-        return Ok(races.Select(RaceModelMapper.MapToDto).ToList());
+        return Ok(races.Select(r => r.ToDto()).ToList());
     }
 }

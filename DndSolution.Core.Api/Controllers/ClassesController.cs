@@ -34,7 +34,7 @@ public class ClassesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> SaveClassAsync([FromBody] CharacterClassDto dto, CancellationToken token)
     {
-        await _service.SaveClassAsync(ClassModelMapper.MapToModel(dto), token);
+        await _service.SaveClassAsync(dto.ToModel(), token);
 
         return NoContent();
     }
@@ -49,6 +49,6 @@ public class ClassesController : ControllerBase
     {
         var models = await _service.GetAllClassesAsync(token);
 
-        return Ok(models.Select(ClassModelMapper.MapToDto).ToList());
+        return Ok(models.Select(c => c.ToDto()).ToList());
     }
 }

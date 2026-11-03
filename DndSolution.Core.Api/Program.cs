@@ -12,6 +12,7 @@ var services = builder.Services;
 
 services.AddControllers();
 services.AddProblemDetails();
+services.AddExceptionHandler<CharacterRulesExceptionHandler>();
 services.AddEndpointsApiExplorer();
 services.ConfigureSwagger();
 

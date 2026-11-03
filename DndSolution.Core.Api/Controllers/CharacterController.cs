@@ -2,7 +2,6 @@ using System.Security.Claims;
 using Core.Api.Mappings;
 using Core.Sdk.Dtos.Characters;
 using DndSolution.Application.Abstractions;
-using DndSolution.Application.Models.Models.Rules;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +31,8 @@ public class CharacterController : ControllerBase
                    ?? throw new InvalidOperationException("В токене нет Id пользователя"));
 
     /// <summary>
-    /// Проверить черновик по правилам и посчитать лист, ничего не сохраняя
+    /// Проверить черновик по правилам и посчитать лист, ничего не сохраняя.
+    /// Нарушение правил — 400 (см. <see cref="CharacterRulesExceptionHandler"/>)
     /// </summary>
     /// <param name="dto">Черновик персонажа</param>
     /// <param name="token">Токен отмены операции</param>
@@ -41,17 +41,9 @@ public class CharacterController : ControllerBase
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Preview([FromBody] CharacterDraftDto dto, CancellationToken token)
     {
-        try
-        {
-            var sheet = await _service.PreviewAsync(
-                CurrentUserId, CharacterMapper.MapToDraft(dto), dto.RollToken, token);
+        var sheet = await _service.PreviewAsync(CurrentUserId, dto.ToDraft(), dto.RollToken, token);
 
-            return Ok(CharacterMapper.MapToDto(sheet));
-        }
-        catch (CharacterRulesException e)
-        {
-            return RulesViolation(e);
-        }
+        return Ok(sheet.ToDto());
     }
 
     /// <summary>
@@ -65,18 +57,11 @@ public class CharacterController : ControllerBase
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest request, CancellationToken token)
     {
-        try
-        {
-            var created = await _service.CreateCharacterAsync(
-                CurrentUserId, request.Name, CharacterMapper.MapToDraft(request), request.RollToken, token);
+        var created = await _service.CreateCharacterAsync(
+            CurrentUserId, request.Name, request.ToDraft(), request.RollToken, token);
 
-            var result = CharacterMapper.MapToDto(created);
-            return CreatedAtAction(nameof(GetCharacterById), new { id = result.Id }, result);
-        }
-        catch (CharacterRulesException e)
-        {
-            return RulesViolation(e);
-        }
+        var result = created.ToDto();
+        return CreatedAtAction(nameof(GetCharacterById), new { id = result.Id }, result);
     }
 
     /// <summary>
@@ -89,8 +74,7 @@ public class CharacterController : ControllerBase
     {
         var models = await _service.GetAllUserCharactersAsync(CurrentUserId, token);
 
-
-        return Ok(models.Select(CharacterMapper.MapToDto).ToList());
+        return Ok(models.Select(m => m.ToDto()).ToList());
     }
 
     /// <summary>
@@ -107,7 +91,7 @@ public class CharacterController : ControllerBase
 
         return model is null
             ? Problem("Персонаж не найден", statusCode: StatusCodes.Status404NotFound)
-            : Ok(CharacterMapper.MapToDto(model));
+            : Ok(model.ToDto());
     }
 
     /// <summary>
@@ -126,10 +110,4 @@ public class CharacterController : ControllerBase
             ? NoContent()
             : Problem("Персонаж не найден", statusCode: StatusCodes.Status404NotFound);
     }
-
-    private IActionResult RulesViolation(CharacterRulesException e) =>
-        ValidationProblem(new ValidationProblemDetails(e.Errors.ToDictionary(x => x.Key, x => x.Value))
-        {
-            Title = "Персонаж не соответствует правилам",
-        });
 }

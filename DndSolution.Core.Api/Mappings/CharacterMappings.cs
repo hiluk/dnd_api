@@ -6,27 +6,23 @@ using DndSolution.Application.Models.Models.Rules;
 
 namespace Core.Api.Mappings;
 
-public static class CharacterMapper
+public static class CharacterMappings
 {
-    public static CharacterDraft MapToDraft(CharacterDraftDto dto) => new(
+    public static CharacterDraft ToDraft(this CharacterDraftDto dto) => new(
         (CharacterRaceType)dto.CharacterRace,
         (CharacterClassType)dto.CharacterClass,
         (GenerationMethod)dto.GenerationMethod,
-        MapToScores(dto.BaseStats),
-        dto.BonusChoices.Select(a => (Ability)a).ToList())
+        dto.BaseStats.ToScores(),
+        dto.BonusChoices.ToModel())
     {
         Background = (BackgroundType?)dto.Background,
-        BackgroundSkills = Skills(dto.BackgroundSkills),
-        RaceSkills = Skills(dto.RaceSkills),
-        ClassSkills = Skills(dto.ClassSkills),
-        Expertise = Skills(dto.Expertise),
+        BackgroundSkills = dto.BackgroundSkills.ToModel(),
+        RaceSkills = dto.RaceSkills.ToModel(),
+        ClassSkills = dto.ClassSkills.ToModel(),
+        Expertise = dto.Expertise.ToModel(),
     };
 
-    private static List<Skill> Skills(IEnumerable<SkillDto> skills) => skills.Select(s => (Skill)s).ToList();
-
-    private static List<SkillDto> Skills(IEnumerable<Skill> skills) => skills.Select(s => (SkillDto)s).ToList();
-
-    public static CharacterDto MapToDto(CharacterWithSheet model)
+    public static CharacterDto ToDto(this CharacterWithSheet model)
     {
         var (character, sheet) = model;
 
@@ -38,21 +34,21 @@ public static class CharacterMapper
             CharacterClass = (CharacterClassTypeDto)character.CharacterClass,
             CharacterRace = (CharacterRaceTypeDto)character.CharacterRace,
             GenerationMethod = (GenerationMethodDto)character.GenerationMethod,
-            BaseStats = MapToDto(AbilityScores.From(character.Stats)),
-            BonusChoices = character.BonusChoices.Select(a => (AbilityDto)a).ToList(),
+            BaseStats = AbilityScores.From(character.Stats).ToDto(),
+            BonusChoices = character.BonusChoices.ToDto(),
             Background = (BackgroundTypeDto)character.Background,
-            BackgroundSkills = Skills(character.BackgroundSkills),
-            RaceSkills = Skills(character.RaceSkills),
-            ClassSkills = Skills(character.ClassSkills),
-            Expertise = Skills(character.Expertise),
-            Sheet = MapToDto(sheet),
+            BackgroundSkills = character.BackgroundSkills.ToDto(),
+            RaceSkills = character.RaceSkills.ToDto(),
+            ClassSkills = character.ClassSkills.ToDto(),
+            Expertise = character.Expertise.ToDto(),
+            Sheet = sheet.ToDto(),
         };
     }
 
-    public static CharacterSheetDto MapToDto(CharacterSheet sheet) => new()
+    public static CharacterSheetDto ToDto(this CharacterSheet sheet) => new()
     {
-        Stats = MapToDto(sheet.Scores),
-        Modifiers = MapToDto(sheet.Modifiers),
+        Stats = sheet.Scores.ToDto(),
+        Modifiers = sheet.Modifiers.ToDto(),
         HitPoints = sheet.HitPoints,
         ArmorClass = sheet.ArmorClass,
         Initiative = sheet.Initiative,
@@ -74,10 +70,10 @@ public static class CharacterMapper
         PassivePerception = sheet.PassivePerception,
     };
 
-    private static AbilityScores MapToScores(CharacterStatsDto dto) => new(
+    private static AbilityScores ToScores(this CharacterStatsDto dto) => new(
         dto.Strength, dto.Dexterity, dto.Constitution, dto.Intelligence, dto.Wisdom, dto.Charisma);
 
-    private static CharacterStatsDto MapToDto(AbilityScores scores) => new()
+    private static CharacterStatsDto ToDto(this AbilityScores scores) => new()
     {
         Strength = scores.Strength,
         Dexterity = scores.Dexterity,
