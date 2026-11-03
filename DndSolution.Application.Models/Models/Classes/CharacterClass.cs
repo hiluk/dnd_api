@@ -1,8 +1,39 @@
-﻿namespace DndSolution.Application.Models.Models.Classes;
+﻿using DndSolution.Application.Models.Enums;
+
+namespace DndSolution.Application.Models.Models.Classes;
 
 public class CharacterClass
 {
-    public int Id { get; set; }
+
+    /// <summary>
+    /// Класс, которому соответствует запись справочника
+    /// </summary>
+    public CharacterClassType Type { get; set; }
+
+    /// <summary>
+    /// Кость хитов: 6, 8, 10 или 12
+    /// </summary>
+    public int HitDie { get; set; }
+
+    /// <summary>
+    /// Спасброски, которыми владеет класс
+    /// </summary>
+    public List<Ability> SavingThrows { get; set; } = [];
+
+    /// <summary>
+    /// Сколько навыков выбирается из <see cref="SkillOptions"/>
+    /// </summary>
+    public int SkillChoices { get; set; }
+
+    /// <summary>
+    /// Навыки, из которых выбирает класс
+    /// </summary>
+    public List<Skill> SkillOptions { get; set; } = [];
+
+    /// <summary>
+    /// Сколько навыков получают компетентность на 1 уровне (плут — 2)
+    /// </summary>
+    public int ExpertiseChoices { get; set; }
     public string Name { get; set; }
     
     public string Description { get; set; }
@@ -27,6 +58,4 @@ public class CharacterClass
     
     public string SpellCastingAbility { get; set; }
 
-    // TODO: Нужно будет добавить подклассы
-    
 }

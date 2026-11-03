@@ -1,13 +1,8 @@
-﻿using System.Text;
 using Data.Abstractions;
-using Data.Repositories.Migrations;
-using DndSolution.Neccessary;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Hosting;
 
 namespace Data.Repositories;
 
@@ -16,25 +11,26 @@ namespace Data.Repositories;
 /// </summary>
 public static class DIExtensions
 {
-    public static void ConfigureDb(this IServiceCollection services, IConfiguration configuration)
+    public static void ConfigureDb(this IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
     {
-        var connectionString = configuration.GetSection("PostgresSQL").Value;
+        var connectionString = configuration.GetConnectionString("Postgres")
+            ?? throw new InvalidOperationException("Не задана строка подключения ConnectionStrings:Postgres");
 
-        services
-            .AddEntityFrameworkNpgsql()
-            .AddEntityFrameworkNamingConventions();
-        
         services.AddDbContext<DndContext>(options =>
+        {
+            options
+                .UseNpgsql(connectionString)
+                .UseSnakeCaseNamingConvention();
+
+            if (environment.IsDevelopment())
             {
-                options
-                    .UseNpgsql(connectionString)
-                    .UseSnakeCaseNamingConvention()
-                    .EnableSensitiveDataLogging();
+                options.EnableSensitiveDataLogging();
             }
-            , ServiceLifetime.Scoped);
-        
-        services.AddTransient<IRacesRepository, RacesRepository>();
-        services.AddTransient<IClassesRepository, ClassesRepository>();
-        services.AddTransient<ICharactersRepository, CharactersRepository>();
+        });
+
+        services.AddScoped<IRacesRepository, RacesRepository>();
+        services.AddScoped<IClassesRepository, ClassesRepository>();
+        services.AddScoped<ICharactersRepository, CharactersRepository>();
+        services.AddScoped<IBackgroundsRepository, BackgroundsRepository>();
     }
 }

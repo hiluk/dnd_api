@@ -1,0 +1,140 @@
+using Data.Repositories.Mappings;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+
+namespace Data.Repositories;
+
+/// <summary>
+/// Применение миграций и синхронизация справочников рас и классов с <see cref="CatalogSeed"/>
+/// </summary>
+public static class DbInitializer
+{
+    public static async Task InitializeDbAsync(this IServiceProvider services, CancellationToken token = default)
+    {
+        await using var scope = services.CreateAsyncScope();
+        var context = scope.ServiceProvider.GetRequiredService<DndContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<DndContext>>();
+
+        await context.Database.MigrateAsync(token);
+
+        var (racesAdded, racesUpdated) = await SyncRacesAsync(context, token);
+        var (classesAdded, classesUpdated) = await SyncClassesAsync(context, token);
+        var (backgroundsAdded, backgroundsUpdated) = await SyncBackgroundsAsync(context, token);
+        await context.SaveChangesAsync(token);
+
+        if (racesAdded + racesUpdated + classesAdded + classesUpdated + backgroundsAdded + backgroundsUpdated > 0)
+        {
+            logger.LogInformation(
+                "Справочники обновлены. Расы: +{RacesAdded}, изменено {RacesUpdated}. " +
+                "Классы: +{ClassesAdded}, изменено {ClassesUpdated}. " +
+                "Предыстории: +{BackgroundsAdded}, изменено {BackgroundsUpdated}",
+                racesAdded, racesUpdated, classesAdded, classesUpdated, backgroundsAdded, backgroundsUpdated);
+        }
+    }
+
+    private static async Task<(int Added, int Updated)> SyncRacesAsync(DndContext context, CancellationToken token)
+    {
+        var existing = await context.Races
+            .Include(x => x.Asi.OrderBy(a => a.Id))
+            .Include(x => x.Speed.OrderBy(s => s.Id))
+            .AsSplitQuery()
+            .ToDictionaryAsync(x => x.Name, token);
+
+        var (added, updated) = (0, 0);
+        foreach (var seed in CatalogSeed.Races.Select(r => r.ToEntity()))
+        {
+            if (!existing.TryGetValue(seed.Name, out var race))
+            {
+                context.Races.Add(seed);
+                added++;
+                continue;
+            }
+
+            var changed = race.Type != seed.Type
+                          || race.SkillChoices != seed.SkillChoices || !race.Skills.SequenceEqual(seed.Skills)
+                          || race.Description != seed.Description || race.Age != seed.Age || race.Size != seed.Size
+                          || race.Language != seed.Language || race.Vision != seed.Vision || race.Traits != seed.Traits
+                          || !race.Asi.Select(a => (a.Stat, a.Value, a.Ability, a.Choices))
+                              .SequenceEqual(seed.Asi.Select(a => (a.Stat, a.Value, a.Ability, a.Choices)))
+                          || !race.Speed.Select(s => (s.Type, s.Value)).SequenceEqual(seed.Speed.Select(s => (s.Type, s.Value)));
+            if (!changed)
+            {
+                continue;
+            }
+
+            race.Type = seed.Type;
+            race.Description = seed.Description;
+            race.Age = seed.Age;
+            race.Size = seed.Size;
+            race.Language = seed.Language;
+            race.Vision = seed.Vision;
+            race.Traits = seed.Traits;
+            race.Skills = seed.Skills;
+            race.SkillChoices = seed.SkillChoices;
+            context.RemoveRange(race.Asi);
+            context.RemoveRange(race.Speed);
+            race.Asi = seed.Asi;
+            race.Speed = seed.Speed;
+            updated++;
+        }
+
+        return (added, updated);
+    }
+
+    private static async Task<(int Added, int Updated)> SyncClassesAsync(DndContext context, CancellationToken token)
+    {
+        var classes = await context.Classes.ToListAsync(token);
+
+        foreach (var characterClass in classes)
+        {
+            if (CatalogSeed.ClassRenames.TryGetValue(characterClass.Name, out var newName)
+                && classes.All(x => x.Name != newName))
+            {
+                characterClass.Name = newName;
+            }
+        }
+
+        var existing = classes.ToDictionary(x => x.Name);
+        var (added, updated) = (0, 0);
+        foreach (var seed in CatalogSeed.Classes)
+        {
+            if (!existing.TryGetValue(seed.Name, out var characterClass))
+            {
+                context.Classes.Add(seed.ToEntity());
+                added++;
+                continue;
+            }
+
+            if (context.Entry(characterClass.Apply(seed)).State == EntityState.Modified)
+            {
+                updated++;
+            }
+        }
+
+        return (added, updated);
+    }
+
+    private static async Task<(int Added, int Updated)> SyncBackgroundsAsync(DndContext context, CancellationToken token)
+    {
+        var existing = await context.Backgrounds.ToDictionaryAsync(x => x.Type, token);
+        var (added, updated) = (0, 0);
+
+        foreach (var seed in CatalogSeed.Backgrounds)
+        {
+            if (!existing.TryGetValue(seed.Type, out var background))
+            {
+                context.Backgrounds.Add(seed.ToEntity());
+                added++;
+                continue;
+            }
+
+            if (context.Entry(background.Apply(seed)).State == EntityState.Modified)
+            {
+                updated++;
+            }
+        }
+
+        return (added, updated);
+    }
+}

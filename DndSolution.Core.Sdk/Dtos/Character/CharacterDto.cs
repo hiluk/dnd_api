@@ -1,34 +1,79 @@
-﻿using Core.Sdk.Dtos.Classes;
-using Core.Sdk.Dtos.Race;
 using Core.Sdk.Enums;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Core.Sdk.Dtos.Characters;
 
-public class CharacterDto 
+/// <summary>
+/// Персонаж
+/// </summary>
+public class CharacterDto
 {
+    /// <summary>
+    /// Id персонажа
+    /// </summary>
+    public Guid Id { get; init; }
+
     /// <summary>
     /// Имя персонажа
     /// </summary>
-    public string Name { get; init; }
-    
+    public required string Name { get; init; }
+
     /// <summary>
     /// Уровень персонажа
     /// </summary>
     public byte Level { get; init; }
-    
+
     /// <summary>
     /// Класс персонажа
     /// </summary>
     public CharacterClassTypeDto CharacterClass { get; init; }
 
     /// <summary>
-    /// Расса персонажа
+    /// Раса персонажа
     /// </summary>
     public CharacterRaceTypeDto CharacterRace { get; init; }
-    
+
     /// <summary>
-    /// Информация о очках характеристик персонажа
+    /// Способ генерации характеристик
     /// </summary>
-    public CharacterStatsDto CharacterStats { get; init; }
+    public GenerationMethodDto GenerationMethod { get; init; }
+
+    /// <summary>
+    /// Базовые характеристики (до бонусов расы)
+    /// </summary>
+    public required CharacterStatsDto BaseStats { get; init; }
+
+    /// <summary>
+    /// Характеристики, выбранные для бонусов расы «на выбор»
+    /// </summary>
+    public required List<AbilityDto> BonusChoices { get; init; }
+
+    /// <summary>
+    /// Предыстория
+    /// </summary>
+    public BackgroundTypeDto Background { get; init; }
+
+    /// <summary>
+    /// Навыки, выбранные для своей предыстории
+    /// </summary>
+    public List<SkillDto> BackgroundSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки, выбранные от расы (полуэльф)
+    /// </summary>
+    public List<SkillDto> RaceSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки, выбранные из списка класса
+    /// </summary>
+    public List<SkillDto> ClassSkills { get; init; } = [];
+
+    /// <summary>
+    /// Навыки с компетентностью (плут)
+    /// </summary>
+    public List<SkillDto> Expertise { get; init; } = [];
+
+    /// <summary>
+    /// Итоговые и производные значения
+    /// </summary>
+    public required CharacterSheetDto Sheet { get; init; }
 }

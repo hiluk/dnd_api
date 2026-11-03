@@ -1,4 +1,6 @@
-﻿namespace Core.Sdk.Dtos.Race;
+﻿using Core.Sdk.Enums;
+
+namespace Core.Sdk.Dtos.Race;
 
 public class RaceDto
 {
@@ -20,4 +22,14 @@ public class RaceDto
     public List<AsiDto> Asi { get; init; }
     
     public List<SpeedDto> Speed { get; init; }
+
+    /// <summary>
+    /// Навыки, которыми раса владеет всегда
+    /// </summary>
+    public List<SkillDto> Skills { get; init; } = [];
+
+    /// <summary>
+    /// Сколько любых навыков раса даёт выбрать
+    /// </summary>
+    public int SkillChoices { get; init; }
 }

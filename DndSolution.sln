@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+# 
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{9316242E-919D-4889-8879-9738DFC06277}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{99E096E5-749B-4754-A689-62196CA877F8}"
@@ -21,6 +22,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndSolution.Application.Abstractions", "DndSolution.Application.Abstractions\DndSolution.Application.Abstractions.csproj", "{AE37ED2D-4768-4EF7-84BD-3338BC04576F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndSolution.Neccessary", "DndSolution.Neccessary\DndSolution.Neccessary.csproj", "{498532EB-6E5C-4C3A-872A-24E16674C1BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A94512E6-A7D5-4946-8B7D-EA58B856D8F6}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndSolution.Tests", "DndSolution.Tests\DndSolution.Tests.csproj", "{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DndSolution.Data.Entities", "DndSolution.Data.Entities\DndSolution.Data.Entities.csproj", "{B3C4BABB-DF2B-4891-874E-8FECD741F032}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,6 +70,14 @@ Global
 		{498532EB-6E5C-4C3A-872A-24E16674C1BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{498532EB-6E5C-4C3A-872A-24E16674C1BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{498532EB-6E5C-4C3A-872A-24E16674C1BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{945A2A13-DF11-4A4A-9FB1-AF6985DCD673}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C4BABB-DF2B-4891-874E-8FECD741F032}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{D4D49666-E0F6-4A56-A813-E14249A3040E} = {99E096E5-749B-4754-A689-62196CA877F8}

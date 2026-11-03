@@ -22,7 +22,7 @@ namespace Data.Repositories.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Character.Character", b =>
+            modelBuilder.Entity("Data.Entities.AsiEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,71 +31,37 @@ namespace Data.Repositories.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CharacterClass")
+                    b.Property<int?>("Ability")
                         .HasColumnType("integer")
-                        .HasColumnName("character_class");
+                        .HasColumnName("ability");
 
-                    b.Property<int>("CharacterRace")
+                    b.Property<int>("Choices")
                         .HasColumnType("integer")
-                        .HasColumnName("character_race");
+                        .HasColumnName("choices");
 
-                    b.Property<string>("Email")
+                    b.Property<int>("RaceId")
+                        .HasColumnType("integer")
+                        .HasColumnName("race_id");
+
+                    b.Property<string>("Stat")
                         .IsRequired()
                         .HasColumnType("text")
-                        .HasColumnName("email");
+                        .HasColumnName("stat");
 
-                    b.Property<byte>("Level")
-                        .HasColumnType("smallint")
-                        .HasColumnName("level");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("name");
+                    b.Property<int>("Value")
+                        .HasColumnType("integer")
+                        .HasColumnName("value");
 
                     b.HasKey("Id")
-                        .HasName("pk_characters");
+                        .HasName("pk_asi");
 
-                    b.ToTable("characters", (string)null);
+                    b.HasIndex("RaceId")
+                        .HasDatabaseName("ix_asi_race_id");
+
+                    b.ToTable("asi", (string)null);
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.CharacterStats", b =>
-                {
-                    b.Property<int>("CharacterId")
-                        .HasColumnType("integer")
-                        .HasColumnName("character_id");
-
-                    b.Property<int>("Charisma")
-                        .HasColumnType("integer")
-                        .HasColumnName("charisma");
-
-                    b.Property<int>("Constitution")
-                        .HasColumnType("integer")
-                        .HasColumnName("constitution");
-
-                    b.Property<int>("Dexterity")
-                        .HasColumnType("integer")
-                        .HasColumnName("dexterity");
-
-                    b.Property<int>("Intelligence")
-                        .HasColumnType("integer")
-                        .HasColumnName("intelligence");
-
-                    b.Property<int>("Strength")
-                        .HasColumnType("integer")
-                        .HasColumnName("strength");
-
-                    b.Property<int>("Wisdom")
-                        .HasColumnType("integer")
-                        .HasColumnName("wisdom");
-
-                    b.HasKey("CharacterId")
-                        .HasName("pk_character_stats");
-
-                    b.ToTable("character_stats", (string)null);
-                });
-
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Classes.CharacterClass", b =>
+            modelBuilder.Entity("Data.Entities.BackgroundEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,10 +80,80 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("equipment");
 
+                    b.Property<string>("Feature")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("feature");
+
+                    b.Property<string>("Languages")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("languages");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<int>("SkillChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("skill_choices");
+
+                    b.Property<int[]>("Skills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("skills");
+
+                    b.Property<string>("Tools")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("tools");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
+                    b.HasKey("Id")
+                        .HasName("pk_backgrounds");
+
+                    b.HasIndex("Type")
+                        .IsUnique()
+                        .HasDatabaseName("ix_backgrounds_type");
+
+                    b.ToTable("backgrounds", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.CharacterClassEntity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("description");
+
+                    b.Property<string>("Equipment")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("equipment");
+
+                    b.Property<int>("ExpertiseChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("expertise_choices");
+
                     b.Property<string>("HitDice")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("hit_dice");
+
+                    b.Property<int>("HitDie")
+                        .HasColumnType("integer")
+                        .HasColumnName("hit_die");
 
                     b.Property<string>("HpAt1stLevel")
                         .IsRequired()
@@ -159,49 +195,151 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("prof_weapon");
 
+                    b.Property<int[]>("SavingThrows")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("saving_throws");
+
+                    b.Property<int>("SkillChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("skill_choices");
+
+                    b.Property<int[]>("SkillOptions")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("skill_options");
+
                     b.Property<string>("SpellCastingAbility")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("spell_casting_ability");
 
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
+
                     b.HasKey("Id")
                         .HasName("pk_classes");
+
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_classes_name");
 
                     b.ToTable("classes", (string)null);
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Races.Asi", b =>
+            modelBuilder.Entity("Data.Entities.CharacterEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("RaceId")
+                    b.Property<int>("Background")
                         .HasColumnType("integer")
-                        .HasColumnName("race_id");
+                        .HasColumnName("background");
 
-                    b.Property<string>("Stat")
+                    b.Property<int[]>("BackgroundSkills")
                         .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("stat");
+                        .HasColumnType("integer[]")
+                        .HasColumnName("background_skills");
 
-                    b.Property<int>("Value")
+                    b.Property<int[]>("BonusChoices")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("bonus_choices");
+
+                    b.Property<int>("CharacterClass")
                         .HasColumnType("integer")
-                        .HasColumnName("value");
+                        .HasColumnName("character_class");
+
+                    b.Property<int>("CharacterRace")
+                        .HasColumnType("integer")
+                        .HasColumnName("character_race");
+
+                    b.Property<int[]>("ClassSkills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("class_skills");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("creation_time");
+
+                    b.Property<int[]>("Expertise")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("expertise");
+
+                    b.Property<int>("GenerationMethod")
+                        .HasColumnType("integer")
+                        .HasColumnName("generation_method");
+
+                    b.Property<byte>("Level")
+                        .HasColumnType("smallint")
+                        .HasColumnName("level");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("name");
+
+                    b.Property<int[]>("RaceSkills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("race_skills");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_asi");
+                        .HasName("pk_characters");
 
-                    b.HasIndex("RaceId")
-                        .HasDatabaseName("ix_asi_race_id");
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_characters_user_id");
 
-                    b.ToTable("asi", (string)null);
+                    b.ToTable("characters", (string)null);
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Races.Race", b =>
+            modelBuilder.Entity("Data.Entities.CharacterStatsEntity", b =>
+                {
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("character_id");
+
+                    b.Property<int>("Charisma")
+                        .HasColumnType("integer")
+                        .HasColumnName("charisma");
+
+                    b.Property<int>("Constitution")
+                        .HasColumnType("integer")
+                        .HasColumnName("constitution");
+
+                    b.Property<int>("Dexterity")
+                        .HasColumnType("integer")
+                        .HasColumnName("dexterity");
+
+                    b.Property<int>("Intelligence")
+                        .HasColumnType("integer")
+                        .HasColumnName("intelligence");
+
+                    b.Property<int>("Strength")
+                        .HasColumnType("integer")
+                        .HasColumnName("strength");
+
+                    b.Property<int>("Wisdom")
+                        .HasColumnType("integer")
+                        .HasColumnName("wisdom");
+
+                    b.HasKey("CharacterId")
+                        .HasName("pk_character_stats");
+
+                    b.ToTable("character_stats", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.RaceEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -235,10 +373,23 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("text")
                         .HasColumnName("size");
 
+                    b.Property<int>("SkillChoices")
+                        .HasColumnType("integer")
+                        .HasColumnName("skill_choices");
+
+                    b.Property<int[]>("Skills")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("skills");
+
                     b.Property<string>("Traits")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("traits");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer")
+                        .HasColumnName("type");
 
                     b.Property<string>("Vision")
                         .IsRequired()
@@ -248,10 +399,14 @@ namespace Data.Repositories.Migrations
                     b.HasKey("Id")
                         .HasName("pk_races");
 
+                    b.HasIndex("Name")
+                        .IsUnique()
+                        .HasDatabaseName("ix_races_name");
+
                     b.ToTable("races", (string)null);
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Races.Speed", b =>
+            modelBuilder.Entity("Data.Entities.SpeedEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -282,69 +437,7 @@ namespace Data.Repositories.Migrations
                     b.ToTable("speed", (string)null);
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text")
-                        .HasColumnName("concurrency_stamp");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("name");
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)")
-                        .HasColumnName("normalized_name");
-
-                    b.HasKey("Id")
-                        .HasName("pk_asp_net_roles");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasDatabaseName("RoleNameIndex");
-
-                    b.ToTable("asp_net_roles", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("ClaimType")
-                        .HasColumnType("text")
-                        .HasColumnName("claim_type");
-
-                    b.Property<string>("ClaimValue")
-                        .HasColumnType("text")
-                        .HasColumnName("claim_value");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("role_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_asp_net_role_claims");
-
-                    b.HasIndex("RoleId")
-                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
-
-                    b.ToTable("asp_net_role_claims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", b =>
+            modelBuilder.Entity("Data.Entities.UserEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -412,7 +505,8 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("user_name");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_users");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -422,8 +516,68 @@ namespace Data.Repositories.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("asp_net_users", (string)null);
+                });
 
-                    b.UseTptMappingStrategy();
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text")
+                        .HasColumnName("concurrency_stamp");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)")
+                        .HasColumnName("normalized_name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_roles");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasDatabaseName("RoleNameIndex");
+
+                    b.ToTable("asp_net_roles", (string)null);
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("text")
+                        .HasColumnName("claim_type");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("text")
+                        .HasColumnName("claim_value");
+
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("role_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_asp_net_role_claims");
+
+                    b.HasIndex("RoleId")
+                        .HasDatabaseName("ix_asp_net_role_claims_role_id");
+
+                    b.ToTable("asp_net_role_claims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -526,28 +680,9 @@ namespace Data.Repositories.Migrations
                     b.ToTable("asp_net_user_tokens", (string)null);
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.User", b =>
+            modelBuilder.Entity("Data.Entities.AsiEntity", b =>
                 {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>");
-
-                    b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("DndSolution.Application.Models.Models.CharacterStats", b =>
-                {
-                    b.HasOne("DndSolution.Application.Models.Models.Character.Character", "Character")
-                        .WithOne("Stats")
-                        .HasForeignKey("DndSolution.Application.Models.Models.CharacterStats", "CharacterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_character_stats_characters_character_id");
-
-                    b.Navigation("Character");
-                });
-
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Races.Asi", b =>
-                {
-                    b.HasOne("DndSolution.Application.Models.Models.Races.Race", "Race")
+                    b.HasOne("Data.Entities.RaceEntity", "Race")
                         .WithMany("Asi")
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -557,9 +692,31 @@ namespace Data.Repositories.Migrations
                     b.Navigation("Race");
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Races.Speed", b =>
+            modelBuilder.Entity("Data.Entities.CharacterEntity", b =>
                 {
-                    b.HasOne("DndSolution.Application.Models.Models.Races.Race", "Race")
+                    b.HasOne("Data.Entities.UserEntity", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_characters_asp_net_users_user_id");
+                });
+
+            modelBuilder.Entity("Data.Entities.CharacterStatsEntity", b =>
+                {
+                    b.HasOne("Data.Entities.CharacterEntity", "Character")
+                        .WithOne("Stats")
+                        .HasForeignKey("Data.Entities.CharacterStatsEntity", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_stats_characters_character_id");
+
+                    b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("Data.Entities.SpeedEntity", b =>
+                {
+                    b.HasOne("Data.Entities.RaceEntity", "Race")
                         .WithMany("Speed")
                         .HasForeignKey("RaceId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -581,7 +738,7 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
+                    b.HasOne("Data.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -591,7 +748,7 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
+                    b.HasOne("Data.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -608,7 +765,7 @@ namespace Data.Repositories.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_asp_net_user_roles_asp_net_roles_role_id");
 
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
+                    b.HasOne("Data.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -618,7 +775,7 @@ namespace Data.Repositories.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
+                    b.HasOne("Data.Entities.UserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -626,23 +783,13 @@ namespace Data.Repositories.Migrations
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.User", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser<System.Guid>", null)
-                        .WithOne()
-                        .HasForeignKey("DndSolution.Application.Models.User", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_users_asp_net_users_id");
-                });
-
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Character.Character", b =>
+            modelBuilder.Entity("Data.Entities.CharacterEntity", b =>
                 {
                     b.Navigation("Stats")
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("DndSolution.Application.Models.Models.Races.Race", b =>
+            modelBuilder.Entity("Data.Entities.RaceEntity", b =>
                 {
                     b.Navigation("Asi");
 
