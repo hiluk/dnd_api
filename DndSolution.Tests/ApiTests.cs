@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DndSolution.Tests;
 
-public class ApiTests : IClassFixture<ApiFactory>
+public partial class ApiTests : IClassFixture<ApiFactory>
 {
     private const string Password = "Passw0rd";
     private readonly ApiFactory _factory;

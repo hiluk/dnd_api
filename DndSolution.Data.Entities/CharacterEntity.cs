@@ -42,6 +42,29 @@ public class CharacterEntity
     /// Базовые характеристики
     /// </summary>
     public CharacterStatsEntity Stats { get; set; } = null!;
+
+    /// <summary>
+    /// Своя картинка; null — стандартная. Хранится в колонках avatar_* таблицы characters
+    /// </summary>
+    public CharacterAvatarEntity? Avatar { get; set; }
+}
+
+/// <summary>
+/// Своя картинка персонажа (часть таблицы characters)
+/// </summary>
+public class CharacterAvatarEntity
+{
+    public string FileName { get; set; } = string.Empty;
+
+    public bool HasTransparency { get; set; }
+
+    public AvatarMode Mode { get; set; }
+
+    public double OffsetX { get; set; }
+
+    public double OffsetY { get; set; }
+
+    public double Scale { get; set; }
 }
 
 /// <summary>

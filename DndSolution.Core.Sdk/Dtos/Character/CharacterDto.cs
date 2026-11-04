@@ -76,4 +76,9 @@ public class CharacterDto
     /// Итоговые и производные значения
     /// </summary>
     public required CharacterSheetDto Sheet { get; init; }
+
+    /// <summary>
+    /// Своя картинка; null — стандартная картинка класса
+    /// </summary>
+    public CharacterAvatarDto? Avatar { get; init; }
 }

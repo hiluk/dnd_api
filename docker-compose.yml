@@ -12,6 +12,9 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__Postgres: Host=postgres;Port=5432;Database=dnd_db;Username=${POSTGRES_USER:-dnd};Password=${POSTGRES_PASSWORD:-dnd}
+      Avatars__Path: /data/avatars
+    volumes:
+      - avatars:/data/avatars
     restart: unless-stopped
 
   postgres:
@@ -34,3 +37,4 @@ services:
 
 volumes:
   postgres:
+  avatars:

@@ -20,6 +20,7 @@ public class CharacterService : ICharacterService
     private readonly IClassesRepository _classes;
     private readonly IBackgroundsRepository _backgrounds;
     private readonly IAbilityRollService _rolls;
+    private readonly IAvatarStorage _avatars;
 
     /// <summary>
     /// .ctor
@@ -29,13 +30,15 @@ public class CharacterService : ICharacterService
         IRacesRepository races,
         IClassesRepository classes,
         IBackgroundsRepository backgrounds,
-        IAbilityRollService rolls)
+        IAbilityRollService rolls,
+        IAvatarStorage avatars)
     {
         _repository = repository;
         _races = races;
         _classes = classes;
         _backgrounds = backgrounds;
         _rolls = rolls;
+        _avatars = avatars;
     }
 
     /// <inheritdoc />
@@ -106,8 +109,22 @@ public class CharacterService : ICharacterService
     }
 
     /// <inheritdoc />
-    public Task<bool> DeleteCharacterAsync(Guid id, Guid userId, CancellationToken token)
-        => _repository.DeleteCharacterAsync(userId, id, token);
+    public async Task<bool> DeleteCharacterAsync(Guid id, Guid userId, CancellationToken token)
+    {
+        // Файл своей картинки удаляем вместе с персонажем
+        var character = await _repository.GetCharacterByIdAsync(userId, id, token);
+        if (character is null || !await _repository.DeleteCharacterAsync(userId, id, token))
+        {
+            return false;
+        }
+
+        if (character.Avatar is not null)
+        {
+            _avatars.Delete(character.Avatar.FileName);
+        }
+
+        return true;
+    }
 
     private CharacterDraft WithRolls(CharacterDraft draft, Guid userId, string? rollToken) =>
         draft.Method == GenerationMethod.Roll

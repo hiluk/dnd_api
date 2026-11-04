@@ -1,5 +1,6 @@
 using Data.Entities;
 using DndSolution.Application.Models.Models;
+using DndSolution.Application.Models.Models.Avatars;
 using DndSolution.Application.Models.Models.Backgrounds;
 using DndSolution.Application.Models.Models.Character;
 using DndSolution.Application.Models.Models.Classes;
@@ -36,6 +37,27 @@ internal static class EntityMappings
             Wisdom = entity.Stats.Wisdom,
             Charisma = entity.Stats.Charisma,
         },
+        Avatar = entity.Avatar?.ToModel(),
+    };
+
+    public static CharacterAvatar ToModel(this CharacterAvatarEntity entity) => new()
+    {
+        FileName = entity.FileName,
+        HasTransparency = entity.HasTransparency,
+        Mode = entity.Mode,
+        OffsetX = entity.OffsetX,
+        OffsetY = entity.OffsetY,
+        Scale = entity.Scale,
+    };
+
+    public static CharacterAvatarEntity ToEntity(this CharacterAvatar model) => new()
+    {
+        FileName = model.FileName,
+        HasTransparency = model.HasTransparency,
+        Mode = model.Mode,
+        OffsetX = model.OffsetX,
+        OffsetY = model.OffsetY,
+        Scale = model.Scale,
     };
 
     public static CharacterEntity ToEntity(this Character model, Guid userId, DateTime creationTime) => new()
@@ -63,6 +85,7 @@ internal static class EntityMappings
             Wisdom = model.Stats.Wisdom,
             Charisma = model.Stats.Charisma,
         },
+        Avatar = model.Avatar?.ToEntity(),
     };
 
     public static Race ToModel(this RaceEntity entity) => new()

@@ -32,5 +32,11 @@ public static class DIExtensions
         services.AddScoped<IClassesRepository, ClassesRepository>();
         services.AddScoped<ICharactersRepository, CharactersRepository>();
         services.AddScoped<IBackgroundsRepository, BackgroundsRepository>();
+
+        // Картинки персонажей лежат на диске. В Docker папку стоит вынести в том
+        var avatarsPath = configuration["Avatars:Path"] is { Length: > 0 } path
+            ? path
+            : Path.Combine(environment.ContentRootPath, "data", "avatars");
+        services.AddSingleton<IAvatarStorage>(new FileAvatarStorage(avatarsPath));
     }
 }

@@ -700,6 +700,49 @@ namespace Data.Repositories.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_characters_asp_net_users_user_id");
+
+                    b.OwnsOne("Data.Entities.CharacterAvatarEntity", "Avatar", b1 =>
+                        {
+                            b1.Property<Guid>("CharacterEntityId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("FileName")
+                                .IsRequired()
+                                .HasMaxLength(64)
+                                .HasColumnType("character varying(64)")
+                                .HasColumnName("avatar_file_name");
+
+                            b1.Property<bool>("HasTransparency")
+                                .HasColumnType("boolean")
+                                .HasColumnName("avatar_has_transparency");
+
+                            b1.Property<int>("Mode")
+                                .HasColumnType("integer")
+                                .HasColumnName("avatar_mode");
+
+                            b1.Property<double>("OffsetX")
+                                .HasColumnType("double precision")
+                                .HasColumnName("avatar_offset_x");
+
+                            b1.Property<double>("OffsetY")
+                                .HasColumnType("double precision")
+                                .HasColumnName("avatar_offset_y");
+
+                            b1.Property<double>("Scale")
+                                .HasColumnType("double precision")
+                                .HasColumnName("avatar_scale");
+
+                            b1.HasKey("CharacterEntityId");
+
+                            b1.ToTable("characters", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("CharacterEntityId")
+                                .HasConstraintName("fk_characters_characters_character_entity_id");
+                        });
+
+                    b.Navigation("Avatar");
                 });
 
             modelBuilder.Entity("Data.Entities.CharacterStatsEntity", b =>

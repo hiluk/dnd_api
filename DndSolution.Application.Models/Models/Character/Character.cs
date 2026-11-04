@@ -1,4 +1,5 @@
 ﻿using DndSolution.Application.Models.Enums;
+using DndSolution.Application.Models.Models.Avatars;
 
 namespace DndSolution.Application.Models.Models.Character;
 
@@ -65,4 +66,9 @@ public class Character
     /// Навыки с компетентностью (плут)
     /// </summary>
     public List<Skill> Expertise { get; init; } = [];
+
+    /// <summary>
+    /// Своя картинка; null — стандартная картинка класса
+    /// </summary>
+    public CharacterAvatar? Avatar { get; set; }
 }
