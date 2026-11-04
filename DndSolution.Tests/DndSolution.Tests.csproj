@@ -23,4 +23,9 @@
         <ProjectReference Include="..\DndSolution.Core.Api\DndSolution.Core.Api.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <!-- Общие примеры правил сессии: те же проверяет приложение -->
+        <None Include="..\docs\session-rules-cases.json" Link="session-rules-cases.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
 </Project>
