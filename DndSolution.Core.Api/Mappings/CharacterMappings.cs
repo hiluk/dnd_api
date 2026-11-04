@@ -42,6 +42,7 @@ public static class CharacterMappings
             ClassSkills = character.ClassSkills.ToDto(),
             Expertise = character.Expertise.ToDto(),
             Sheet = sheet.ToDto(),
+            Avatar = character.Avatar?.ToDto(character.Id),
         };
     }
 

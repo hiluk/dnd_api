@@ -70,6 +70,20 @@ public class DndContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid
                 .HasForeignKey<CharacterStatsEntity>(x => x.CharacterId)
                 .OnDelete(DeleteBehavior.Cascade)
                 .IsRequired();
+            character.OwnsOne(x => x.Avatar, avatar =>
+            {
+                // Колонки в той же таблице: ключ владельца — это id персонажа.
+                // Без явного имени snake_case-конвенция назовёт его character_entity_id
+                avatar.ToTable("characters");
+                avatar.Property<Guid>("CharacterEntityId").HasColumnName("id");
+                avatar.Property(x => x.FileName).HasColumnName("avatar_file_name").HasMaxLength(64);
+                avatar.Property(x => x.HasTransparency).HasColumnName("avatar_has_transparency");
+                avatar.Property(x => x.Mode).HasColumnName("avatar_mode");
+                avatar.Property(x => x.OffsetX).HasColumnName("avatar_offset_x");
+                avatar.Property(x => x.OffsetY).HasColumnName("avatar_offset_y");
+                avatar.Property(x => x.Scale).HasColumnName("avatar_scale");
+            });
+            character.Navigation(x => x.Avatar).IsRequired(false);
         });
         modelBuilder.Entity<CharacterStatsEntity>().ToTable("character_stats").HasKey(x => x.CharacterId);
     }

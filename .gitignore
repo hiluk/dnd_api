@@ -8,3 +8,6 @@ riderModule.iml
 *.user
 *.DotSettings.user
 .env
+
+# Загруженные картинки персонажей
+**/data/avatars/

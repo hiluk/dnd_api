@@ -1,3 +1,4 @@
+using DndSolution.Application.Models.Models.Avatars;
 using DndSolution.Application.Models.Models.Character;
 
 namespace Data.Abstractions;
@@ -39,4 +40,10 @@ public interface ICharactersRepository
     /// <param name="token">Токен отмены операции</param>
     /// <returns>true, если персонаж был удален</returns>
     public Task<bool> DeleteCharacterAsync(Guid userId, Guid id, CancellationToken token);
+
+    /// <summary>
+    /// Записать или убрать (null) свою картинку персонажа
+    /// </summary>
+    /// <returns>false — персонаж не найден</returns>
+    public Task<bool> SetAvatarAsync(Guid userId, Guid id, CharacterAvatar? avatar, CancellationToken token);
 }

@@ -11,6 +11,8 @@ public static class ConfigureServicesExtensions
         services.AddScoped<IClassService, ClassService>();
         services.AddScoped<ICharacterService, CharacterService>();
         services.AddSingleton<IAbilityRollService, AbilityRollService>();
+        services.AddSingleton<IImageProcessor, SkiaImageProcessor>();
+        services.AddScoped<ICharacterAvatarService, CharacterAvatarService>();
 
         return services;
     }

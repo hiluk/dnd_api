@@ -1,5 +1,6 @@
 using Data.Abstractions;
 using Data.Repositories.Mappings;
+using DndSolution.Application.Models.Models.Avatars;
 using DndSolution.Application.Models.Models.Character;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,5 +66,20 @@ public class CharactersRepository : ICharactersRepository
             .ExecuteDeleteAsync(token);
 
         return deleted > 0;
+    }
+
+    public async Task<bool> SetAvatarAsync(Guid userId, Guid id, CharacterAvatar? avatar, CancellationToken token)
+    {
+        var entity = await _context.Characters
+            .FirstOrDefaultAsync(c => c.UserId == userId && c.Id == id, token);
+        if (entity is null)
+        {
+            return false;
+        }
+
+        entity.Avatar = avatar?.ToEntity();
+        await _context.SaveChangesAsync(token);
+
+        return true;
     }
 }

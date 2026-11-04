@@ -1,3 +1,4 @@
+using DndSolution.Application.Models.Models.Avatars;
 using DndSolution.Application.Models.Models.Rules;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
@@ -5,7 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace Core.Api;
 
 /// <summary>
-/// Превращает нарушение правил создания персонажа в 400 ValidationProblemDetails
+/// Превращает нарушение правил создания персонажа и ошибки картинки
+/// в 400 ValidationProblemDetails
 /// </summary>
 public class CharacterRulesExceptionHandler : IExceptionHandler
 {
@@ -18,7 +20,13 @@ public class CharacterRulesExceptionHandler : IExceptionHandler
 
     public async ValueTask<bool> TryHandleAsync(HttpContext context, Exception exception, CancellationToken token)
     {
-        if (exception is not CharacterRulesException rules)
+        var (errors, title) = exception switch
+        {
+            CharacterRulesException rules => (rules.Errors, "Персонаж не соответствует правилам"),
+            AvatarException avatar => (avatar.Errors, "Картинка не подходит"),
+            _ => (null, null),
+        };
+        if (errors is null)
         {
             return false;
         }
@@ -29,9 +37,9 @@ public class CharacterRulesExceptionHandler : IExceptionHandler
         {
             HttpContext = context,
             Exception = exception,
-            ProblemDetails = new ValidationProblemDetails(rules.Errors.ToDictionary(x => x.Key, x => x.Value))
+            ProblemDetails = new ValidationProblemDetails(errors.ToDictionary(x => x.Key, x => x.Value))
             {
-                Title = "Персонаж не соответствует правилам",
+                Title = title,
                 Status = StatusCodes.Status400BadRequest,
             },
         });

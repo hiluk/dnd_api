@@ -16,10 +16,17 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         Environment.GetEnvironmentVariable("DND_TEST_POSTGRES")
         ?? "Host=localhost;Port=5432;Database=dnd_test;Username=dnd;Password=dnd";
 
+    /// <summary>
+    /// Временная папка для картинок персонажей на время прогона
+    /// </summary>
+    public string AvatarsPath { get; } =
+        Path.Combine(Path.GetTempPath(), "dnd_test_avatars", Guid.NewGuid().ToString("N"));
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Development");
         builder.UseSetting("ConnectionStrings:Postgres", ConnectionString);
+        builder.UseSetting("Avatars:Path", AvatarsPath);
     }
 
     public async Task InitializeAsync()
@@ -35,5 +42,13 @@ public class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
         _ = Server;
     }
 
-    Task IAsyncLifetime.DisposeAsync() => Task.CompletedTask;
+    Task IAsyncLifetime.DisposeAsync()
+    {
+        if (Directory.Exists(AvatarsPath))
+        {
+            Directory.Delete(AvatarsPath, recursive: true);
+        }
+
+        return Task.CompletedTask;
+    }
 }

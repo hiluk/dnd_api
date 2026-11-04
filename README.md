@@ -54,9 +54,16 @@ dotnet test
 | POST | `/characters/create` | Создать персонажа 1 уровня из черновика |
 | GET | `/characters` | Персонажи текущего пользователя (с вычисленным листом `sheet`) |
 | GET | `/characters/{id}` | Персонаж по Id |
-| DELETE | `/characters/{id}` | Удалить персонажа |
+| DELETE | `/characters/{id}` | Удалить персонажа (вместе с его картинкой) |
+| PUT | `/characters/{id}/avatar` | Загрузить свою картинку: multipart, поле `file`, JPEG/PNG/WebP до 5 МБ → `{ url, hasTransparency, mode, offsetX, offsetY, scale }` |
+| PATCH | `/characters/{id}/avatar` | Вид и кадр `{ mode, offsetX, offsetY, scale }`: `mode` 1 — в рамке, 2 — фигура (только при прозрачном фоне); сдвиг от -1 до 1, увеличение от 1 до 4 |
+| GET | `/characters/{id}/avatar` | Файл картинки, только владельцу |
+| DELETE | `/characters/{id}/avatar` | Вернуть стандартную картинку класса |
 
 Ошибки возвращаются в формате `ProblemDetails` / `ValidationProblemDetails`.
+
+Свои картинки персонажей сервер уменьшает до 1024 px, поворачивает по EXIF и хранит на диске
+в папке `Avatars:Path` (по умолчанию `data/avatars` рядом с приложением; в Docker — том `avatars`).
 
 Персонаж создаётся по правилам «Книги игрока»: стандартный набор, покупка очков или броски,
 бонусы расы и производные значения считает сервер (`CharacterRules`). Подробности — в
