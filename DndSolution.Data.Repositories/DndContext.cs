@@ -109,8 +109,10 @@ public class DndContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid
                 .HasForeignKey(x => x.CharacterId)
                 .OnDelete(DeleteBehavior.Cascade);
             sessionEvent.HasIndex(x => new { x.CharacterId, x.ReceivedAt });
-            sessionEvent.Property(x => x.Action).HasColumnType("jsonb");
-            sessionEvent.Property(x => x.Result).HasColumnType("jsonb");
+            // json, а не jsonb: jsonb переставляет ключи, а поле type
+            // полиморфного действия должно идти первым
+            sessionEvent.Property(x => x.Action).HasColumnType("json");
+            sessionEvent.Property(x => x.Result).HasColumnType("json");
         });
     }
 }

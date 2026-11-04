@@ -470,7 +470,7 @@ namespace Data.Repositories.Migrations
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("jsonb")
+                        .HasColumnType("json")
                         .HasColumnName("action");
 
                     b.Property<Guid>("CharacterId")
@@ -487,7 +487,7 @@ namespace Data.Repositories.Migrations
 
                     b.Property<string>("Result")
                         .IsRequired()
-                        .HasColumnType("jsonb")
+                        .HasColumnType("json")
                         .HasColumnName("result");
 
                     b.HasKey("Id")

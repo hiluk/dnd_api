@@ -61,6 +61,12 @@ public partial class ApiTests
         var stable = await ActAsync(client, id, Act("deathSave", new { roll = 18 }));
 
         Assert.True(stable["session"]!["isStable"]!.GetValue<bool>());
+
+        // Журнал читается со всеми видами действий (в том числе спасбросками)
+        var events = (await client.GetFromJsonAsync<JsonArray>($"/characters/{id}/events"))!;
+        Assert.Equal(6, events.Count);
+        Assert.Equal(18, events[0]!["roll"]!.GetValue<int>());
+        Assert.Equal("deathSave", events[0]!["type"]!.GetValue<string>());
         Assert.Equal(
             new[] { "deathSaveSuccess", "stabilized" },
             stable["event"]!["outcomes"]!.AsArray().Select(o => o!.GetValue<string>()));

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Repositories.Migrations
 {
     [DbContext(typeof(DndContext))]
-    [Migration("20261104102825_GameSession")]
+    [Migration("20261104104326_GameSession")]
     partial class GameSession
     {
         /// <inheritdoc />
@@ -473,7 +473,7 @@ namespace Data.Repositories.Migrations
 
                     b.Property<string>("Action")
                         .IsRequired()
-                        .HasColumnType("jsonb")
+                        .HasColumnType("json")
                         .HasColumnName("action");
 
                     b.Property<Guid>("CharacterId")
@@ -490,7 +490,7 @@ namespace Data.Repositories.Migrations
 
                     b.Property<string>("Result")
                         .IsRequired()
-                        .HasColumnType("jsonb")
+                        .HasColumnType("json")
                         .HasColumnName("result");
 
                     b.HasKey("Id")

@@ -46,8 +46,8 @@ namespace Data.Repositories.Migrations
                     character_id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     received_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    action = table.Column<string>(type: "jsonb", nullable: false),
-                    result = table.Column<string>(type: "jsonb", nullable: false)
+                    action = table.Column<string>(type: "json", nullable: false),
+                    result = table.Column<string>(type: "json", nullable: false)
                 },
                 constraints: table =>
                 {
