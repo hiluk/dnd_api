@@ -334,6 +334,13 @@ namespace Data.Repositories.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("hit_dice_spent");
 
+                    b.Property<string>("Inventory")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("jsonb")
+                        .HasColumnName("inventory")
+                        .HasDefaultValueSql("'{}'::jsonb");
+
                     b.Property<bool>("IsDead")
                         .HasColumnType("boolean")
                         .HasColumnName("is_dead");

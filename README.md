@@ -48,6 +48,7 @@ dotnet test
 | POST | `/login` | Вход по логину или эмейлу `{ login, password }` → `{ accessToken, refreshToken, expiresIn }` |
 | POST | `/refresh` | Новая пара токенов `{ refreshToken }` |
 | GET | `/races`, `/classes` | Справочники (без авторизации) |
+| GET | `/items` | Справочник предметов SRD 5.1: оружие, доспехи, боеприпасы, зелья, снаряжение, наборы (без авторизации) |
 | POST | `/races/save-new`, `/classes/save-new` | Добавить в справочник (роль `Admin`) |
 | POST | `/abilities/roll` | Бросить 4к6 для шести характеристик → `{ values, token }` |
 | POST | `/characters/preview` | Проверить черновик по правилам и посчитать лист, не сохраняя |
@@ -59,15 +60,17 @@ dotnet test
 | PATCH | `/characters/{id}/avatar` | Вид и кадр `{ mode, offsetX, offsetY, scale }`: `mode` 1 — в рамке, 2 — фигура (только при прозрачном фоне); сдвиг от -1 до 1, увеличение от 1 до 4 |
 | GET | `/characters/{id}/avatar` | Файл картинки, только владельцу |
 | DELETE | `/characters/{id}/avatar` | Вернуть стандартную картинку класса |
-| GET | `/characters/{id}/session` | Игровая сессия: хиты, временные хиты, кости хитов, спасброски от смерти, состояния, истощение |
-| POST | `/characters/{id}/actions` | Действие в сессии `{ id, createdAt, type, … }`: `damage`, `heal`, `tempHp`, `setHp`, `deathSave`, `stabilize`, `spendHitDie`, `longRest`, `setCondition`, `setExhaustion`. Повтор с тем же `id` не применяется |
+| GET | `/characters/{id}/session` | Игровая сессия: хиты, временные хиты, кости хитов, спасброски от смерти, состояния, истощение, снаряжение и монеты; `equipment` — КД, скорость, вес и атаки по надетому |
+| POST | `/characters/{id}/actions` | Действие в сессии `{ id, createdAt, type, … }`: `damage`, `heal`, `tempHp`, `setHp`, `deathSave`, `stabilize`, `spendHitDie`, `longRest`, `setCondition`, `setExhaustion`, `addItem`, `removeItem`, `setEquipped`, `changeCurrency`, `drinkPotion`, `useAmmo`. Повтор с тем же `id` не применяется |
 | GET | `/characters/{id}/events` | Журнал сессии от новых к старым (`?before=…&limit=50`) |
 
 Ошибки возвращаются в формате `ProblemDetails` / `ValidationProblemDetails`.
 
-Правила игровой сессии (`SessionRules`) повторены в приложении. Общий набор примеров
-[`docs/session-rules-cases.json`](docs/session-rules-cases.json) проверяют тесты сервера и клиента;
-при изменении правил меняйте его в обоих репозиториях.
+Правила игровой сессии (`SessionRules`, `InventoryRules`, `EquipmentRules`) повторены в приложении.
+Общие наборы примеров [`docs/session-rules-cases.json`](docs/session-rules-cases.json) и
+[`docs/equipment-rules-cases.json`](docs/equipment-rules-cases.json) проверяют тесты сервера и клиента;
+при изменении правил меняйте их в обоих репозиториях. Справочник предметов лежит в
+`DndSolution.Application.Services/Catalog/items.json` (SRD 5.1, CC BY 4.0).
 
 Свои картинки персонажей сервер уменьшает до 1024 px, поворачивает по EXIF и хранит на диске
 в папке `Avatars:Path` (по умолчанию `data/avatars` рядом с приложением; в Docker — том `avatars`).

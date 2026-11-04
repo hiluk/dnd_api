@@ -1,4 +1,5 @@
 using DndSolution.Application.Models.Enums;
+using DndSolution.Application.Models.Models.Items;
 using DndSolution.Application.Models.Models.Session;
 
 namespace DndSolution.Application.Services.Rules;
@@ -26,7 +27,10 @@ public static class SessionRules
 
     public static SessionResult Apply(SessionContext context, SessionState state, SessionAction action)
     {
-        if (state.IsDead && action is not (SessionAction.SetHp or SessionAction.SetCondition or SessionAction.SetExhaustion))
+        // Погибшему можно вернуть хиты, поменять состояния и разобрать снаряжение
+        if (state.IsDead && action is not (SessionAction.SetHp or SessionAction.SetCondition
+                or SessionAction.SetExhaustion or SessionAction.AddItem or SessionAction.RemoveItem
+                or SessionAction.SetEquipped or SessionAction.ChangeCurrency or SessionAction.UseAmmo))
         {
             throw new SessionRulesException("Action", "Персонаж погиб. Верните ему хиты вручную, если его воскресили");
         }
@@ -43,6 +47,12 @@ public static class SessionRules
             SessionAction.LongRest => LongRest(context, state),
             SessionAction.SetCondition condition => SetCondition(state, condition),
             SessionAction.SetExhaustion exhaustion => SetExhaustion(context, state, exhaustion),
+            SessionAction.AddItem add => Inventory(state, InventoryRules.Add(context, state.Inventory, add)),
+            SessionAction.RemoveItem remove => Inventory(state, InventoryRules.Remove(state.Inventory, remove)),
+            SessionAction.SetEquipped equip => Inventory(state, InventoryRules.SetEquipped(context, state.Inventory, equip)),
+            SessionAction.ChangeCurrency currency => Inventory(state, InventoryRules.ChangeCurrency(state.Inventory, currency)),
+            SessionAction.UseAmmo ammo => Inventory(state, InventoryRules.UseAmmo(context, state.Inventory, ammo)),
+            SessionAction.DrinkPotion potion => DrinkPotion(context, state, potion),
             _ => throw new SessionRulesException("Action", "Неизвестное действие"),
         };
     }
@@ -303,6 +313,32 @@ public static class SessionRules
         }
 
         return new SessionResult(next, state, outcomes);
+    }
+
+    private static SessionResult Inventory(SessionState state, InventoryState inventory) =>
+        new(state with { Inventory = inventory }, state, []);
+
+    /// <summary>
+    /// Зелье: лечение на выпавшее значение, как обычное лечение, и зелий на одно меньше
+    /// </summary>
+    private static SessionResult DrinkPotion(SessionContext context, SessionState state, SessionAction.DrinkPotion action)
+    {
+        var (item, definition) = InventoryRules.Find(context, state.Inventory, action.ItemId);
+        if (definition?.Potion is null)
+        {
+            throw new SessionRulesException("ItemId", "Это не зелье");
+        }
+
+        var dice = DiceFormula.Parse(definition.Potion.Heal);
+        if (action.Roll < dice.Min || action.Roll > dice.Max)
+        {
+            throw new SessionRulesException("Roll", $"На {dice} выпадает от {dice.Min} до {dice.Max}");
+        }
+
+        var healed = Heal(context, state, new SessionAction.Heal(action.Roll));
+        var inventory = InventoryRules.Remove(state.Inventory, new SessionAction.RemoveItem(item.Id, 1));
+
+        return healed with { State = healed.State with { Inventory = inventory } };
     }
 
     private static SessionState Dead(SessionState state) =>

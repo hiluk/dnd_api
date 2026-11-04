@@ -1,6 +1,7 @@
 using System.Text.Json;
 using Data.Abstractions;
 using Data.Entities;
+using DndSolution.Application.Models.Models.Items;
 using DndSolution.Application.Models.Models.Session;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
@@ -87,8 +88,11 @@ public class SessionRepository : ISessionRepository
         return entities.Select(ToModel).ToList();
     }
 
+    /// <summary>
+    /// Состояния равны: сравниваем JSON, потому что в состоянии есть списки
+    /// </summary>
     private static bool Same(SessionState a, SessionState b) =>
-        a with { Conditions = [] } == b with { Conditions = [] } && a.Conditions.SequenceEqual(b.Conditions);
+        JsonSerializer.Serialize(a, Json) == JsonSerializer.Serialize(b, Json);
 
     private static SessionState ToModel(CharacterSessionEntity entity) => new()
     {
@@ -101,6 +105,7 @@ public class SessionRepository : ISessionRepository
         IsDead = entity.IsDead,
         Conditions = entity.Conditions.ToList(),
         Exhaustion = entity.Exhaustion,
+        Inventory = JsonSerializer.Deserialize<InventoryState>(entity.Inventory, Json) ?? new InventoryState(),
     };
 
     private static void Apply(CharacterSessionEntity entity, SessionState state)
@@ -114,6 +119,7 @@ public class SessionRepository : ISessionRepository
         entity.IsDead = state.IsDead;
         entity.Conditions = state.Conditions.ToList();
         entity.Exhaustion = state.Exhaustion;
+        entity.Inventory = JsonSerializer.Serialize(state.Inventory, Json);
     }
 
     private static SessionEvent ToModel(SessionEventEntity entity) => new(

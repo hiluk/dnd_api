@@ -26,6 +26,7 @@
     <ItemGroup>
         <!-- Общие примеры правил сессии: те же проверяет приложение -->
         <None Include="..\docs\session-rules-cases.json" Link="session-rules-cases.json" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="..\docs\equipment-rules-cases.json" Link="equipment-rules-cases.json" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>
