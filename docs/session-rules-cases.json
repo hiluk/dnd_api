@@ -1,0 +1,1995 @@
+{
+ "description": "Общие примеры правил игровой сессии. Проверяются тестами сервера (SessionRulesTests) и приложения (session_rules_test.dart); при изменении правил меняйте этот файл в обоих репозиториях.",
+ "cases": [
+  {
+   "name": "Урон уменьшает хиты",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 12,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 26,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Временные хиты поглощают урон первыми",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 5,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 12,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 31,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 5
+   }
+  },
+  {
+   "name": "Урон целиком в временные хиты",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 10,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 4,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 38,
+     "tempHp": 6,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 4
+   }
+  },
+  {
+   "name": "Урон до 0 — без сознания",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 10,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "knockedOut"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Урон больше хитов, но меньше максимума после 0",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 64,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "knockedOut"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Остаток урона не меньше максимума — мгновенная смерть",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 65,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "instantDeath",
+     "died"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Урон по лежащему — провал спасброска",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 1,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 3,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 1,
+     "deathFailures": 1,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Критический удар по лежащему — два провала",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 3,
+    "critical": true
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 2,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Третий провал от урона — смерть",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 2,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 1,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure",
+     "died"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Урон по стабильному снимает стабильность",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": true,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 2,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 1,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Урон по лежащему не меньше максимума — смерть",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 55,
+    "critical": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "instantDeath",
+     "died"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Урон по погибшему недоступен",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": true,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": 5,
+    "critical": false
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Отрицательный урон недопустим",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "damage",
+    "amount": -1,
+    "critical": false
+   },
+   "error": "Amount"
+  },
+  {
+   "name": "Лечение не выше максимума",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 50,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "heal",
+    "amount": 10
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 5,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Лечение с 0 приводит в сознание и сбрасывает спасброски",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 2,
+    "deathFailures": 1,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "heal",
+    "amount": 9
+   },
+   "expect": {
+    "state": {
+     "currentHp": 9,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "revived"
+    ],
+    "healed": 9,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Лечение при истощении 4 — максимум вдвое меньше",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 4
+   },
+   "action": {
+    "type": "heal",
+    "amount": 30
+   },
+   "expect": {
+    "state": {
+     "currentHp": 27,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 4
+    },
+    "outcomes": [],
+    "healed": 7,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Временные хиты не складываются — остаётся большее",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 8,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "tempHp",
+    "amount": 5
+   },
+   "expect": {
+    "state": {
+     "currentHp": 38,
+     "tempHp": 8,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Временные хиты: новое значение больше",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 3,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "tempHp",
+    "amount": 5
+   },
+   "expect": {
+    "state": {
+     "currentHp": 38,
+     "tempHp": 5,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Ручная правка хитов",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setHp",
+    "amount": 15
+   },
+   "expect": {
+    "state": {
+     "currentHp": 15,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Ручная правка до 0 — без сознания",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 38,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setHp",
+    "amount": 0
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "knockedOut"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Ручная правка с 0 приводит в сознание",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 2,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setHp",
+    "amount": 5
+   },
+   "expect": {
+    "state": {
+     "currentHp": 5,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "revived"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Хиты выше 0 погибшему — воскрешение",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": true,
+    "conditions": [],
+    "exhaustion": 6
+   },
+   "action": {
+    "type": "setHp",
+    "amount": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 1,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 5
+    },
+    "outcomes": [
+     "resurrected"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Воскресить с 0 хитов нельзя",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": true,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setHp",
+    "amount": 0
+   },
+   "error": "Amount"
+  },
+  {
+   "name": "Хиты выше максимума нельзя",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setHp",
+    "amount": 56
+   },
+   "error": "Amount"
+  },
+  {
+   "name": "Спасбросок 10 — успех",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 10
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 1,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveSuccess"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Спасбросок 9 — провал",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 9
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 1,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Спасбросок 1 — два провала",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 2,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure",
+     "naturalOne"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Спасбросок 20 — встаёт с 1 хитом",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 2,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 20
+   },
+   "expect": {
+    "state": {
+     "currentHp": 1,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "naturalTwenty",
+     "revived"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Третий успех — стабилен",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 2,
+    "deathFailures": 1,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 15
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": true,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveSuccess",
+     "stabilized"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Третий провал — смерть",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 2,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 5
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure",
+     "died"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Единица при одном провале — смерть",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 1,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "deathSaveFailure",
+     "naturalOne",
+     "died"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Спасбросок при хитах недоступен",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 12
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Спасбросок стабильного недоступен",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": true,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 12
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Бросок к20 вне диапазона",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "deathSave",
+    "roll": 21
+   },
+   "error": "Roll"
+  },
+  {
+   "name": "Стабилизация",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 1,
+    "deathFailures": 2,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "stabilize"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": true,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [
+     "stabilized"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Стабилизировать в сознании нельзя",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 5,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "stabilize"
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Кость хитов: бросок плюс Телосложение",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 23,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "spendHitDie",
+    "roll": 7
+   },
+   "expect": {
+    "state": {
+     "currentHp": 33,
+     "tempHp": 0,
+     "hitDiceSpent": 1,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 10,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Кость хитов не лечит выше максимума",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 50,
+    "tempHp": 0,
+    "hitDiceSpent": 1,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "spendHitDie",
+    "roll": 12
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 2,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 5,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Отрицательный модификатор не отнимает хиты",
+   "context": {
+    "baseMaxHp": 20,
+    "hitDie": 6,
+    "level": 3,
+    "conModifier": -2
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "spendHitDie",
+    "roll": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 10,
+     "tempHp": 0,
+     "hitDiceSpent": 1,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Свободных костей нет",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 5,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "spendHitDie",
+    "roll": 5
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Кость хитов к12 вне диапазона",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 10,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "spendHitDie",
+    "roll": 13
+   },
+   "error": "Roll"
+  },
+  {
+   "name": "Без сознания кости не тратят",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "spendHitDie",
+    "roll": 5
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Длинный отдых: хиты, половина костей, истощение −1",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 4,
+    "hitDiceSpent": 4,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [
+     10
+    ],
+    "exhaustion": 2
+   },
+   "action": {
+    "type": "longRest"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 2,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [
+      10
+     ],
+     "exhaustion": 1
+    },
+    "outcomes": [],
+    "healed": 35,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Длинный отдых возвращает минимум одну кость",
+   "context": {
+    "baseMaxHp": 8,
+    "hitDie": 8,
+    "level": 1,
+    "conModifier": 0
+   },
+   "state": {
+    "currentHp": 5,
+    "tempHp": 0,
+    "hitDiceSpent": 1,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "longRest"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 8,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 3,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Длинный отдых с 4 на 3 истощения возвращает полный максимум",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 27,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 4
+   },
+   "action": {
+    "type": "longRest"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 3
+    },
+    "outcomes": [],
+    "healed": 28,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Длинный отдых без хитов недоступен",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": true,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "longRest"
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Состояние включается",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [
+     1
+    ],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setCondition",
+    "condition": 10,
+    "active": true
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [
+      1,
+      10
+     ],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Состояние выключается",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [
+     1,
+     10
+    ],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setCondition",
+    "condition": 1,
+    "active": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [
+      10
+     ],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Повторное включение не дублирует",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [
+     10
+    ],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setCondition",
+    "condition": 10,
+    "active": true
+   },
+   "expect": {
+    "state": {
+     "currentHp": 55,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [
+      10
+     ],
+     "exhaustion": 0
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Неизвестное состояние",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setCondition",
+    "condition": 99,
+    "active": true
+   },
+   "error": "Condition"
+  },
+  {
+   "name": "Истощение 4 урезает хиты до половины максимума",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 40,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setExhaustion",
+    "level": 4
+   },
+   "expect": {
+    "state": {
+     "currentHp": 27,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 4
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Истощение 6 — смерть",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 40,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setExhaustion",
+    "level": 6
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 6
+    },
+    "outcomes": [
+     "died"
+    ],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Истощение вне диапазона",
+   "context": {
+    "baseMaxHp": 55,
+    "hitDie": 12,
+    "level": 5,
+    "conModifier": 3
+   },
+   "state": {
+    "currentHp": 55,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0
+   },
+   "action": {
+    "type": "setExhaustion",
+    "level": 7
+   },
+   "error": "Level"
+  }
+ ]
+}

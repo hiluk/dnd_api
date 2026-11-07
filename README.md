@@ -59,8 +59,15 @@ dotnet test
 | PATCH | `/characters/{id}/avatar` | Вид и кадр `{ mode, offsetX, offsetY, scale }`: `mode` 1 — в рамке, 2 — фигура (только при прозрачном фоне); сдвиг от -1 до 1, увеличение от 1 до 4 |
 | GET | `/characters/{id}/avatar` | Файл картинки, только владельцу |
 | DELETE | `/characters/{id}/avatar` | Вернуть стандартную картинку класса |
+| GET | `/characters/{id}/session` | Игровая сессия: хиты, временные хиты, кости хитов, спасброски от смерти, состояния, истощение |
+| POST | `/characters/{id}/actions` | Действие в сессии `{ id, createdAt, type, … }`: `damage`, `heal`, `tempHp`, `setHp`, `deathSave`, `stabilize`, `spendHitDie`, `longRest`, `setCondition`, `setExhaustion`. Повтор с тем же `id` не применяется |
+| GET | `/characters/{id}/events` | Журнал сессии от новых к старым (`?before=…&limit=50`) |
 
 Ошибки возвращаются в формате `ProblemDetails` / `ValidationProblemDetails`.
+
+Правила игровой сессии (`SessionRules`) повторены в приложении. Общий набор примеров
+[`docs/session-rules-cases.json`](docs/session-rules-cases.json) проверяют тесты сервера и клиента;
+при изменении правил меняйте его в обоих репозиториях.
 
 Свои картинки персонажей сервер уменьшает до 1024 px, поворачивает по EXIF и хранит на диске
 в папке `Avatars:Path` (по умолчанию `data/avatars` рядом с приложением; в Docker — том `avatars`).

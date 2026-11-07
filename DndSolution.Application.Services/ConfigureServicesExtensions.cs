@@ -13,6 +13,7 @@ public static class ConfigureServicesExtensions
         services.AddSingleton<IAbilityRollService, AbilityRollService>();
         services.AddSingleton<IImageProcessor, SkiaImageProcessor>();
         services.AddScoped<ICharacterAvatarService, CharacterAvatarService>();
+        services.AddScoped<ISessionService, SessionService>();
 
         return services;
     }

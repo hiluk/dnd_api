@@ -9,6 +9,8 @@ namespace Data.Repositories;
 public class DndContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid>
 {
     public DbSet<CharacterEntity> Characters => Set<CharacterEntity>();
+    public DbSet<CharacterSessionEntity> Sessions => Set<CharacterSessionEntity>();
+    public DbSet<SessionEventEntity> SessionEvents => Set<SessionEventEntity>();
 
     public DbSet<RaceEntity> Races => Set<RaceEntity>();
 
@@ -86,5 +88,31 @@ public class DndContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid
             character.Navigation(x => x.Avatar).IsRequired(false);
         });
         modelBuilder.Entity<CharacterStatsEntity>().ToTable("character_stats").HasKey(x => x.CharacterId);
+
+        modelBuilder.Entity<CharacterSessionEntity>(session =>
+        {
+            session.ToTable("character_sessions");
+            session.HasKey(x => x.CharacterId);
+            session.HasOne<CharacterEntity>()
+                .WithOne()
+                .HasForeignKey<CharacterSessionEntity>(x => x.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
+            session.Property(x => x.Version).IsRowVersion();
+        });
+
+        modelBuilder.Entity<SessionEventEntity>(sessionEvent =>
+        {
+            sessionEvent.ToTable("session_events");
+            sessionEvent.HasKey(x => x.Id);
+            sessionEvent.HasOne<CharacterEntity>()
+                .WithMany()
+                .HasForeignKey(x => x.CharacterId)
+                .OnDelete(DeleteBehavior.Cascade);
+            sessionEvent.HasIndex(x => new { x.CharacterId, x.ReceivedAt });
+            // json, а не jsonb: jsonb переставляет ключи, а поле type
+            // полиморфного действия должно идти первым
+            sessionEvent.Property(x => x.Action).HasColumnType("json");
+            sessionEvent.Property(x => x.Result).HasColumnType("json");
+        });
     }
 }

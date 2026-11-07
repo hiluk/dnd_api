@@ -303,6 +303,61 @@ namespace Data.Repositories.Migrations
                     b.ToTable("characters", (string)null);
                 });
 
+            modelBuilder.Entity("Data.Entities.CharacterSessionEntity", b =>
+                {
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("character_id");
+
+                    b.Property<int[]>("Conditions")
+                        .IsRequired()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("conditions");
+
+                    b.Property<int>("CurrentHp")
+                        .HasColumnType("integer")
+                        .HasColumnName("current_hp");
+
+                    b.Property<int>("DeathFailures")
+                        .HasColumnType("integer")
+                        .HasColumnName("death_failures");
+
+                    b.Property<int>("DeathSuccesses")
+                        .HasColumnType("integer")
+                        .HasColumnName("death_successes");
+
+                    b.Property<int>("Exhaustion")
+                        .HasColumnType("integer")
+                        .HasColumnName("exhaustion");
+
+                    b.Property<int>("HitDiceSpent")
+                        .HasColumnType("integer")
+                        .HasColumnName("hit_dice_spent");
+
+                    b.Property<bool>("IsDead")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_dead");
+
+                    b.Property<bool>("IsStable")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_stable");
+
+                    b.Property<int>("TempHp")
+                        .HasColumnType("integer")
+                        .HasColumnName("temp_hp");
+
+                    b.Property<uint>("Version")
+                        .IsConcurrencyToken()
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("xid")
+                        .HasColumnName("xmin");
+
+                    b.HasKey("CharacterId")
+                        .HasName("pk_character_sessions");
+
+                    b.ToTable("character_sessions", (string)null);
+                });
+
             modelBuilder.Entity("Data.Entities.CharacterStatsEntity", b =>
                 {
                     b.Property<Guid>("CharacterId")
@@ -404,6 +459,44 @@ namespace Data.Repositories.Migrations
                         .HasDatabaseName("ix_races_name");
 
                     b.ToTable("races", (string)null);
+                });
+
+            modelBuilder.Entity("Data.Entities.SessionEventEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasColumnType("json")
+                        .HasColumnName("action");
+
+                    b.Property<Guid>("CharacterId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("character_id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("ReceivedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("received_at");
+
+                    b.Property<string>("Result")
+                        .IsRequired()
+                        .HasColumnType("json")
+                        .HasColumnName("result");
+
+                    b.HasKey("Id")
+                        .HasName("pk_session_events");
+
+                    b.HasIndex("CharacterId", "ReceivedAt")
+                        .HasDatabaseName("ix_session_events_character_id_received_at");
+
+                    b.ToTable("session_events", (string)null);
                 });
 
             modelBuilder.Entity("Data.Entities.SpeedEntity", b =>
@@ -745,6 +838,16 @@ namespace Data.Repositories.Migrations
                     b.Navigation("Avatar");
                 });
 
+            modelBuilder.Entity("Data.Entities.CharacterSessionEntity", b =>
+                {
+                    b.HasOne("Data.Entities.CharacterEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Data.Entities.CharacterSessionEntity", "CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_sessions_characters_character_id");
+                });
+
             modelBuilder.Entity("Data.Entities.CharacterStatsEntity", b =>
                 {
                     b.HasOne("Data.Entities.CharacterEntity", "Character")
@@ -755,6 +858,16 @@ namespace Data.Repositories.Migrations
                         .HasConstraintName("fk_character_stats_characters_character_id");
 
                     b.Navigation("Character");
+                });
+
+            modelBuilder.Entity("Data.Entities.SessionEventEntity", b =>
+                {
+                    b.HasOne("Data.Entities.CharacterEntity", null)
+                        .WithMany()
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_session_events_characters_character_id");
                 });
 
             modelBuilder.Entity("Data.Entities.SpeedEntity", b =>

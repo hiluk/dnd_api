@@ -1,5 +1,6 @@
 using DndSolution.Application.Models.Models.Avatars;
 using DndSolution.Application.Models.Models.Rules;
+using DndSolution.Application.Models.Models.Session;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,9 @@ public class CharacterRulesExceptionHandler : IExceptionHandler
         {
             CharacterRulesException rules => (rules.Errors, "Персонаж не соответствует правилам"),
             AvatarException avatar => (avatar.Errors, "Картинка не подходит"),
+            SessionRulesException session => (
+                (IReadOnlyDictionary<string, string[]>)new Dictionary<string, string[]> { [session.Field] = [session.Message] },
+                "Действие недоступно"),
             _ => (null, null),
         };
         if (errors is null)
