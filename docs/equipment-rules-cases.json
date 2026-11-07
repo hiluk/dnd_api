@@ -1,0 +1,1448 @@
+{
+ "description": "Общие примеры расчёта снаряжения: КД, скорость, вес и атаки. Проверяются тестами сервера (EquipmentRulesTests) и приложения (equipment_rules_test.dart); при изменении правил меняйте файл в обоих репозиториях.",
+ "cases": [
+  {
+   "name": "Без доспеха: 10 + Ловкость",
+   "profile": {
+    "scores": {
+     "strength": 16,
+     "dexterity": 14,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 12,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 3,
+     "dexterity": 2,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 1,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "heavy",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "greatsword",
+     "handaxe",
+     "longbow",
+     "longsword",
+     "net",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": []
+   },
+   "expect": {
+    "armorClass": 12,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 0,
+    "capacity": 240,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Не надетый доспех не считается",
+   "profile": {
+    "scores": {
+     "strength": 16,
+     "dexterity": 14,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 12,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 3,
+     "dexterity": 2,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 1,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "heavy",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "greatsword",
+     "handaxe",
+     "longbow",
+     "longsword",
+     "net",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": false,
+      "key": "chain-mail"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 12,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 55,
+    "capacity": 240,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Кольчуга, щит и длинный меч",
+   "profile": {
+    "scores": {
+     "strength": 16,
+     "dexterity": 14,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 12,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 3,
+     "dexterity": 2,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 1,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "heavy",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "greatsword",
+     "handaxe",
+     "longbow",
+     "longsword",
+     "net",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "chain-mail"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "quantity": 1,
+      "equipped": true,
+      "key": "shield"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "quantity": 1,
+      "equipped": true,
+      "key": "longsword"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 18,
+    "armorSource": "Кольчуга, щит",
+    "speed": 30,
+    "stealthDisadvantage": true,
+    "weight": 64,
+    "capacity": 240,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000003",
+      "name": "Длинный меч",
+      "attackBonus": 5,
+      "damage": "1к8 + 3",
+      "damageType": "рубящий",
+      "versatile": "1к10 + 3",
+      "range": null,
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": null
+     }
+    ]
+   }
+  },
+  {
+   "name": "Лёгкий доспех: вся Ловкость; фехтовальное — лучшая характеристика",
+   "profile": {
+    "scores": {
+     "strength": 10,
+     "dexterity": 16,
+     "constitution": 12,
+     "intelligence": 12,
+     "wisdom": 10,
+     "charisma": 14
+    },
+    "modifiers": {
+     "strength": 0,
+     "dexterity": 3,
+     "constitution": 1,
+     "intelligence": 1,
+     "wisdom": 0,
+     "charisma": 2
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "hand-crossbow",
+     "rapier",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "leather"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "quantity": 1,
+      "equipped": true,
+      "key": "rapier"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "quantity": 2,
+      "equipped": true,
+      "key": "dagger"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 14,
+    "armorSource": "Кожаный доспех",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 14,
+    "capacity": 150,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000002",
+      "name": "Рапира",
+      "attackBonus": 5,
+      "damage": "1к8 + 3",
+      "damageType": "колющий",
+      "versatile": null,
+      "range": null,
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": null
+     },
+     {
+      "itemId": "00000000-0000-0000-0000-000000000003",
+      "name": "Кинжал",
+      "attackBonus": 5,
+      "damage": "1к4 + 3",
+      "damageType": "колющий",
+      "versatile": null,
+      "range": [
+       20,
+       60
+      ],
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": null
+     }
+    ]
+   }
+  },
+  {
+   "name": "Средний доспех: Ловкость не больше +2; лук со стрелами",
+   "profile": {
+    "scores": {
+     "strength": 12,
+     "dexterity": 18,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 14,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 1,
+     "dexterity": 4,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 2,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "longbow",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "scale-mail"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "quantity": 1,
+      "equipped": true,
+      "key": "longbow"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "quantity": 20,
+      "equipped": false,
+      "key": "arrows"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 16,
+    "armorSource": "Чешуйчатый доспех",
+    "speed": 30,
+    "stealthDisadvantage": true,
+    "weight": 48,
+    "capacity": 180,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000002",
+      "name": "Длинный лук",
+      "attackBonus": 6,
+      "damage": "1к8 + 4",
+      "damageType": "колющий",
+      "versatile": null,
+      "range": [
+       150,
+       600
+      ],
+      "proficient": true,
+      "ammoItemId": "00000000-0000-0000-0000-000000000003",
+      "ammoCount": 20
+     }
+    ]
+   }
+  },
+  {
+   "name": "Лук без стрел",
+   "profile": {
+    "scores": {
+     "strength": 12,
+     "dexterity": 18,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 14,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 1,
+     "dexterity": 4,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 2,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "longbow",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "longbow"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 14,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 2,
+    "capacity": 180,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000001",
+      "name": "Длинный лук",
+      "attackBonus": 6,
+      "damage": "1к8 + 4",
+      "damageType": "колющий",
+      "versatile": null,
+      "range": [
+       150,
+       600
+      ],
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": 0
+     }
+    ]
+   }
+  },
+  {
+   "name": "Тяжёлый доспех без нужной Силы и без владения",
+   "profile": {
+    "scores": {
+     "strength": 8,
+     "dexterity": 12,
+     "constitution": 14,
+     "intelligence": 16,
+     "wisdom": 12,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": -1,
+     "dexterity": 1,
+     "constitution": 2,
+     "intelligence": 3,
+     "wisdom": 1,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [],
+    "weaponProficiencies": [
+     "dagger",
+     "quarterstaff"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "plate"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 18,
+    "armorSource": "Латы",
+    "speed": 20,
+    "stealthDisadvantage": true,
+    "weight": 65,
+    "capacity": 120,
+    "encumbered": false,
+    "warnings": [
+     "Нет владения доспехом «Латы»: помеха на проверки, спасброски и атаки Силы и Ловкости, заклинания недоступны",
+     "Сила 8 меньше 15: скорость −10 фт."
+    ],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Дварфу тяжёлый доспех не мешает",
+   "profile": {
+    "scores": {
+     "strength": 11,
+     "dexterity": 10,
+     "constitution": 16,
+     "intelligence": 10,
+     "wisdom": 12,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 0,
+     "dexterity": 0,
+     "constitution": 3,
+     "intelligence": 0,
+     "wisdom": 1,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 25,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "heavy",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "warhammer"
+    ],
+    "ignoresHeavyArmorSpeed": true
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "plate"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 18,
+    "armorSource": "Латы",
+    "speed": 25,
+    "stealthDisadvantage": true,
+    "weight": 65,
+    "capacity": 165,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Сила не ниже требования — штрафа нет",
+   "profile": {
+    "scores": {
+     "strength": 16,
+     "dexterity": 14,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 12,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 3,
+     "dexterity": 2,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 1,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "heavy",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "greatsword",
+     "handaxe",
+     "longbow",
+     "longsword",
+     "net",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "splint"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 17,
+    "armorSource": "Наборный доспех",
+    "speed": 30,
+    "stealthDisadvantage": true,
+    "weight": 60,
+    "capacity": 240,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Варвар: защита без доспеха",
+   "profile": {
+    "scores": {
+     "strength": 15,
+     "dexterity": 14,
+     "constitution": 16,
+     "intelligence": 8,
+     "wisdom": 10,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": 2,
+     "dexterity": 2,
+     "constitution": 3,
+     "intelligence": -1,
+     "wisdom": 0,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "barbarian",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "greataxe",
+     "handaxe"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": []
+   },
+   "expect": {
+    "armorClass": 15,
+    "armorSource": "Защита без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 0,
+    "capacity": 225,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Варвар со щитом и секирой",
+   "profile": {
+    "scores": {
+     "strength": 15,
+     "dexterity": 14,
+     "constitution": 16,
+     "intelligence": 8,
+     "wisdom": 10,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": 2,
+     "dexterity": 2,
+     "constitution": 3,
+     "intelligence": -1,
+     "wisdom": 0,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "barbarian",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "greataxe",
+     "handaxe"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "shield"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "quantity": 1,
+      "equipped": true,
+      "key": "greataxe"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 17,
+    "armorSource": "Защита без доспеха, щит",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 13,
+    "capacity": 225,
+    "encumbered": false,
+    "warnings": [
+     "«Секира» — двуручное оружие, а в руке щит"
+    ],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000002",
+      "name": "Секира",
+      "attackBonus": 4,
+      "damage": "1к12 + 2",
+      "damageType": "рубящий",
+      "versatile": null,
+      "range": null,
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": null
+     }
+    ]
+   }
+  },
+  {
+   "name": "Варвар в доспехе теряет защиту без доспеха",
+   "profile": {
+    "scores": {
+     "strength": 15,
+     "dexterity": 14,
+     "constitution": 16,
+     "intelligence": 8,
+     "wisdom": 10,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": 2,
+     "dexterity": 2,
+     "constitution": 3,
+     "intelligence": -1,
+     "wisdom": 0,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "barbarian",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "greataxe",
+     "handaxe"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "hide"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 14,
+    "armorSource": "Шкурный доспех",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 12,
+    "capacity": 225,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Монах: защита без доспеха и посох",
+   "profile": {
+    "scores": {
+     "strength": 10,
+     "dexterity": 16,
+     "constitution": 12,
+     "intelligence": 10,
+     "wisdom": 15,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 0,
+     "dexterity": 3,
+     "constitution": 1,
+     "intelligence": 0,
+     "wisdom": 2,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "monk",
+    "armorProficiencies": [],
+    "weaponProficiencies": [
+     "dart",
+     "quarterstaff",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "quarterstaff"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 15,
+    "armorSource": "Защита без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 4,
+    "capacity": 150,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000001",
+      "name": "Боевой посох",
+      "attackBonus": 2,
+      "damage": "1к6",
+      "damageType": "дробящий",
+      "versatile": "1к8",
+      "range": null,
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": null
+     }
+    ]
+   }
+  },
+  {
+   "name": "Монах со щитом теряет защиту без доспеха",
+   "profile": {
+    "scores": {
+     "strength": 10,
+     "dexterity": 16,
+     "constitution": 12,
+     "intelligence": 10,
+     "wisdom": 15,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 0,
+     "dexterity": 3,
+     "constitution": 1,
+     "intelligence": 0,
+     "wisdom": 2,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "monk",
+    "armorProficiencies": [],
+    "weaponProficiencies": [
+     "dart",
+     "quarterstaff",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "shield"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 15,
+    "armorSource": "Без доспеха, щит",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 6,
+    "capacity": 150,
+    "encumbered": false,
+    "warnings": [
+     "Нет владения щитом: помеха на проверки, спасброски и атаки Силы и Ловкости"
+    ],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Оружие без владения: без бонуса мастерства",
+   "profile": {
+    "scores": {
+     "strength": 8,
+     "dexterity": 12,
+     "constitution": 14,
+     "intelligence": 16,
+     "wisdom": 12,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": -1,
+     "dexterity": 1,
+     "constitution": 2,
+     "intelligence": 3,
+     "wisdom": 1,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [],
+    "weaponProficiencies": [
+     "dagger",
+     "quarterstaff"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "club"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 11,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 2,
+    "capacity": 120,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000001",
+      "name": "Дубинка",
+      "attackBonus": -1,
+      "damage": "1к4 − 1",
+      "damageType": "дробящий",
+      "versatile": null,
+      "range": null,
+      "proficient": false,
+      "ammoItemId": null,
+      "ammoCount": null
+     }
+    ]
+   }
+  },
+  {
+   "name": "Сеть урона не наносит",
+   "profile": {
+    "scores": {
+     "strength": 16,
+     "dexterity": 14,
+     "constitution": 14,
+     "intelligence": 10,
+     "wisdom": 12,
+     "charisma": 8
+    },
+    "modifiers": {
+     "strength": 3,
+     "dexterity": 2,
+     "constitution": 2,
+     "intelligence": 0,
+     "wisdom": 1,
+     "charisma": -1
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light",
+     "medium",
+     "heavy",
+     "shield"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "greatsword",
+     "handaxe",
+     "longbow",
+     "longsword",
+     "net",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": true,
+      "key": "net"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 12,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 3,
+    "capacity": 240,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000001",
+      "name": "Сеть",
+      "attackBonus": 4,
+      "damage": "—",
+      "damageType": "",
+      "versatile": null,
+      "range": [
+       5,
+       15
+      ],
+      "proficient": true,
+      "ammoItemId": null,
+      "ammoCount": null
+     }
+    ]
+   }
+  },
+  {
+   "name": "Ручной арбалет берёт болты",
+   "profile": {
+    "scores": {
+     "strength": 10,
+     "dexterity": 16,
+     "constitution": 12,
+     "intelligence": 12,
+     "wisdom": 10,
+     "charisma": 14
+    },
+    "modifiers": {
+     "strength": 0,
+     "dexterity": 3,
+     "constitution": 1,
+     "intelligence": 1,
+     "wisdom": 0,
+     "charisma": 2
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "hand-crossbow",
+     "rapier",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 0,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 10,
+      "equipped": false,
+      "key": "arrows"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "quantity": 1,
+      "equipped": true,
+      "key": "hand-crossbow"
+     },
+     {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "quantity": 15,
+      "equipped": false,
+      "key": "bolts"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 13,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 4.63,
+    "capacity": 150,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": [
+     {
+      "itemId": "00000000-0000-0000-0000-000000000002",
+      "name": "Ручной арбалет",
+      "attackBonus": 5,
+      "damage": "1к6 + 3",
+      "damageType": "колющий",
+      "versatile": null,
+      "range": [
+       30,
+       120
+      ],
+      "proficient": true,
+      "ammoItemId": "00000000-0000-0000-0000-000000000003",
+      "ammoCount": 15
+     }
+    ]
+   }
+  },
+  {
+   "name": "Вес: стрелы поштучно, монеты по 50 на фунт",
+   "profile": {
+    "scores": {
+     "strength": 10,
+     "dexterity": 16,
+     "constitution": 12,
+     "intelligence": 12,
+     "wisdom": 10,
+     "charisma": 14
+    },
+    "modifiers": {
+     "strength": 0,
+     "dexterity": 3,
+     "constitution": 1,
+     "intelligence": 1,
+     "wisdom": 0,
+     "charisma": 2
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [
+     "light"
+    ],
+    "weaponProficiencies": [
+     "dagger",
+     "hand-crossbow",
+     "rapier",
+     "shortsword"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 3,
+     "sp": 0,
+     "ep": 0,
+     "gp": 100,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 30,
+      "equipped": false,
+      "key": "arrows"
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 13,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 3.56,
+    "capacity": 150,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Перегруз",
+   "profile": {
+    "scores": {
+     "strength": 8,
+     "dexterity": 12,
+     "constitution": 14,
+     "intelligence": 16,
+     "wisdom": 12,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": -1,
+     "dexterity": 1,
+     "constitution": 2,
+     "intelligence": 3,
+     "wisdom": 1,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [],
+    "weaponProficiencies": [
+     "dagger",
+     "quarterstaff"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 1000,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": false,
+      "name": "Сундук с книгами",
+      "weight": 101
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 11,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 121,
+    "capacity": 120,
+    "encumbered": true,
+    "warnings": [
+     "Перегруз: 121 из 120 фнт."
+    ],
+    "attacks": []
+   }
+  },
+  {
+   "name": "Ровно грузоподъёмность — не перегруз",
+   "profile": {
+    "scores": {
+     "strength": 8,
+     "dexterity": 12,
+     "constitution": 14,
+     "intelligence": 16,
+     "wisdom": 12,
+     "charisma": 10
+    },
+    "modifiers": {
+     "strength": -1,
+     "dexterity": 1,
+     "constitution": 2,
+     "intelligence": 3,
+     "wisdom": 1,
+     "charisma": 0
+    },
+    "proficiencyBonus": 2,
+    "baseSpeed": 30,
+    "unarmored": "none",
+    "armorProficiencies": [],
+    "weaponProficiencies": [
+     "dagger",
+     "quarterstaff"
+    ],
+    "ignoresHeavyArmorSpeed": false
+   },
+   "inventory": {
+    "currency": {
+     "cp": 0,
+     "sp": 0,
+     "ep": 0,
+     "gp": 1000,
+     "pp": 0
+    },
+    "items": [
+     {
+      "id": "00000000-0000-0000-0000-000000000001",
+      "quantity": 1,
+      "equipped": false,
+      "name": "Сундук с книгами",
+      "weight": 100
+     }
+    ]
+   },
+   "expect": {
+    "armorClass": 11,
+    "armorSource": "Без доспеха",
+    "speed": 30,
+    "stealthDisadvantage": false,
+    "weight": 120,
+    "capacity": 120,
+    "encumbered": false,
+    "warnings": [],
+    "attacks": []
+   }
+  }
+ ]
+}

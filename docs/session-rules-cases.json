@@ -1990,6 +1990,2175 @@
     "level": 7
    },
    "error": "Level"
+  },
+  {
+   "name": "Предмет из справочника",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "key": "longsword"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": false,
+        "key": "longsword"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Тот же предмет складывается количеством",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 20,
+       "equipped": false,
+       "key": "arrows"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000002",
+    "quantity": 10,
+    "key": "arrows"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 30,
+        "equipped": false,
+        "key": "arrows"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Свой предмет",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "name": "  Карта сокровищ ",
+    "weight": 0.5,
+    "note": "из склепа"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": false,
+        "name": "Карта сокровищ",
+        "weight": 0.5,
+        "note": "из склепа"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Свой предмет без веса весит 0",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 3,
+    "name": "Письмо"
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 3,
+        "equipped": false,
+        "name": "Письмо",
+        "weight": 0
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Набор не добавляется целиком",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "key": "explorers-pack"
+   },
+   "error": "Key"
+  },
+  {
+   "name": "Неизвестный предмет",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "key": "lightsaber"
+   },
+   "error": "Key"
+  },
+  {
+   "name": "Свой предмет без названия",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "name": "  "
+   },
+   "error": "Name"
+  },
+  {
+   "name": "Слишком тяжёлый свой предмет",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "name": "Валун",
+    "weight": 2000
+   },
+   "error": "Weight"
+  },
+  {
+   "name": "Нулевое количество",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 0,
+    "key": "dagger"
+   },
+   "error": "Quantity"
+  },
+  {
+   "name": "Больше 9999 штук",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 9990,
+       "equipped": false,
+       "key": "arrows"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000002",
+    "quantity": 10,
+    "key": "arrows"
+   },
+   "error": "Quantity"
+  },
+  {
+   "name": "Id уже занят",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "dagger"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "addItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1,
+    "key": "rope-hempen"
+   },
+   "error": "ItemId"
+  },
+  {
+   "name": "Убрать часть",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 20,
+       "equipped": false,
+       "key": "arrows"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "removeItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 5
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 15,
+        "equipped": false,
+        "key": "arrows"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Убрать всё",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 2,
+       "equipped": false,
+       "key": "dagger"
+      },
+      {
+       "id": "00000000-0000-0000-0000-000000000002",
+       "quantity": 5,
+       "equipped": false,
+       "key": "torch"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "removeItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 2
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "quantity": 5,
+        "equipped": false,
+        "key": "torch"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Убрать больше, чем есть",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 2,
+       "equipped": false,
+       "key": "dagger"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "removeItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 3
+   },
+   "error": "Quantity"
+  },
+  {
+   "name": "Убрать то, чего нет",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "removeItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1
+   },
+   "error": "ItemId"
+  },
+  {
+   "name": "Новый доспех снимает прежний",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": true,
+       "key": "leather"
+      },
+      {
+       "id": "00000000-0000-0000-0000-000000000002",
+       "quantity": 1,
+       "equipped": false,
+       "key": "chain-mail"
+      },
+      {
+       "id": "00000000-0000-0000-0000-000000000003",
+       "quantity": 1,
+       "equipped": true,
+       "key": "shield"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "setEquipped",
+    "itemId": "00000000-0000-0000-0000-000000000002",
+    "equipped": true
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": false,
+        "key": "leather"
+       },
+       {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "quantity": 1,
+        "equipped": true,
+        "key": "chain-mail"
+       },
+       {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "quantity": 1,
+        "equipped": true,
+        "key": "shield"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Новый щит снимает прежний",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": true,
+       "key": "shield"
+      },
+      {
+       "id": "00000000-0000-0000-0000-000000000002",
+       "quantity": 1,
+       "equipped": false,
+       "key": "shield"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "setEquipped",
+    "itemId": "00000000-0000-0000-0000-000000000002",
+    "equipped": true
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": false,
+        "key": "shield"
+       },
+       {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "quantity": 1,
+        "equipped": true,
+        "key": "shield"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Оружия в руках может быть несколько",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": true,
+       "key": "shortsword"
+      },
+      {
+       "id": "00000000-0000-0000-0000-000000000002",
+       "quantity": 1,
+       "equipped": false,
+       "key": "dagger"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "setEquipped",
+    "itemId": "00000000-0000-0000-0000-000000000002",
+    "equipped": true
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": true,
+        "key": "shortsword"
+       },
+       {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "quantity": 1,
+        "equipped": true,
+        "key": "dagger"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Снять доспех",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": true,
+       "key": "plate"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "setEquipped",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "equipped": false
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": false,
+        "key": "plate"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Факел не надевается",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "torch"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "setEquipped",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "equipped": true
+   },
+   "error": "ItemId"
+  },
+  {
+   "name": "Свой предмет не надевается",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "name": "Амулет",
+       "weight": 0
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "setEquipped",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "equipped": true
+   },
+   "error": "ItemId"
+  },
+  {
+   "name": "Получить золото",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 3,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "changeCurrency",
+    "cp": 0,
+    "sp": 4,
+    "ep": 0,
+    "gp": 15,
+    "pp": 0
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 4,
+       "ep": 0,
+       "gp": 18,
+       "pp": 0
+      },
+      "items": []
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Разменять золотой на серебро",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 3,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "changeCurrency",
+    "cp": 0,
+    "sp": 10,
+    "ep": 0,
+    "gp": -1,
+    "pp": 0
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 10,
+       "ep": 0,
+       "gp": 2,
+       "pp": 0
+      },
+      "items": []
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Не хватает монет",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 50,
+      "ep": 0,
+      "gp": 3,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "changeCurrency",
+    "cp": 0,
+    "sp": 0,
+    "ep": 0,
+    "gp": -5,
+    "pp": 0
+   },
+   "error": "Currency"
+  },
+  {
+   "name": "Больше миллиона монет",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 999990,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": []
+    }
+   },
+   "action": {
+    "type": "changeCurrency",
+    "cp": 20,
+    "sp": 0,
+    "ep": 0,
+    "gp": 0,
+    "pp": 0
+   },
+   "error": "Currency"
+  },
+  {
+   "name": "Выпить зелье лечения",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 12,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 2,
+       "equipped": false,
+       "key": "potion-healing"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 7
+   },
+   "expect": {
+    "state": {
+     "currentHp": 19,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": false,
+        "key": "potion-healing"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 7,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Последнее зелье: лечит не выше максимума",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 27,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "potion-healing"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 9
+   },
+   "expect": {
+    "state": {
+     "currentHp": 30,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": []
+     }
+    },
+    "outcomes": [],
+    "healed": 3,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Зелье поднимает с 0 хитов",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 2,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "potion-greater-healing"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 10
+   },
+   "expect": {
+    "state": {
+     "currentHp": 10,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": []
+     }
+    },
+    "outcomes": [
+     "revived"
+    ],
+    "healed": 10,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Бросок вне 2к4 + 2",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "potion-healing"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 11
+   },
+   "error": "Roll"
+  },
+  {
+   "name": "Бросок ниже минимума",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "potion-healing"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 3
+   },
+   "error": "Roll"
+  },
+  {
+   "name": "Пить можно только зелье",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 3,
+       "equipped": false,
+       "key": "rations"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 5
+   },
+   "error": "ItemId"
+  },
+  {
+   "name": "Погибший не пьёт зелья",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": true,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "potion-healing"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "drinkPotion",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "roll": 6
+   },
+   "error": "Action"
+  },
+  {
+   "name": "Выстрел тратит стрелу",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": true,
+       "key": "longbow"
+      },
+      {
+       "id": "00000000-0000-0000-0000-000000000002",
+       "quantity": 20,
+       "equipped": false,
+       "key": "arrows"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "useAmmo",
+    "itemId": "00000000-0000-0000-0000-000000000002",
+    "quantity": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": [
+       {
+        "id": "00000000-0000-0000-0000-000000000001",
+        "quantity": 1,
+        "equipped": true,
+        "key": "longbow"
+       },
+       {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "quantity": 19,
+        "equipped": false,
+        "key": "arrows"
+       }
+      ]
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Последний болт",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "bolts"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "useAmmo",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 20,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": false,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": []
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
+  },
+  {
+   "name": "Меч — не боеприпас",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "longsword"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "useAmmo",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1
+   },
+   "error": "ItemId"
+  },
+  {
+   "name": "Стрел меньше, чем нужно",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 20,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": false,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 2,
+       "equipped": false,
+       "key": "arrows"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "useAmmo",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 3
+   },
+   "error": "Quantity"
+  },
+  {
+   "name": "Погибшему можно разобрать снаряжение",
+   "group": "inventory",
+   "context": {
+    "baseMaxHp": 30,
+    "hitDie": 10,
+    "level": 3,
+    "conModifier": 2
+   },
+   "state": {
+    "currentHp": 0,
+    "tempHp": 0,
+    "hitDiceSpent": 0,
+    "deathSuccesses": 0,
+    "deathFailures": 0,
+    "isStable": false,
+    "isDead": true,
+    "conditions": [],
+    "exhaustion": 0,
+    "inventory": {
+     "currency": {
+      "cp": 0,
+      "sp": 0,
+      "ep": 0,
+      "gp": 0,
+      "pp": 0
+     },
+     "items": [
+      {
+       "id": "00000000-0000-0000-0000-000000000001",
+       "quantity": 1,
+       "equipped": false,
+       "key": "dagger"
+      }
+     ]
+    }
+   },
+   "action": {
+    "type": "removeItem",
+    "itemId": "00000000-0000-0000-0000-000000000001",
+    "quantity": 1
+   },
+   "expect": {
+    "state": {
+     "currentHp": 0,
+     "tempHp": 0,
+     "hitDiceSpent": 0,
+     "deathSuccesses": 0,
+     "deathFailures": 0,
+     "isStable": false,
+     "isDead": true,
+     "conditions": [],
+     "exhaustion": 0,
+     "inventory": {
+      "currency": {
+       "cp": 0,
+       "sp": 0,
+       "ep": 0,
+       "gp": 0,
+       "pp": 0
+      },
+      "items": []
+     }
+    },
+    "outcomes": [],
+    "healed": 0,
+    "absorbed": 0
+   }
   }
  ]
 }

@@ -2,6 +2,8 @@ using System.Text.Json;
 using Core.Sdk.Dtos.Session;
 using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models.Enums;
+using DndSolution.Application.Models.Models.Items;
+using DndSolution.Application.Models.Models.Rules;
 using DndSolution.Application.Models.Models.Session;
 using DndSolution.Application.Services.Rules;
 
@@ -23,11 +25,14 @@ public static class SessionMappings
         IsDead = view.State.IsDead,
         Conditions = view.State.Conditions.Select(c => (int)c).ToList(),
         Exhaustion = view.State.Exhaustion,
+        Inventory = view.State.Inventory.ToDto(),
         MaxHp = SessionRules.MaxHp(view.Context, view.State.Exhaustion),
         BaseMaxHp = view.Context.BaseMaxHp,
         HitDie = view.Context.HitDie,
         HitDiceTotal = view.Context.Level,
         ConModifier = view.Context.ConModifier,
+        Equipment = EquipmentRules.Evaluate(view.Context, view.State.Inventory).ToDto(),
+        Profile = view.Context.Equipment!.ToDto(),
     };
 
     public static SessionStateDto ToDto(this SessionState state) => new()
@@ -41,33 +46,141 @@ public static class SessionMappings
         IsDead = state.IsDead,
         Conditions = state.Conditions.Select(c => (int)c).ToList(),
         Exhaustion = state.Exhaustion,
+        Inventory = state.Inventory.ToDto(),
     };
+
+    public static InventoryDto ToDto(this InventoryState inventory) => new()
+    {
+        Currency = new CurrencyDto
+        {
+            Cp = inventory.Currency.Cp,
+            Sp = inventory.Currency.Sp,
+            Ep = inventory.Currency.Ep,
+            Gp = inventory.Currency.Gp,
+            Pp = inventory.Currency.Pp,
+        },
+        Items = inventory.Items.Select(i => new InventoryItemDto
+        {
+            Id = i.Id,
+            Key = i.Key,
+            Name = i.Name,
+            Weight = i.Weight,
+            Note = i.Note,
+            Quantity = i.Quantity,
+            Equipped = i.Equipped,
+        }).ToList(),
+    };
+
+    public static EquipmentSummaryDto ToDto(this EquipmentSummary summary) => new()
+    {
+        ArmorClass = summary.ArmorClass,
+        ArmorSource = summary.ArmorSource,
+        Speed = summary.Speed,
+        StealthDisadvantage = summary.StealthDisadvantage,
+        Weight = summary.Weight,
+        Capacity = summary.Capacity,
+        Encumbered = summary.Encumbered,
+        Warnings = summary.Warnings.ToList(),
+        Attacks = summary.Attacks.Select(a => new WeaponAttackDto
+        {
+            ItemId = a.ItemId,
+            Name = a.Name,
+            AttackBonus = a.AttackBonus,
+            Damage = a.Damage,
+            DamageType = a.DamageType,
+            Versatile = a.Versatile,
+            Range = a.Range?.ToList(),
+            Proficient = a.Proficient,
+            AmmoItemId = a.AmmoItemId,
+            AmmoCount = a.AmmoCount,
+        }).ToList(),
+    };
+
+    public static EquipmentProfileDto ToDto(this EquipmentProfile profile)
+    {
+        static Dictionary<string, int> Abilities(AbilityScores s) => new()
+        {
+            ["strength"] = s.Strength,
+            ["dexterity"] = s.Dexterity,
+            ["constitution"] = s.Constitution,
+            ["intelligence"] = s.Intelligence,
+            ["wisdom"] = s.Wisdom,
+            ["charisma"] = s.Charisma,
+        };
+
+        return new EquipmentProfileDto
+        {
+            Scores = Abilities(profile.Scores),
+            Modifiers = Abilities(profile.Modifiers),
+            ProficiencyBonus = profile.ProficiencyBonus,
+            BaseSpeed = profile.BaseSpeed,
+            Unarmored = (int)profile.Unarmored,
+            ArmorProficiencies = profile.ArmorProficiencies.ToList(),
+            WeaponProficiencies = profile.WeaponProficiencies.ToList(),
+            IgnoresHeavyArmorSpeed = profile.IgnoresHeavyArmorSpeed,
+        };
+    }
 
     public static SessionEventDto ToDto(this SessionEvent sessionEvent)
     {
-        var dto = new SessionEventDto
+        var action = sessionEvent.Action;
+        var currency = action as SessionAction.ChangeCurrency;
+
+        return new SessionEventDto
         {
             Id = sessionEvent.Id,
             CreatedAt = sessionEvent.CreatedAt,
-            Type = TypeOf(sessionEvent.Action),
+            Type = TypeOf(action),
             Before = sessionEvent.Result.Before.ToDto(),
             After = sessionEvent.Result.State.ToDto(),
             Outcomes = sessionEvent.Result.Outcomes.Select(o => JsonNamingPolicy.CamelCase.ConvertName(o.ToString())).ToList(),
             Healed = sessionEvent.Result.Healed,
             Absorbed = sessionEvent.Result.Absorbed,
-        };
-
-        return sessionEvent.Action switch
-        {
-            SessionAction.Damage a => Copy(dto, amount: a.Amount, critical: a.Critical),
-            SessionAction.Heal a => Copy(dto, amount: a.Amount),
-            SessionAction.TempHp a => Copy(dto, amount: a.Amount),
-            SessionAction.SetHp a => Copy(dto, amount: a.Amount),
-            SessionAction.DeathSave a => Copy(dto, roll: a.Roll),
-            SessionAction.SpendHitDie a => Copy(dto, roll: a.Roll),
-            SessionAction.SetCondition a => Copy(dto, condition: (int)a.Condition, active: a.Active),
-            SessionAction.SetExhaustion a => Copy(dto, level: a.Level),
-            _ => dto,
+            Amount = action switch
+            {
+                SessionAction.Damage a => a.Amount,
+                SessionAction.Heal a => a.Amount,
+                SessionAction.TempHp a => a.Amount,
+                SessionAction.SetHp a => a.Amount,
+                _ => null,
+            },
+            Critical = (action as SessionAction.Damage)?.Critical,
+            Roll = action switch
+            {
+                SessionAction.DeathSave a => a.Roll,
+                SessionAction.SpendHitDie a => a.Roll,
+                SessionAction.DrinkPotion a => a.Roll,
+                _ => null,
+            },
+            Condition = action is SessionAction.SetCondition c ? (int)c.Condition : null,
+            Active = (action as SessionAction.SetCondition)?.Active,
+            Level = (action as SessionAction.SetExhaustion)?.Level,
+            ItemId = action switch
+            {
+                SessionAction.AddItem a => a.ItemId,
+                SessionAction.RemoveItem a => a.ItemId,
+                SessionAction.SetEquipped a => a.ItemId,
+                SessionAction.DrinkPotion a => a.ItemId,
+                SessionAction.UseAmmo a => a.ItemId,
+                _ => null,
+            },
+            Key = (action as SessionAction.AddItem)?.Key,
+            Name = (action as SessionAction.AddItem)?.Name,
+            Weight = (action as SessionAction.AddItem)?.Weight,
+            Note = (action as SessionAction.AddItem)?.Note,
+            Quantity = action switch
+            {
+                SessionAction.AddItem a => a.Quantity,
+                SessionAction.RemoveItem a => a.Quantity,
+                SessionAction.UseAmmo a => a.Quantity,
+                _ => null,
+            },
+            Equipped = (action as SessionAction.SetEquipped)?.Equipped,
+            Cp = currency?.Cp,
+            Sp = currency?.Sp,
+            Ep = currency?.Ep,
+            Gp = currency?.Gp,
+            Pp = currency?.Pp,
         };
     }
 
@@ -93,30 +206,25 @@ public static class SessionMappings
                 (Condition)Required(request.Condition, "Condition"),
                 request.Active ?? throw new SessionRulesException("Active", "Поле обязательно для этого действия")),
             "setExhaustion" => new SessionAction.SetExhaustion(Required(request.Level, "Level")),
+            "addItem" => new SessionAction.AddItem(
+                ItemId(request), request.Key, request.Quantity ?? 1, request.Name, request.Weight, request.Note),
+            "removeItem" => new SessionAction.RemoveItem(ItemId(request), Required(request.Quantity, "Quantity")),
+            "setEquipped" => new SessionAction.SetEquipped(
+                ItemId(request),
+                request.Equipped ?? throw new SessionRulesException("Equipped", "Поле обязательно для этого действия")),
+            "changeCurrency" => new SessionAction.ChangeCurrency(
+                request.Cp ?? 0, request.Sp ?? 0, request.Ep ?? 0, request.Gp ?? 0, request.Pp ?? 0),
+            "drinkPotion" => new SessionAction.DrinkPotion(ItemId(request), Required(request.Roll, "Roll")),
+            "useAmmo" => new SessionAction.UseAmmo(ItemId(request), request.Quantity ?? 1),
             _ => throw new SessionRulesException("Type", "Неизвестное действие"),
         };
     }
 
+    private static Guid ItemId(SessionActionRequest request) =>
+        request.ItemId is { } id && id != Guid.Empty
+            ? id
+            : throw new SessionRulesException("ItemId", "Поле обязательно для этого действия");
+
     private static string TypeOf(SessionAction action) =>
         JsonNamingPolicy.CamelCase.ConvertName(action.GetType().Name);
-
-    private static SessionEventDto Copy(
-        SessionEventDto dto, int? amount = null, bool? critical = null, int? roll = null,
-        int? condition = null, bool? active = null, int? level = null) => new()
-    {
-        Id = dto.Id,
-        CreatedAt = dto.CreatedAt,
-        Type = dto.Type,
-        Before = dto.Before,
-        After = dto.After,
-        Outcomes = dto.Outcomes,
-        Healed = dto.Healed,
-        Absorbed = dto.Absorbed,
-        Amount = amount,
-        Critical = critical,
-        Roll = roll,
-        Condition = condition,
-        Active = active,
-        Level = level,
-    };
 }

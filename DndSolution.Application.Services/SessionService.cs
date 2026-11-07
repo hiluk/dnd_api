@@ -1,6 +1,7 @@
 using Data.Abstractions;
 using DndSolution.Application.Abstractions;
 using DndSolution.Application.Models.Models.Session;
+using DndSolution.Application.Services.Catalog;
 using DndSolution.Application.Services.Rules;
 
 namespace DndSolution.Application.Services;
@@ -94,8 +95,21 @@ public sealed class SessionService : ISessionService
         var (character, sheet) = found;
         var classes = await _classes.GetAllClassesAsync(token);
         var hitDie = classes.First(c => c.Type == character.CharacterClass).HitDie;
+        var catalog = ItemCatalog.All;
 
-        return new SessionContext(sheet.HitPoints, hitDie, character.Level, sheet.Modifiers.Constitution);
+        return new SessionContext(sheet.HitPoints, hitDie, character.Level, sheet.Modifiers.Constitution)
+        {
+            Catalog = catalog,
+            Equipment = new EquipmentProfile(
+                sheet.Scores,
+                sheet.Modifiers,
+                sheet.ProficiencyBonus,
+                sheet.Speed,
+                Proficiencies.Unarmored(character.CharacterClass),
+                Proficiencies.Armor(character.CharacterClass),
+                Proficiencies.Weapons(character.CharacterClass, character.CharacterRace, catalog),
+                Proficiencies.IgnoresHeavyArmorSpeed(character.CharacterRace)),
+        };
     }
 
     /// <summary>

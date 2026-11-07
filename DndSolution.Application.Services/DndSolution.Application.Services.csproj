@@ -20,4 +20,8 @@
       <ProjectReference Include="..\DndSolution.Data.Abstractions\DndSolution.Data.Abstractions.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <EmbeddedResource Include="Catalog\items.json" />
+    </ItemGroup>
+
 </Project>

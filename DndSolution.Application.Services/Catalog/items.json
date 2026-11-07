@@ -1,0 +1,1832 @@
+{
+ "description": "Справочник предметов по SRD 5.1 (CC BY 4.0). Вес в фунтах, цена в медных монетах за bundle штук.",
+ "items": [
+  {
+   "key": "club",
+   "name": "Дубинка",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 10,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d4",
+    "damageType": "дробящий",
+    "properties": [
+     "light"
+    ]
+   }
+  },
+  {
+   "key": "dagger",
+   "name": "Кинжал",
+   "category": "weapon",
+   "weight": 1,
+   "cost": 200,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d4",
+    "damageType": "колющий",
+    "properties": [
+     "finesse",
+     "light",
+     "thrown"
+    ],
+    "range": [
+     20,
+     60
+    ]
+   }
+  },
+  {
+   "key": "greatclub",
+   "name": "Палица",
+   "category": "weapon",
+   "weight": 10,
+   "cost": 20,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "дробящий",
+    "properties": [
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "handaxe",
+   "name": "Ручной топор",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 500,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "рубящий",
+    "properties": [
+     "light",
+     "thrown"
+    ],
+    "range": [
+     20,
+     60
+    ]
+   }
+  },
+  {
+   "key": "javelin",
+   "name": "Метательное копьё",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 50,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "колющий",
+    "properties": [
+     "thrown"
+    ],
+    "range": [
+     30,
+     120
+    ]
+   }
+  },
+  {
+   "key": "light-hammer",
+   "name": "Лёгкий молот",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 200,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d4",
+    "damageType": "дробящий",
+    "properties": [
+     "light",
+     "thrown"
+    ],
+    "range": [
+     20,
+     60
+    ]
+   }
+  },
+  {
+   "key": "mace",
+   "name": "Булава",
+   "category": "weapon",
+   "weight": 4,
+   "cost": 500,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "дробящий",
+    "properties": []
+   }
+  },
+  {
+   "key": "quarterstaff",
+   "name": "Боевой посох",
+   "category": "weapon",
+   "weight": 4,
+   "cost": 20,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "дробящий",
+    "properties": [
+     "versatile"
+    ],
+    "versatile": "1d8"
+   }
+  },
+  {
+   "key": "sickle",
+   "name": "Серп",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 100,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d4",
+    "damageType": "рубящий",
+    "properties": [
+     "light"
+    ]
+   }
+  },
+  {
+   "key": "spear",
+   "name": "Копьё",
+   "category": "weapon",
+   "weight": 3,
+   "cost": 100,
+   "weapon": {
+    "category": "simple",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "колющий",
+    "properties": [
+     "thrown",
+     "versatile"
+    ],
+    "versatile": "1d8",
+    "range": [
+     20,
+     60
+    ]
+   }
+  },
+  {
+   "key": "light-crossbow",
+   "name": "Лёгкий арбалет",
+   "category": "weapon",
+   "weight": 5,
+   "cost": 2500,
+   "weapon": {
+    "category": "simple",
+    "ranged": true,
+    "damage": "1d8",
+    "damageType": "колющий",
+    "properties": [
+     "ammunition",
+     "loading",
+     "twoHanded"
+    ],
+    "range": [
+     80,
+     320
+    ],
+    "ammo": "bolt"
+   }
+  },
+  {
+   "key": "dart",
+   "name": "Дротик",
+   "category": "weapon",
+   "weight": 0.25,
+   "cost": 5,
+   "weapon": {
+    "category": "simple",
+    "ranged": true,
+    "damage": "1d4",
+    "damageType": "колющий",
+    "properties": [
+     "finesse",
+     "thrown"
+    ],
+    "range": [
+     20,
+     60
+    ]
+   }
+  },
+  {
+   "key": "shortbow",
+   "name": "Короткий лук",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 2500,
+   "weapon": {
+    "category": "simple",
+    "ranged": true,
+    "damage": "1d6",
+    "damageType": "колющий",
+    "properties": [
+     "ammunition",
+     "twoHanded"
+    ],
+    "range": [
+     80,
+     320
+    ],
+    "ammo": "arrow"
+   }
+  },
+  {
+   "key": "sling",
+   "name": "Праща",
+   "category": "weapon",
+   "weight": 0,
+   "cost": 10,
+   "weapon": {
+    "category": "simple",
+    "ranged": true,
+    "damage": "1d4",
+    "damageType": "дробящий",
+    "properties": [
+     "ammunition"
+    ],
+    "range": [
+     30,
+     120
+    ],
+    "ammo": "bullet"
+   }
+  },
+  {
+   "key": "battleaxe",
+   "name": "Боевой топор",
+   "category": "weapon",
+   "weight": 4,
+   "cost": 1000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "рубящий",
+    "properties": [
+     "versatile"
+    ],
+    "versatile": "1d10"
+   }
+  },
+  {
+   "key": "flail",
+   "name": "Цеп",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 1000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "дробящий",
+    "properties": []
+   }
+  },
+  {
+   "key": "glaive",
+   "name": "Глефа",
+   "category": "weapon",
+   "weight": 6,
+   "cost": 2000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d10",
+    "damageType": "рубящий",
+    "properties": [
+     "heavy",
+     "reach",
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "greataxe",
+   "name": "Секира",
+   "category": "weapon",
+   "weight": 7,
+   "cost": 3000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d12",
+    "damageType": "рубящий",
+    "properties": [
+     "heavy",
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "greatsword",
+   "name": "Двуручный меч",
+   "category": "weapon",
+   "weight": 6,
+   "cost": 5000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "2d6",
+    "damageType": "рубящий",
+    "properties": [
+     "heavy",
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "halberd",
+   "name": "Алебарда",
+   "category": "weapon",
+   "weight": 6,
+   "cost": 2000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d10",
+    "damageType": "рубящий",
+    "properties": [
+     "heavy",
+     "reach",
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "lance",
+   "name": "Длинное копьё",
+   "category": "weapon",
+   "weight": 6,
+   "cost": 1000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d12",
+    "damageType": "колющий",
+    "properties": [
+     "reach",
+     "special"
+    ]
+   }
+  },
+  {
+   "key": "longsword",
+   "name": "Длинный меч",
+   "category": "weapon",
+   "weight": 3,
+   "cost": 1500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "рубящий",
+    "properties": [
+     "versatile"
+    ],
+    "versatile": "1d10"
+   }
+  },
+  {
+   "key": "maul",
+   "name": "Молот",
+   "category": "weapon",
+   "weight": 10,
+   "cost": 1000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "2d6",
+    "damageType": "дробящий",
+    "properties": [
+     "heavy",
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "morningstar",
+   "name": "Моргенштерн",
+   "category": "weapon",
+   "weight": 4,
+   "cost": 1500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "колющий",
+    "properties": []
+   }
+  },
+  {
+   "key": "pike",
+   "name": "Пика",
+   "category": "weapon",
+   "weight": 18,
+   "cost": 500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d10",
+    "damageType": "колющий",
+    "properties": [
+     "heavy",
+     "reach",
+     "twoHanded"
+    ]
+   }
+  },
+  {
+   "key": "rapier",
+   "name": "Рапира",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 2500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "колющий",
+    "properties": [
+     "finesse"
+    ]
+   }
+  },
+  {
+   "key": "scimitar",
+   "name": "Скимитар",
+   "category": "weapon",
+   "weight": 3,
+   "cost": 2500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "рубящий",
+    "properties": [
+     "finesse",
+     "light"
+    ]
+   }
+  },
+  {
+   "key": "shortsword",
+   "name": "Короткий меч",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 1000,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "колющий",
+    "properties": [
+     "finesse",
+     "light"
+    ]
+   }
+  },
+  {
+   "key": "trident",
+   "name": "Трезубец",
+   "category": "weapon",
+   "weight": 4,
+   "cost": 500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d6",
+    "damageType": "колющий",
+    "properties": [
+     "thrown",
+     "versatile"
+    ],
+    "versatile": "1d8",
+    "range": [
+     20,
+     60
+    ]
+   }
+  },
+  {
+   "key": "war-pick",
+   "name": "Боевая кирка",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "колющий",
+    "properties": []
+   }
+  },
+  {
+   "key": "warhammer",
+   "name": "Боевой молот",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 1500,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d8",
+    "damageType": "дробящий",
+    "properties": [
+     "versatile"
+    ],
+    "versatile": "1d10"
+   }
+  },
+  {
+   "key": "whip",
+   "name": "Кнут",
+   "category": "weapon",
+   "weight": 3,
+   "cost": 200,
+   "weapon": {
+    "category": "martial",
+    "ranged": false,
+    "damage": "1d4",
+    "damageType": "рубящий",
+    "properties": [
+     "finesse",
+     "reach"
+    ]
+   }
+  },
+  {
+   "key": "blowgun",
+   "name": "Духовая трубка",
+   "category": "weapon",
+   "weight": 1,
+   "cost": 1000,
+   "weapon": {
+    "category": "martial",
+    "ranged": true,
+    "damage": "1",
+    "damageType": "колющий",
+    "properties": [
+     "ammunition",
+     "loading"
+    ],
+    "range": [
+     25,
+     100
+    ],
+    "ammo": "needle"
+   }
+  },
+  {
+   "key": "hand-crossbow",
+   "name": "Ручной арбалет",
+   "category": "weapon",
+   "weight": 3,
+   "cost": 7500,
+   "weapon": {
+    "category": "martial",
+    "ranged": true,
+    "damage": "1d6",
+    "damageType": "колющий",
+    "properties": [
+     "ammunition",
+     "light",
+     "loading"
+    ],
+    "range": [
+     30,
+     120
+    ],
+    "ammo": "bolt"
+   }
+  },
+  {
+   "key": "heavy-crossbow",
+   "name": "Тяжёлый арбалет",
+   "category": "weapon",
+   "weight": 18,
+   "cost": 5000,
+   "weapon": {
+    "category": "martial",
+    "ranged": true,
+    "damage": "1d10",
+    "damageType": "колющий",
+    "properties": [
+     "ammunition",
+     "heavy",
+     "loading",
+     "twoHanded"
+    ],
+    "range": [
+     100,
+     400
+    ],
+    "ammo": "bolt"
+   }
+  },
+  {
+   "key": "longbow",
+   "name": "Длинный лук",
+   "category": "weapon",
+   "weight": 2,
+   "cost": 5000,
+   "weapon": {
+    "category": "martial",
+    "ranged": true,
+    "damage": "1d8",
+    "damageType": "колющий",
+    "properties": [
+     "ammunition",
+     "heavy",
+     "twoHanded"
+    ],
+    "range": [
+     150,
+     600
+    ],
+    "ammo": "arrow"
+   }
+  },
+  {
+   "key": "net",
+   "name": "Сеть",
+   "category": "weapon",
+   "weight": 3,
+   "cost": 100,
+   "weapon": {
+    "category": "martial",
+    "ranged": true,
+    "damage": "0",
+    "damageType": "",
+    "properties": [
+     "special",
+     "thrown"
+    ],
+    "range": [
+     5,
+     15
+    ]
+   }
+  },
+  {
+   "key": "padded",
+   "name": "Стёганый доспех",
+   "category": "armor",
+   "weight": 8,
+   "cost": 500,
+   "armor": {
+    "type": "light",
+    "baseAc": 11,
+    "stealthDisadvantage": true
+   }
+  },
+  {
+   "key": "leather",
+   "name": "Кожаный доспех",
+   "category": "armor",
+   "weight": 10,
+   "cost": 1000,
+   "armor": {
+    "type": "light",
+    "baseAc": 11,
+    "stealthDisadvantage": false
+   }
+  },
+  {
+   "key": "studded-leather",
+   "name": "Проклёпанный кожаный доспех",
+   "category": "armor",
+   "weight": 13,
+   "cost": 4500,
+   "armor": {
+    "type": "light",
+    "baseAc": 12,
+    "stealthDisadvantage": false
+   }
+  },
+  {
+   "key": "hide",
+   "name": "Шкурный доспех",
+   "category": "armor",
+   "weight": 12,
+   "cost": 1000,
+   "armor": {
+    "type": "medium",
+    "baseAc": 12,
+    "stealthDisadvantage": false,
+    "dexCap": 2
+   }
+  },
+  {
+   "key": "chain-shirt",
+   "name": "Кольчужная рубаха",
+   "category": "armor",
+   "weight": 20,
+   "cost": 5000,
+   "armor": {
+    "type": "medium",
+    "baseAc": 13,
+    "stealthDisadvantage": false,
+    "dexCap": 2
+   }
+  },
+  {
+   "key": "scale-mail",
+   "name": "Чешуйчатый доспех",
+   "category": "armor",
+   "weight": 45,
+   "cost": 5000,
+   "armor": {
+    "type": "medium",
+    "baseAc": 14,
+    "stealthDisadvantage": true,
+    "dexCap": 2
+   }
+  },
+  {
+   "key": "breastplate",
+   "name": "Кираса",
+   "category": "armor",
+   "weight": 20,
+   "cost": 40000,
+   "armor": {
+    "type": "medium",
+    "baseAc": 14,
+    "stealthDisadvantage": false,
+    "dexCap": 2
+   }
+  },
+  {
+   "key": "half-plate",
+   "name": "Полулаты",
+   "category": "armor",
+   "weight": 40,
+   "cost": 75000,
+   "armor": {
+    "type": "medium",
+    "baseAc": 15,
+    "stealthDisadvantage": true,
+    "dexCap": 2
+   }
+  },
+  {
+   "key": "ring-mail",
+   "name": "Колечный доспех",
+   "category": "armor",
+   "weight": 40,
+   "cost": 3000,
+   "armor": {
+    "type": "heavy",
+    "baseAc": 14,
+    "stealthDisadvantage": true,
+    "dexCap": 0
+   }
+  },
+  {
+   "key": "chain-mail",
+   "name": "Кольчуга",
+   "category": "armor",
+   "weight": 55,
+   "cost": 7500,
+   "armor": {
+    "type": "heavy",
+    "baseAc": 16,
+    "stealthDisadvantage": true,
+    "dexCap": 0,
+    "strength": 13
+   }
+  },
+  {
+   "key": "splint",
+   "name": "Наборный доспех",
+   "category": "armor",
+   "weight": 60,
+   "cost": 20000,
+   "armor": {
+    "type": "heavy",
+    "baseAc": 17,
+    "stealthDisadvantage": true,
+    "dexCap": 0,
+    "strength": 15
+   }
+  },
+  {
+   "key": "plate",
+   "name": "Латы",
+   "category": "armor",
+   "weight": 65,
+   "cost": 150000,
+   "armor": {
+    "type": "heavy",
+    "baseAc": 18,
+    "stealthDisadvantage": true,
+    "dexCap": 0,
+    "strength": 15
+   }
+  },
+  {
+   "key": "shield",
+   "name": "Щит",
+   "category": "shield",
+   "weight": 6,
+   "cost": 1000,
+   "shield": {
+    "bonus": 2
+   }
+  },
+  {
+   "key": "arrows",
+   "name": "Стрелы",
+   "category": "ammunition",
+   "weight": 1,
+   "cost": 100,
+   "bundle": 20,
+   "ammunition": {
+    "kind": "arrow"
+   }
+  },
+  {
+   "key": "bolts",
+   "name": "Арбалетные болты",
+   "category": "ammunition",
+   "weight": 1.5,
+   "cost": 100,
+   "bundle": 20,
+   "ammunition": {
+    "kind": "bolt"
+   }
+  },
+  {
+   "key": "needles",
+   "name": "Иглы для духовой трубки",
+   "category": "ammunition",
+   "weight": 1,
+   "cost": 100,
+   "bundle": 50,
+   "ammunition": {
+    "kind": "needle"
+   }
+  },
+  {
+   "key": "sling-bullets",
+   "name": "Снаряды для пращи",
+   "category": "ammunition",
+   "weight": 1.5,
+   "cost": 4,
+   "bundle": 20,
+   "ammunition": {
+    "kind": "bullet"
+   }
+  },
+  {
+   "key": "potion-healing",
+   "name": "Зелье лечения",
+   "category": "potion",
+   "weight": 0.5,
+   "cost": 5000,
+   "potion": {
+    "heal": "2d4+2"
+   }
+  },
+  {
+   "key": "potion-greater-healing",
+   "name": "Зелье большого лечения",
+   "category": "potion",
+   "weight": 0.5,
+   "cost": 15000,
+   "potion": {
+    "heal": "4d4+4"
+   }
+  },
+  {
+   "key": "backpack",
+   "name": "Рюкзак",
+   "category": "gear",
+   "weight": 5,
+   "cost": 200
+  },
+  {
+   "key": "bedroll",
+   "name": "Спальник",
+   "category": "gear",
+   "weight": 7,
+   "cost": 100
+  },
+  {
+   "key": "blanket",
+   "name": "Одеяло",
+   "category": "gear",
+   "weight": 3,
+   "cost": 50
+  },
+  {
+   "key": "torch",
+   "name": "Факел",
+   "category": "gear",
+   "weight": 1,
+   "cost": 1
+  },
+  {
+   "key": "tinderbox",
+   "name": "Трутница",
+   "category": "gear",
+   "weight": 1,
+   "cost": 50
+  },
+  {
+   "key": "rations",
+   "name": "Рацион на день",
+   "category": "gear",
+   "weight": 2,
+   "cost": 50
+  },
+  {
+   "key": "waterskin",
+   "name": "Бурдюк",
+   "category": "gear",
+   "weight": 5,
+   "cost": 20
+  },
+  {
+   "key": "rope-hempen",
+   "name": "Пеньковая верёвка (50 фт.)",
+   "category": "gear",
+   "weight": 10,
+   "cost": 100
+  },
+  {
+   "key": "rope-silk",
+   "name": "Шёлковая верёвка (50 фт.)",
+   "category": "gear",
+   "weight": 5,
+   "cost": 1000
+  },
+  {
+   "key": "mess-kit",
+   "name": "Столовый набор",
+   "category": "gear",
+   "weight": 1,
+   "cost": 20
+  },
+  {
+   "key": "lantern-hooded",
+   "name": "Закрытый фонарь",
+   "category": "gear",
+   "weight": 2,
+   "cost": 500
+  },
+  {
+   "key": "lamp",
+   "name": "Лампа",
+   "category": "gear",
+   "weight": 1,
+   "cost": 50
+  },
+  {
+   "key": "oil",
+   "name": "Масло (фляга)",
+   "category": "gear",
+   "weight": 1,
+   "cost": 10
+  },
+  {
+   "key": "crowbar",
+   "name": "Ломик",
+   "category": "gear",
+   "weight": 5,
+   "cost": 200
+  },
+  {
+   "key": "hammer",
+   "name": "Молоток",
+   "category": "gear",
+   "weight": 3,
+   "cost": 100
+  },
+  {
+   "key": "piton",
+   "name": "Шлямбур",
+   "category": "gear",
+   "weight": 0.25,
+   "cost": 5
+  },
+  {
+   "key": "tent",
+   "name": "Палатка на двоих",
+   "category": "gear",
+   "weight": 20,
+   "cost": 200
+  },
+  {
+   "key": "candle",
+   "name": "Свеча",
+   "category": "gear",
+   "weight": 0,
+   "cost": 1
+  },
+  {
+   "key": "chalk",
+   "name": "Мел",
+   "category": "gear",
+   "weight": 0,
+   "cost": 1
+  },
+  {
+   "key": "mirror",
+   "name": "Стальное зеркальце",
+   "category": "gear",
+   "weight": 0.5,
+   "cost": 500
+  },
+  {
+   "key": "healers-kit",
+   "name": "Набор целителя",
+   "category": "gear",
+   "weight": 3,
+   "cost": 500
+  },
+  {
+   "key": "clothes-common",
+   "name": "Обычная одежда",
+   "category": "gear",
+   "weight": 3,
+   "cost": 50
+  },
+  {
+   "key": "clothes-traveler",
+   "name": "Дорожная одежда",
+   "category": "gear",
+   "weight": 4,
+   "cost": 200
+  },
+  {
+   "key": "clothes-fine",
+   "name": "Отличная одежда",
+   "category": "gear",
+   "weight": 6,
+   "cost": 1500
+  },
+  {
+   "key": "clothes-costume",
+   "name": "Костюм",
+   "category": "gear",
+   "weight": 4,
+   "cost": 500
+  },
+  {
+   "key": "vestments",
+   "name": "Облачение",
+   "category": "gear",
+   "weight": 4,
+   "cost": 100
+  },
+  {
+   "key": "pouch",
+   "name": "Поясной кошель",
+   "category": "gear",
+   "weight": 1,
+   "cost": 50
+  },
+  {
+   "key": "sack",
+   "name": "Мешок",
+   "category": "gear",
+   "weight": 0.5,
+   "cost": 1
+  },
+  {
+   "key": "quiver",
+   "name": "Колчан",
+   "category": "gear",
+   "weight": 1,
+   "cost": 100
+  },
+  {
+   "key": "case-scroll",
+   "name": "Футляр для карт и свитков",
+   "category": "gear",
+   "weight": 1,
+   "cost": 100
+  },
+  {
+   "key": "chest",
+   "name": "Сундук",
+   "category": "gear",
+   "weight": 25,
+   "cost": 500
+  },
+  {
+   "key": "ink",
+   "name": "Чернила (бутылочка)",
+   "category": "gear",
+   "weight": 0,
+   "cost": 1000
+  },
+  {
+   "key": "ink-pen",
+   "name": "Перо для письма",
+   "category": "gear",
+   "weight": 0,
+   "cost": 2
+  },
+  {
+   "key": "paper",
+   "name": "Бумага (лист)",
+   "category": "gear",
+   "weight": 0,
+   "cost": 20
+  },
+  {
+   "key": "parchment",
+   "name": "Пергамент (лист)",
+   "category": "gear",
+   "weight": 0,
+   "cost": 10
+  },
+  {
+   "key": "book",
+   "name": "Книга",
+   "category": "gear",
+   "weight": 5,
+   "cost": 2500
+  },
+  {
+   "key": "spellbook",
+   "name": "Книга заклинаний",
+   "category": "gear",
+   "weight": 3,
+   "cost": 5000
+  },
+  {
+   "key": "holy-symbol",
+   "name": "Священный символ",
+   "category": "gear",
+   "weight": 1,
+   "cost": 500
+  },
+  {
+   "key": "holy-water",
+   "name": "Святая вода (фляга)",
+   "category": "gear",
+   "weight": 1,
+   "cost": 2500
+  },
+  {
+   "key": "component-pouch",
+   "name": "Мешочек с компонентами",
+   "category": "gear",
+   "weight": 2,
+   "cost": 2500
+  },
+  {
+   "key": "arcane-focus",
+   "name": "Магическая фокусировка",
+   "category": "gear",
+   "weight": 1,
+   "cost": 1000
+  },
+  {
+   "key": "druidic-focus",
+   "name": "Друидическая фокусировка",
+   "category": "gear",
+   "weight": 0,
+   "cost": 100
+  },
+  {
+   "key": "soap",
+   "name": "Мыло",
+   "category": "gear",
+   "weight": 0,
+   "cost": 2
+  },
+  {
+   "key": "grappling-hook",
+   "name": "Крюк-кошка",
+   "category": "gear",
+   "weight": 4,
+   "cost": 200
+  },
+  {
+   "key": "manacles",
+   "name": "Кандалы",
+   "category": "gear",
+   "weight": 6,
+   "cost": 200
+  },
+  {
+   "key": "chain",
+   "name": "Цепь (10 фт.)",
+   "category": "gear",
+   "weight": 10,
+   "cost": 500
+  },
+  {
+   "key": "shovel",
+   "name": "Лопата",
+   "category": "gear",
+   "weight": 5,
+   "cost": 200
+  },
+  {
+   "key": "pick-miner",
+   "name": "Кирка рудокопа",
+   "category": "gear",
+   "weight": 10,
+   "cost": 200
+  },
+  {
+   "key": "pole",
+   "name": "Шест (10 фт.)",
+   "category": "gear",
+   "weight": 7,
+   "cost": 5
+  },
+  {
+   "key": "bell",
+   "name": "Колокольчик",
+   "category": "gear",
+   "weight": 0,
+   "cost": 100
+  },
+  {
+   "key": "signal-whistle",
+   "name": "Сигнальный свисток",
+   "category": "gear",
+   "weight": 0,
+   "cost": 5
+  },
+  {
+   "key": "hunting-trap",
+   "name": "Охотничий капкан",
+   "category": "gear",
+   "weight": 25,
+   "cost": 500
+  },
+  {
+   "key": "ball-bearings",
+   "name": "Металлические шарики (1000)",
+   "category": "gear",
+   "weight": 2,
+   "cost": 100
+  },
+  {
+   "key": "string",
+   "name": "Бечёвка (10 фт.)",
+   "category": "gear",
+   "weight": 0,
+   "cost": 0
+  },
+  {
+   "key": "perfume",
+   "name": "Духи (флакон)",
+   "category": "gear",
+   "weight": 0,
+   "cost": 500
+  },
+  {
+   "key": "sealing-wax",
+   "name": "Сургуч",
+   "category": "gear",
+   "weight": 0,
+   "cost": 50
+  },
+  {
+   "key": "alms-box",
+   "name": "Ящик для подаяний",
+   "category": "gear",
+   "weight": 0,
+   "cost": 0
+  },
+  {
+   "key": "incense",
+   "name": "Благовония (брусок)",
+   "category": "gear",
+   "weight": 0,
+   "cost": 0
+  },
+  {
+   "key": "censer",
+   "name": "Кадило",
+   "category": "gear",
+   "weight": 0,
+   "cost": 0
+  },
+  {
+   "key": "sand-bag",
+   "name": "Мешочек с песком",
+   "category": "gear",
+   "weight": 0,
+   "cost": 0
+  },
+  {
+   "key": "knife-small",
+   "name": "Маленький нож",
+   "category": "gear",
+   "weight": 0,
+   "cost": 0
+  },
+  {
+   "key": "dice-set",
+   "name": "Набор игральных костей",
+   "category": "gear",
+   "weight": 0,
+   "cost": 10
+  },
+  {
+   "key": "playing-cards",
+   "name": "Колода карт",
+   "category": "gear",
+   "weight": 0,
+   "cost": 50
+  },
+  {
+   "key": "magnifying-glass",
+   "name": "Увеличительное стекло",
+   "category": "gear",
+   "weight": 0,
+   "cost": 10000
+  },
+  {
+   "key": "spyglass",
+   "name": "Подзорная труба",
+   "category": "gear",
+   "weight": 1,
+   "cost": 100000
+  },
+  {
+   "key": "hourglass",
+   "name": "Песочные часы",
+   "category": "gear",
+   "weight": 1,
+   "cost": 2500
+  },
+  {
+   "key": "flask",
+   "name": "Фляга",
+   "category": "gear",
+   "weight": 1,
+   "cost": 2
+  },
+  {
+   "key": "jug",
+   "name": "Кувшин",
+   "category": "gear",
+   "weight": 4,
+   "cost": 2
+  },
+  {
+   "key": "thieves-tools",
+   "name": "Воровские инструменты",
+   "category": "tool",
+   "weight": 1,
+   "cost": 2500
+  },
+  {
+   "key": "herbalism-kit",
+   "name": "Набор травника",
+   "category": "tool",
+   "weight": 3,
+   "cost": 500
+  },
+  {
+   "key": "disguise-kit",
+   "name": "Набор для грима",
+   "category": "tool",
+   "weight": 3,
+   "cost": 2500
+  },
+  {
+   "key": "forgery-kit",
+   "name": "Набор для фальсификации",
+   "category": "tool",
+   "weight": 5,
+   "cost": 1500
+  },
+  {
+   "key": "poisoners-kit",
+   "name": "Набор отравителя",
+   "category": "tool",
+   "weight": 2,
+   "cost": 5000
+  },
+  {
+   "key": "navigators-tools",
+   "name": "Инструменты навигатора",
+   "category": "tool",
+   "weight": 2,
+   "cost": 2500
+  },
+  {
+   "key": "smiths-tools",
+   "name": "Инструменты кузнеца",
+   "category": "tool",
+   "weight": 8,
+   "cost": 2000
+  },
+  {
+   "key": "carpenters-tools",
+   "name": "Инструменты плотника",
+   "category": "tool",
+   "weight": 6,
+   "cost": 800
+  },
+  {
+   "key": "calligraphers-supplies",
+   "name": "Каллиграфические принадлежности",
+   "category": "tool",
+   "weight": 5,
+   "cost": 1000
+  },
+  {
+   "key": "cooks-utensils",
+   "name": "Инструменты повара",
+   "category": "tool",
+   "weight": 8,
+   "cost": 100
+  },
+  {
+   "key": "tinkers-tools",
+   "name": "Инструменты ремонтника",
+   "category": "tool",
+   "weight": 10,
+   "cost": 5000
+  },
+  {
+   "key": "lute",
+   "name": "Лютня",
+   "category": "tool",
+   "weight": 2,
+   "cost": 3500
+  },
+  {
+   "key": "flute",
+   "name": "Флейта",
+   "category": "tool",
+   "weight": 1,
+   "cost": 200
+  },
+  {
+   "key": "drum",
+   "name": "Барабан",
+   "category": "tool",
+   "weight": 3,
+   "cost": 600
+  },
+  {
+   "key": "lyre",
+   "name": "Лира",
+   "category": "tool",
+   "weight": 2,
+   "cost": 3000
+  },
+  {
+   "key": "burglars-pack",
+   "name": "Набор взломщика",
+   "category": "pack",
+   "weight": 0,
+   "cost": 1600,
+   "pack": [
+    {
+     "key": "backpack",
+     "quantity": 1
+    },
+    {
+     "key": "ball-bearings",
+     "quantity": 1
+    },
+    {
+     "key": "string",
+     "quantity": 1
+    },
+    {
+     "key": "bell",
+     "quantity": 1
+    },
+    {
+     "key": "candle",
+     "quantity": 5
+    },
+    {
+     "key": "crowbar",
+     "quantity": 1
+    },
+    {
+     "key": "hammer",
+     "quantity": 1
+    },
+    {
+     "key": "piton",
+     "quantity": 10
+    },
+    {
+     "key": "lantern-hooded",
+     "quantity": 1
+    },
+    {
+     "key": "oil",
+     "quantity": 2
+    },
+    {
+     "key": "rations",
+     "quantity": 5
+    },
+    {
+     "key": "tinderbox",
+     "quantity": 1
+    },
+    {
+     "key": "waterskin",
+     "quantity": 1
+    },
+    {
+     "key": "rope-hempen",
+     "quantity": 1
+    }
+   ]
+  },
+  {
+   "key": "diplomats-pack",
+   "name": "Набор дипломата",
+   "category": "pack",
+   "weight": 0,
+   "cost": 3900,
+   "pack": [
+    {
+     "key": "chest",
+     "quantity": 1
+    },
+    {
+     "key": "case-scroll",
+     "quantity": 2
+    },
+    {
+     "key": "clothes-fine",
+     "quantity": 1
+    },
+    {
+     "key": "ink",
+     "quantity": 1
+    },
+    {
+     "key": "ink-pen",
+     "quantity": 1
+    },
+    {
+     "key": "lamp",
+     "quantity": 1
+    },
+    {
+     "key": "oil",
+     "quantity": 2
+    },
+    {
+     "key": "paper",
+     "quantity": 5
+    },
+    {
+     "key": "perfume",
+     "quantity": 1
+    },
+    {
+     "key": "sealing-wax",
+     "quantity": 1
+    },
+    {
+     "key": "soap",
+     "quantity": 1
+    }
+   ]
+  },
+  {
+   "key": "dungeoneers-pack",
+   "name": "Набор исследователя подземелий",
+   "category": "pack",
+   "weight": 0,
+   "cost": 1200,
+   "pack": [
+    {
+     "key": "backpack",
+     "quantity": 1
+    },
+    {
+     "key": "crowbar",
+     "quantity": 1
+    },
+    {
+     "key": "hammer",
+     "quantity": 1
+    },
+    {
+     "key": "piton",
+     "quantity": 10
+    },
+    {
+     "key": "torch",
+     "quantity": 10
+    },
+    {
+     "key": "tinderbox",
+     "quantity": 1
+    },
+    {
+     "key": "rations",
+     "quantity": 10
+    },
+    {
+     "key": "waterskin",
+     "quantity": 1
+    },
+    {
+     "key": "rope-hempen",
+     "quantity": 1
+    }
+   ]
+  },
+  {
+   "key": "entertainers-pack",
+   "name": "Набор артиста",
+   "category": "pack",
+   "weight": 0,
+   "cost": 4000,
+   "pack": [
+    {
+     "key": "backpack",
+     "quantity": 1
+    },
+    {
+     "key": "bedroll",
+     "quantity": 1
+    },
+    {
+     "key": "clothes-costume",
+     "quantity": 2
+    },
+    {
+     "key": "candle",
+     "quantity": 5
+    },
+    {
+     "key": "rations",
+     "quantity": 5
+    },
+    {
+     "key": "waterskin",
+     "quantity": 1
+    },
+    {
+     "key": "disguise-kit",
+     "quantity": 1
+    }
+   ]
+  },
+  {
+   "key": "explorers-pack",
+   "name": "Набор путешественника",
+   "category": "pack",
+   "weight": 0,
+   "cost": 1000,
+   "pack": [
+    {
+     "key": "backpack",
+     "quantity": 1
+    },
+    {
+     "key": "bedroll",
+     "quantity": 1
+    },
+    {
+     "key": "mess-kit",
+     "quantity": 1
+    },
+    {
+     "key": "tinderbox",
+     "quantity": 1
+    },
+    {
+     "key": "torch",
+     "quantity": 10
+    },
+    {
+     "key": "rations",
+     "quantity": 10
+    },
+    {
+     "key": "waterskin",
+     "quantity": 1
+    },
+    {
+     "key": "rope-hempen",
+     "quantity": 1
+    }
+   ]
+  },
+  {
+   "key": "priests-pack",
+   "name": "Набор священника",
+   "category": "pack",
+   "weight": 0,
+   "cost": 1900,
+   "pack": [
+    {
+     "key": "backpack",
+     "quantity": 1
+    },
+    {
+     "key": "blanket",
+     "quantity": 1
+    },
+    {
+     "key": "candle",
+     "quantity": 10
+    },
+    {
+     "key": "tinderbox",
+     "quantity": 1
+    },
+    {
+     "key": "alms-box",
+     "quantity": 1
+    },
+    {
+     "key": "incense",
+     "quantity": 2
+    },
+    {
+     "key": "censer",
+     "quantity": 1
+    },
+    {
+     "key": "vestments",
+     "quantity": 1
+    },
+    {
+     "key": "rations",
+     "quantity": 2
+    },
+    {
+     "key": "waterskin",
+     "quantity": 1
+    }
+   ]
+  },
+  {
+   "key": "scholars-pack",
+   "name": "Набор учёного",
+   "category": "pack",
+   "weight": 0,
+   "cost": 4000,
+   "pack": [
+    {
+     "key": "backpack",
+     "quantity": 1
+    },
+    {
+     "key": "book",
+     "quantity": 1
+    },
+    {
+     "key": "ink",
+     "quantity": 1
+    },
+    {
+     "key": "ink-pen",
+     "quantity": 1
+    },
+    {
+     "key": "parchment",
+     "quantity": 10
+    },
+    {
+     "key": "sand-bag",
+     "quantity": 1
+    },
+    {
+     "key": "knife-small",
+     "quantity": 1
+    }
+   ]
+  }
+ ]
+}

@@ -98,6 +98,7 @@ public class DndContext : IdentityDbContext<UserEntity, IdentityRole<Guid>, Guid
                 .HasForeignKey<CharacterSessionEntity>(x => x.CharacterId)
                 .OnDelete(DeleteBehavior.Cascade);
             session.Property(x => x.Version).IsRowVersion();
+            session.Property(x => x.Inventory).HasColumnType("jsonb").HasDefaultValueSql("'{}'::jsonb");
         });
 
         modelBuilder.Entity<SessionEventEntity>(sessionEvent =>

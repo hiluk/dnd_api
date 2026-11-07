@@ -28,6 +28,11 @@ public class CharacterSessionEntity
     public int Exhaustion { get; set; }
 
     /// <summary>
+    /// Снаряжение и монеты в JSON
+    /// </summary>
+    public string Inventory { get; set; } = "{}";
+
+    /// <summary>
     /// Версия строки (системный столбец xmin): два одновременных действия не затрут друг друга
     /// </summary>
     public uint Version { get; set; }

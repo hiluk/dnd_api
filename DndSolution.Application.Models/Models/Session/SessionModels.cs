@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using DndSolution.Application.Models.Enums;
+using DndSolution.Application.Models.Models.Items;
+using DndSolution.Application.Models.Models.Rules;
 
 namespace DndSolution.Application.Models.Models.Session;
 
@@ -36,6 +38,11 @@ public sealed record SessionState
     public int Exhaustion { get; init; }
 
     /// <summary>
+    /// Снаряжение и монеты
+    /// </summary>
+    public InventoryState Inventory { get; init; } = new();
+
+    /// <summary>
     /// Начальное состояние: полные хиты
     /// </summary>
     public static SessionState Fresh(SessionContext context) => new() { CurrentHp = context.BaseMaxHp };
@@ -48,7 +55,58 @@ public sealed record SessionState
 /// <param name="HitDie">Грань кости хитов класса: 6, 8, 10 или 12</param>
 /// <param name="Level">Уровень: столько же костей хитов</param>
 /// <param name="ConModifier">Модификатор Телосложения</param>
-public sealed record SessionContext(int BaseMaxHp, int HitDie, int Level, int ConModifier);
+public sealed record SessionContext(int BaseMaxHp, int HitDie, int Level, int ConModifier)
+{
+    /// <summary>
+    /// Справочник предметов
+    /// </summary>
+    public IReadOnlyDictionary<string, ItemDefinition> Catalog { get; init; } = new Dictionary<string, ItemDefinition>();
+
+    /// <summary>
+    /// Что нужно для КД, атак и веса; null — снаряжение не считается
+    /// </summary>
+    public EquipmentProfile? Equipment { get; init; }
+}
+
+/// <summary>
+/// Защита без доспеха по классу
+/// </summary>
+public enum UnarmoredDefense
+{
+    /// <summary>
+    /// 10 + Ловкость
+    /// </summary>
+    None = 0,
+
+    /// <summary>
+    /// Варвар: 10 + Ловкость + Телосложение, щит можно
+    /// </summary>
+    Barbarian = 1,
+
+    /// <summary>
+    /// Монах: 10 + Ловкость + Мудрость, без щита
+    /// </summary>
+    Monk = 2,
+}
+
+/// <summary>
+/// Данные персонажа для КД, атак и веса
+/// </summary>
+/// <param name="Scores">Итоговые характеристики</param>
+/// <param name="Modifiers">Модификаторы</param>
+/// <param name="BaseSpeed">Скорость расы</param>
+/// <param name="ArmorProficiencies">light, medium, heavy, shield</param>
+/// <param name="WeaponProficiencies">Ключи оружия из справочника, которым владеет персонаж</param>
+/// <param name="IgnoresHeavyArmorSpeed">Тяжёлый доспех не снижает скорость (дварф)</param>
+public sealed record EquipmentProfile(
+    AbilityScores Scores,
+    AbilityScores Modifiers,
+    int ProficiencyBonus,
+    int BaseSpeed,
+    UnarmoredDefense Unarmored,
+    IReadOnlyList<string> ArmorProficiencies,
+    IReadOnlyList<string> WeaponProficiencies,
+    bool IgnoresHeavyArmorSpeed);
 
 /// <summary>
 /// Действие игрока в сессии. В журнале хранится в JSON с полем type
@@ -64,6 +122,12 @@ public sealed record SessionContext(int BaseMaxHp, int HitDie, int Level, int Co
 [JsonDerivedType(typeof(LongRest), "longRest")]
 [JsonDerivedType(typeof(SetCondition), "setCondition")]
 [JsonDerivedType(typeof(SetExhaustion), "setExhaustion")]
+[JsonDerivedType(typeof(AddItem), "addItem")]
+[JsonDerivedType(typeof(RemoveItem), "removeItem")]
+[JsonDerivedType(typeof(SetEquipped), "setEquipped")]
+[JsonDerivedType(typeof(ChangeCurrency), "changeCurrency")]
+[JsonDerivedType(typeof(DrinkPotion), "drinkPotion")]
+[JsonDerivedType(typeof(UseAmmo), "useAmmo")]
 public abstract record SessionAction
 {
     public sealed record Damage(int Amount, bool Critical) : SessionAction;
@@ -91,6 +155,37 @@ public abstract record SessionAction
     public sealed record SetCondition(Condition Condition, bool Active) : SessionAction;
 
     public sealed record SetExhaustion(int Level) : SessionAction;
+
+    /// <summary>
+    /// Добавить предмет: из справочника (<paramref name="Key"/>) или свой (<paramref name="Name"/>).
+    /// Предмет из справочника, который уже есть, добавляется к нему количеством
+    /// </summary>
+    /// <param name="ItemId">Id нового предмета, выданный клиентом</param>
+    public sealed record AddItem(
+        Guid ItemId, string? Key, int Quantity, string? Name = null, double? Weight = null, string? Note = null)
+        : SessionAction;
+
+    public sealed record RemoveItem(Guid ItemId, int Quantity) : SessionAction;
+
+    /// <summary>
+    /// Надеть или снять. Новый доспех снимает прежний, новый щит — прежний щит
+    /// </summary>
+    public sealed record SetEquipped(Guid ItemId, bool Equipped) : SessionAction;
+
+    /// <summary>
+    /// Изменить монеты на величины (могут быть отрицательными)
+    /// </summary>
+    public sealed record ChangeCurrency(int Cp = 0, int Sp = 0, int Ep = 0, int Gp = 0, int Pp = 0) : SessionAction;
+
+    /// <summary>
+    /// Выпить зелье: лечение на выпавшее значение, зелий на одно меньше
+    /// </summary>
+    public sealed record DrinkPotion(Guid ItemId, int Roll) : SessionAction;
+
+    /// <summary>
+    /// Потратить боеприпасы
+    /// </summary>
+    public sealed record UseAmmo(Guid ItemId, int Quantity = 1) : SessionAction;
 }
 
 /// <summary>
